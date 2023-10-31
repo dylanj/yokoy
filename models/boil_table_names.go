@@ -4,12 +4,16 @@
 package models
 
 var TableNames = struct {
+	Categories    string
 	CompanyCards  string
+	CostCenter    string
 	LegalEntities string
 	Trips         string
 	Users         string
 }{
+	Categories:    "categories",
 	CompanyCards:  "company_cards",
+	CostCenter:    "cost_center",
 	LegalEntities: "legal_entities",
 	Trips:         "trips",
 	Users:         "users",
