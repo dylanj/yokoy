@@ -175,6 +175,25 @@ func (s *Sync) SyncCompanyCards() {
 	}
 }
 
+func (s *Sync) SyncCategories() {
+	fmt.Println("syncing categories")
+
+	ctx := context.TODO()
+
+	truncateCategories(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchCategories(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "categories in le", legalEntityId)
+
+		insertCategories(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"
@@ -218,7 +237,8 @@ func (s *Sync) Go() {
 	s.setup()
 	fmt.Println("syncing")
 	s.SyncLegalEntities()
-	s.SyncUsers()
-	s.SyncTrips()
-	s.SyncCompanyCards()
+	//s.SyncUsers()
+	//s.SyncTrips()
+	//s.SyncCompanyCards()
+	s.SyncCategories()
 }
