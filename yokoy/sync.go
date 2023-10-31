@@ -11,7 +11,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/salesfive/yokoy/api"
 )
 
@@ -162,7 +161,7 @@ func (s *Sync) SyncCompanyCards() {
 
 	ctx := context.TODO()
 
-	truncateCompanyCards()
+	truncateCompanyCards(ctx, s.db)
 	for _, legalEntityId := range s.legalEntityIds {
 		ccs, err := fetchCompanyCards(ctx, legalEntityId, s.apiClient)
 
@@ -170,13 +169,10 @@ func (s *Sync) SyncCompanyCards() {
 			log.Fatalln(err)
 		}
 
-		fmt.Println("got", len(*ccs), "cards")
+		fmt.Println("got", len(*ccs), "cards in le", legalEntityId)
 
-		insertCompanyCards(ctx, db, legalEntityId, ccs)
-
-		spew.Dump(ccs)
+		insertCompanyCards(ctx, s.db, legalEntityId, ccs)
 	}
-
 }
 
 func (s *Sync) configApiClient() error {
@@ -222,7 +218,7 @@ func (s *Sync) Go() {
 	s.setup()
 	fmt.Println("syncing")
 	s.SyncLegalEntities()
-	//s.SyncUsers()
-	//s.SyncTrips()
+	s.SyncUsers()
+	s.SyncTrips()
 	s.SyncCompanyCards()
 }

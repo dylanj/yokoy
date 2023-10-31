@@ -4,9 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/salesfive/yokoy/api"
 	"github.com/salesfive/yokoy/models"
 	"github.com/volatiletech/null/v8"
@@ -23,15 +21,8 @@ func fetchCompanyCards(ctx context.Context, legalEntityId string, c api.ClientWi
 	}
 
 	if h.StatusCode() != 200 {
-		spew.Dump(h.HTTPResponse.Request.URL)
-		fmt.Println(h.StatusCode())
-		fmt.Println(string(h.Body))
 		return nil, errors.New("got non 200 response code")
 	}
-
-	spew.Dump(h.HTTPResponse.Request.URL)
-	fmt.Println(h.StatusCode())
-	fmt.Println(string(h.Body))
 
 	return h.JSON200.CompanyCards, nil
 
