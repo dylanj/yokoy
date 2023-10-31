@@ -13,62 +13,75 @@ import "testing"
 // Separating the tests thusly grants avoidance of Postgres deadlocks.
 func TestParent(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntities)
+	t.Run("Trips", testTrips)
 	t.Run("Users", testUsers)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesDelete)
+	t.Run("Trips", testTripsDelete)
 	t.Run("Users", testUsersDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesQueryDeleteAll)
+	t.Run("Trips", testTripsQueryDeleteAll)
 	t.Run("Users", testUsersQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSliceDeleteAll)
+	t.Run("Trips", testTripsSliceDeleteAll)
 	t.Run("Users", testUsersSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesExists)
+	t.Run("Trips", testTripsExists)
 	t.Run("Users", testUsersExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesFind)
+	t.Run("Trips", testTripsFind)
 	t.Run("Users", testUsersFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesBind)
+	t.Run("Trips", testTripsBind)
 	t.Run("Users", testUsersBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesOne)
+	t.Run("Trips", testTripsOne)
 	t.Run("Users", testUsersOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesAll)
+	t.Run("Trips", testTripsAll)
 	t.Run("Users", testUsersAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesCount)
+	t.Run("Trips", testTripsCount)
 	t.Run("Users", testUsersCount)
 }
 
 func TestHooks(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesHooks)
+	t.Run("Trips", testTripsHooks)
 	t.Run("Users", testUsersHooks)
 }
 
 func TestInsert(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesInsert)
 	t.Run("LegalEntities", testLegalEntitiesInsertWhitelist)
+	t.Run("Trips", testTripsInsert)
+	t.Run("Trips", testTripsInsertWhitelist)
 	t.Run("Users", testUsersInsert)
 	t.Run("Users", testUsersInsertWhitelist)
 }
@@ -115,25 +128,30 @@ func TestToManyRemove(t *testing.T) {}
 
 func TestReload(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesReload)
+	t.Run("Trips", testTripsReload)
 	t.Run("Users", testUsersReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesReloadAll)
+	t.Run("Trips", testTripsReloadAll)
 	t.Run("Users", testUsersReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSelect)
+	t.Run("Trips", testTripsSelect)
 	t.Run("Users", testUsersSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesUpdate)
+	t.Run("Trips", testTripsUpdate)
 	t.Run("Users", testUsersUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSliceUpdateAll)
+	t.Run("Trips", testTripsSliceUpdateAll)
 	t.Run("Users", testUsersSliceUpdateAll)
 }

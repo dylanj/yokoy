@@ -128,14 +128,26 @@ func (s *Sync) SyncUsers() {
 
 	fmt.Println("inserting users into db")
 	insertUsers(ctx, s.db, users)
-
 }
 
 func (s *Sync) SyncTrips() {
 	fmt.Println("syncing trips")
 
-}
+	ctx := context.TODO()
 
+	Trips, err := fetchTrips(ctx, s.apiClient)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println("got", len(*Trips), "trips")
+
+	fmt.Println("truncating Trips")
+	truncateTrips(ctx, s.db)
+
+	fmt.Println("inserting trips into db")
+	insertTrips(ctx, s.db, Trips)
+}
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"
@@ -181,7 +193,7 @@ func (s *Sync) Go() {
 
 	fmt.Println("syncing")
 	//s.SyncLegalEntities()
-	s.SyncUsers()
+	//s.SyncUsers()
 	s.SyncTrips()
 	// fetch all legal entites
 	// fetch all users
