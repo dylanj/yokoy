@@ -34,9 +34,7 @@ func insertUsers(ctx context.Context, db *sql.DB, users *[]api.User) error {
 	for _, u := range *users {
 		dbU := models.User{}
 		dbU.ID = *u.Id
-		if u.CostCenterId != nil {
-			dbU.CostCenterID = null.StringFrom(*u.CostCenterId)
-		}
+		dbU.CostCenterID = null.StringFromPtr(u.CostCenterId)
 		dbU.Email = null.StringFrom(u.Email)
 		//dbU.EmployeeID = u.EmployeeId
 		if u.Language != nil {
@@ -45,18 +43,13 @@ func insertUsers(ctx context.Context, db *sql.DB, users *[]api.User) error {
 		dbU.FirstName = null.StringFrom(u.FirstName)
 		dbU.LastName = null.StringFrom(u.LastName)
 		dbU.LegalEntityID = null.StringFrom(u.LegalEntityId)
-		if u.LineManagerId != nil {
-			dbU.LineManagerID = null.StringFrom(*u.LineManagerId)
+		dbU.LineManagerID = null.StringFromPtr(u.LineManagerId)
+		if u.LineManagerThreshold != nil {
+			dbU.LineManagerThreshold = null.IntFrom(int(*u.LineManagerThreshold))
 		}
-		//dbU.LineManagerThreshold = null.StringFrom(u.LineManagerThreshold)
-		if u.PolicyId != nil {
-			dbU.PolicyID = null.StringFrom(*u.PolicyId)
-		}
-
+		dbU.PolicyID = null.StringFromPtr(u.PolicyId)
 		dbU.StatusActive = null.BoolFrom(u.StatusActive)
-		if u.SubmissionDelegateId != nil {
-			dbU.SubmissionDelegateID = null.StringFrom(*u.SubmissionDelegateId)
-		}
+		dbU.SubmissionDelegateID = null.StringFromPtr(u.SubmissionDelegateId)
 
 		err := dbU.Insert(ctx, db, boil.Infer())
 		if err != nil {

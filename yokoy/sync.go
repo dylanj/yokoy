@@ -148,6 +148,7 @@ func (s *Sync) SyncTrips() {
 	fmt.Println("inserting trips into db")
 	insertTrips(ctx, s.db, Trips)
 }
+
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"
@@ -193,7 +194,7 @@ func (s *Sync) Go() {
 
 	fmt.Println("syncing")
 	//s.SyncLegalEntities()
-	//s.SyncUsers()
+	s.SyncUsers()
 	s.SyncTrips()
 	// fetch all legal entites
 	// fetch all users

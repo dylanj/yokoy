@@ -33,7 +33,7 @@ func truncateLegalEntities(ctx context.Context, db *sql.DB) {
 func insertLegalEntities(ctx context.Context, db *sql.DB, legalEntities *[]api.LegalEntity) error {
 	for _, le := range *legalEntities {
 		dbLE := models.LegalEntity{}
-		dbLE.Name = null.StringFrom(*le.Name)
+		dbLE.Name = null.StringFromPtr(le.Name)
 		dbLE.ID = *le.Id
 		dbLE.Code = null.StringFrom(le.Code)
 		dbLE.Language = null.StringFrom(string(le.Language))
