@@ -568,7 +568,7 @@ func testLegalEntitiesSelect(t *testing.T) {
 }
 
 var (
-	legalEntityDBTypes = map[string]string{`ID`: `text`, `Code`: `text`, `Language`: `text`, `Name`: `text`}
+	legalEntityDBTypes = map[string]string{`ID`: `text`, `Code`: `text`, `Language`: `text`, `Name`: `text`, `CreatedAt`: `timestamp without time zone`, `UpdatedAt`: `timestamp without time zone`}
 	_                  = bytes.MinRead
 )
 

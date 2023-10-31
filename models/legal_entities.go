@@ -24,37 +24,47 @@ import (
 
 // LegalEntity is an object representing the database table.
 type LegalEntity struct {
-	ID       string      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Code     null.String `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
-	Language null.String `boil:"language" json:"language,omitempty" toml:"language" yaml:"language,omitempty"`
-	Name     null.String `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
+	ID        string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Code      null.String `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
+	Language  null.String `boil:"language" json:"language,omitempty" toml:"language" yaml:"language,omitempty"`
+	Name      null.String `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
+	CreatedAt null.Time   `boil:"created_at" json:"created_at,omitempty" toml:"created_at" yaml:"created_at,omitempty"`
+	UpdatedAt null.Time   `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
 
 	R *legalEntityR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L legalEntityL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var LegalEntityColumns = struct {
-	ID       string
-	Code     string
-	Language string
-	Name     string
+	ID        string
+	Code      string
+	Language  string
+	Name      string
+	CreatedAt string
+	UpdatedAt string
 }{
-	ID:       "id",
-	Code:     "code",
-	Language: "language",
-	Name:     "name",
+	ID:        "id",
+	Code:      "code",
+	Language:  "language",
+	Name:      "name",
+	CreatedAt: "created_at",
+	UpdatedAt: "updated_at",
 }
 
 var LegalEntityTableColumns = struct {
-	ID       string
-	Code     string
-	Language string
-	Name     string
+	ID        string
+	Code      string
+	Language  string
+	Name      string
+	CreatedAt string
+	UpdatedAt string
 }{
-	ID:       "legal_entities.id",
-	Code:     "legal_entities.code",
-	Language: "legal_entities.language",
-	Name:     "legal_entities.name",
+	ID:        "legal_entities.id",
+	Code:      "legal_entities.code",
+	Language:  "legal_entities.language",
+	Name:      "legal_entities.name",
+	CreatedAt: "legal_entities.created_at",
+	UpdatedAt: "legal_entities.updated_at",
 }
 
 // Generated where
@@ -136,16 +146,44 @@ func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
 func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
 func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+
 var LegalEntityWhere = struct {
-	ID       whereHelperstring
-	Code     whereHelpernull_String
-	Language whereHelpernull_String
-	Name     whereHelpernull_String
+	ID        whereHelperstring
+	Code      whereHelpernull_String
+	Language  whereHelpernull_String
+	Name      whereHelpernull_String
+	CreatedAt whereHelpernull_Time
+	UpdatedAt whereHelpernull_Time
 }{
-	ID:       whereHelperstring{field: "\"legal_entities\".\"id\""},
-	Code:     whereHelpernull_String{field: "\"legal_entities\".\"code\""},
-	Language: whereHelpernull_String{field: "\"legal_entities\".\"language\""},
-	Name:     whereHelpernull_String{field: "\"legal_entities\".\"name\""},
+	ID:        whereHelperstring{field: "\"legal_entities\".\"id\""},
+	Code:      whereHelpernull_String{field: "\"legal_entities\".\"code\""},
+	Language:  whereHelpernull_String{field: "\"legal_entities\".\"language\""},
+	Name:      whereHelpernull_String{field: "\"legal_entities\".\"name\""},
+	CreatedAt: whereHelpernull_Time{field: "\"legal_entities\".\"created_at\""},
+	UpdatedAt: whereHelpernull_Time{field: "\"legal_entities\".\"updated_at\""},
 }
 
 // LegalEntityRels is where relationship names are stored.
@@ -165,9 +203,9 @@ func (*legalEntityR) NewStruct() *legalEntityR {
 type legalEntityL struct{}
 
 var (
-	legalEntityAllColumns            = []string{"id", "code", "language", "name"}
+	legalEntityAllColumns            = []string{"id", "code", "language", "name", "created_at", "updated_at"}
 	legalEntityColumnsWithoutDefault = []string{"id"}
-	legalEntityColumnsWithDefault    = []string{"code", "language", "name"}
+	legalEntityColumnsWithDefault    = []string{"code", "language", "name", "created_at", "updated_at"}
 	legalEntityPrimaryKeyColumns     = []string{"id"}
 	legalEntityGeneratedColumns      = []string{}
 )
@@ -499,6 +537,16 @@ func (o *LegalEntity) Insert(ctx context.Context, exec boil.ContextExecutor, col
 	}
 
 	var err error
+	if !boil.TimestampsAreSkipped(ctx) {
+		currTime := time.Now().In(boil.GetLocation())
+
+		if queries.MustTime(o.CreatedAt).IsZero() {
+			queries.SetScanner(&o.CreatedAt, currTime)
+		}
+		if queries.MustTime(o.UpdatedAt).IsZero() {
+			queries.SetScanner(&o.UpdatedAt, currTime)
+		}
+	}
 
 	if err := o.doBeforeInsertHooks(ctx, exec); err != nil {
 		return err
@@ -574,6 +622,12 @@ func (o *LegalEntity) Insert(ctx context.Context, exec boil.ContextExecutor, col
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
 func (o *LegalEntity) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
+	if !boil.TimestampsAreSkipped(ctx) {
+		currTime := time.Now().In(boil.GetLocation())
+
+		queries.SetScanner(&o.UpdatedAt, currTime)
+	}
+
 	var err error
 	if err = o.doBeforeUpdateHooks(ctx, exec); err != nil {
 		return 0, err
@@ -703,6 +757,14 @@ func (o LegalEntitySlice) UpdateAll(ctx context.Context, exec boil.ContextExecut
 func (o *LegalEntity) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
 		return errors.New("models: no legal_entities provided for upsert")
+	}
+	if !boil.TimestampsAreSkipped(ctx) {
+		currTime := time.Now().In(boil.GetLocation())
+
+		if queries.MustTime(o.CreatedAt).IsZero() {
+			queries.SetScanner(&o.CreatedAt, currTime)
+		}
+		queries.SetScanner(&o.UpdatedAt, currTime)
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {
