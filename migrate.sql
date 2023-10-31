@@ -59,7 +59,7 @@ CREATE table categories (
 CREATE table cost_center (
     id                  text primary key,
     approval_limit      integer,
-    approval_id         text,
+    approver_id         text,
     auto_approval_limit integer,
     code                text,
     delegate_expiry     timestamp without time zone,

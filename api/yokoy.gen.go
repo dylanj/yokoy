@@ -211,7 +211,7 @@ type CompanyCard struct {
 // CostCenter defines model for CostCenter.
 type CostCenter struct {
 	// ApprovalLimit Approval limit in legal entity currency.
-	ApprovalLimit *float32 `json:"approvalLimit"`
+	ApprovalLimit interface{} `json:"approvalLimit,string"`
 
 	// ApproverId The internal user id identifying the cost center's approver.
 	ApproverId *string `json:"approverId"`
@@ -12743,6 +12743,7 @@ func (c *ClientWithResponses) GetLegalEntitiesLegalEntityIdCostCentersWithRespon
 	if err != nil {
 		return nil, err
 	}
+
 	return ParseGetLegalEntitiesLegalEntityIdCostCentersResponse(rsp)
 }
 
@@ -14456,6 +14457,8 @@ func ParseGetLegalEntitiesLegalEntityIdCostCentersResponse(rsp *http.Response) (
 		var dest struct {
 			CostCenters *[]CostCenter `json:"costCenters,omitempty"`
 		}
+
+		fmt.Println(string(bodyBytes))
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

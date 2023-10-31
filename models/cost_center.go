@@ -26,7 +26,7 @@ import (
 type CostCenter struct {
 	ID                string      `boil:"id" json:"id" toml:"id" yaml:"id"`
 	ApprovalLimit     null.Int    `boil:"approval_limit" json:"approval_limit,omitempty" toml:"approval_limit" yaml:"approval_limit,omitempty"`
-	ApprovalID        null.String `boil:"approval_id" json:"approval_id,omitempty" toml:"approval_id" yaml:"approval_id,omitempty"`
+	ApproverID        null.String `boil:"approver_id" json:"approver_id,omitempty" toml:"approver_id" yaml:"approver_id,omitempty"`
 	AutoApprovalLimit null.Int    `boil:"auto_approval_limit" json:"auto_approval_limit,omitempty" toml:"auto_approval_limit" yaml:"auto_approval_limit,omitempty"`
 	Code              null.String `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
 	DelegateExpiry    null.Time   `boil:"delegate_expiry" json:"delegate_expiry,omitempty" toml:"delegate_expiry" yaml:"delegate_expiry,omitempty"`
@@ -44,7 +44,7 @@ type CostCenter struct {
 var CostCenterColumns = struct {
 	ID                string
 	ApprovalLimit     string
-	ApprovalID        string
+	ApproverID        string
 	AutoApprovalLimit string
 	Code              string
 	DelegateExpiry    string
@@ -57,7 +57,7 @@ var CostCenterColumns = struct {
 }{
 	ID:                "id",
 	ApprovalLimit:     "approval_limit",
-	ApprovalID:        "approval_id",
+	ApproverID:        "approver_id",
 	AutoApprovalLimit: "auto_approval_limit",
 	Code:              "code",
 	DelegateExpiry:    "delegate_expiry",
@@ -72,7 +72,7 @@ var CostCenterColumns = struct {
 var CostCenterTableColumns = struct {
 	ID                string
 	ApprovalLimit     string
-	ApprovalID        string
+	ApproverID        string
 	AutoApprovalLimit string
 	Code              string
 	DelegateExpiry    string
@@ -85,7 +85,7 @@ var CostCenterTableColumns = struct {
 }{
 	ID:                "cost_center.id",
 	ApprovalLimit:     "cost_center.approval_limit",
-	ApprovalID:        "cost_center.approval_id",
+	ApproverID:        "cost_center.approver_id",
 	AutoApprovalLimit: "cost_center.auto_approval_limit",
 	Code:              "cost_center.code",
 	DelegateExpiry:    "cost_center.delegate_expiry",
@@ -164,7 +164,7 @@ func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsN
 var CostCenterWhere = struct {
 	ID                whereHelperstring
 	ApprovalLimit     whereHelpernull_Int
-	ApprovalID        whereHelpernull_String
+	ApproverID        whereHelpernull_String
 	AutoApprovalLimit whereHelpernull_Int
 	Code              whereHelpernull_String
 	DelegateExpiry    whereHelpernull_Time
@@ -177,7 +177,7 @@ var CostCenterWhere = struct {
 }{
 	ID:                whereHelperstring{field: "\"cost_center\".\"id\""},
 	ApprovalLimit:     whereHelpernull_Int{field: "\"cost_center\".\"approval_limit\""},
-	ApprovalID:        whereHelpernull_String{field: "\"cost_center\".\"approval_id\""},
+	ApproverID:        whereHelpernull_String{field: "\"cost_center\".\"approver_id\""},
 	AutoApprovalLimit: whereHelpernull_Int{field: "\"cost_center\".\"auto_approval_limit\""},
 	Code:              whereHelpernull_String{field: "\"cost_center\".\"code\""},
 	DelegateExpiry:    whereHelpernull_Time{field: "\"cost_center\".\"delegate_expiry\""},
@@ -206,9 +206,9 @@ func (*costCenterR) NewStruct() *costCenterR {
 type costCenterL struct{}
 
 var (
-	costCenterAllColumns            = []string{"id", "approval_limit", "approval_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
+	costCenterAllColumns            = []string{"id", "approval_limit", "approver_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
 	costCenterColumnsWithoutDefault = []string{"id"}
-	costCenterColumnsWithDefault    = []string{"approval_limit", "approval_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
+	costCenterColumnsWithDefault    = []string{"approval_limit", "approver_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
 	costCenterPrimaryKeyColumns     = []string{"id"}
 	costCenterGeneratedColumns      = []string{}
 )

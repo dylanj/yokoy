@@ -568,7 +568,7 @@ func testCostCentersSelect(t *testing.T) {
 }
 
 var (
-	costCenterDBTypes = map[string]string{`ID`: `text`, `ApprovalLimit`: `integer`, `ApprovalID`: `text`, `AutoApprovalLimit`: `integer`, `Code`: `text`, `DelegateExpiry`: `timestamp without time zone`, `DelegateID`: `text`, `Description`: `text`, `Name`: `text`, `ParentID`: `text`, `LegalEntityID`: `text`, `StatusActive`: `boolean`}
+	costCenterDBTypes = map[string]string{`ID`: `text`, `ApprovalLimit`: `integer`, `ApproverID`: `text`, `AutoApprovalLimit`: `integer`, `Code`: `text`, `DelegateExpiry`: `timestamp without time zone`, `DelegateID`: `text`, `Description`: `text`, `Name`: `text`, `ParentID`: `text`, `LegalEntityID`: `text`, `StatusActive`: `boolean`}
 	_                 = bytes.MinRead
 )
 
