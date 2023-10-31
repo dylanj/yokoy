@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/salesfive/yokoy/api"
 )
 
@@ -20,6 +21,8 @@ type Sync struct {
 	clientSecret   string
 	organizationID string
 	accessToken    string
+
+	legalEntityIds []string
 
 	db        *sql.DB
 	apiClient *api.ClientWithResponses
@@ -98,6 +101,11 @@ func (s *Sync) SyncLegalEntities() {
 		log.Fatalln(err)
 	}
 
+	s.legalEntityIds = make([]string, 0)
+	for _, le := range *legalEntities {
+		s.legalEntityIds = append(s.legalEntityIds, *le.Id)
+	}
+
 	fmt.Println("got", len(*legalEntities), "legal entities")
 
 	fmt.Println("truncating legal entities")
@@ -149,6 +157,28 @@ func (s *Sync) SyncTrips() {
 	insertTrips(ctx, s.db, Trips)
 }
 
+func (s *Sync) SyncCompanyCards() {
+	fmt.Println("syncing company cards")
+
+	ctx := context.TODO()
+
+	truncateCompanyCards()
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchCompanyCards(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "cards")
+
+		insertCompanyCards(ctx, db, legalEntityId, ccs)
+
+		spew.Dump(ccs)
+	}
+
+}
+
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"
@@ -189,14 +219,10 @@ func (s *Sync) setup() {
 }
 
 func (s *Sync) Go() {
-
 	s.setup()
-
 	fmt.Println("syncing")
-	//s.SyncLegalEntities()
-	s.SyncUsers()
-	s.SyncTrips()
-	// fetch all legal entites
-	// fetch all users
-	// fetch all trips
+	s.SyncLegalEntities()
+	//s.SyncUsers()
+	//s.SyncTrips()
+	s.SyncCompanyCards()
 }

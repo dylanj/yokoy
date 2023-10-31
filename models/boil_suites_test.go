@@ -12,72 +12,85 @@ import "testing"
 // It does NOT run each operation group in parallel.
 // Separating the tests thusly grants avoidance of Postgres deadlocks.
 func TestParent(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCards)
 	t.Run("LegalEntities", testLegalEntities)
 	t.Run("Trips", testTrips)
 	t.Run("Users", testUsers)
 }
 
 func TestDelete(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsDelete)
 	t.Run("LegalEntities", testLegalEntitiesDelete)
 	t.Run("Trips", testTripsDelete)
 	t.Run("Users", testUsersDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsQueryDeleteAll)
 	t.Run("LegalEntities", testLegalEntitiesQueryDeleteAll)
 	t.Run("Trips", testTripsQueryDeleteAll)
 	t.Run("Users", testUsersQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsSliceDeleteAll)
 	t.Run("LegalEntities", testLegalEntitiesSliceDeleteAll)
 	t.Run("Trips", testTripsSliceDeleteAll)
 	t.Run("Users", testUsersSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsExists)
 	t.Run("LegalEntities", testLegalEntitiesExists)
 	t.Run("Trips", testTripsExists)
 	t.Run("Users", testUsersExists)
 }
 
 func TestFind(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsFind)
 	t.Run("LegalEntities", testLegalEntitiesFind)
 	t.Run("Trips", testTripsFind)
 	t.Run("Users", testUsersFind)
 }
 
 func TestBind(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsBind)
 	t.Run("LegalEntities", testLegalEntitiesBind)
 	t.Run("Trips", testTripsBind)
 	t.Run("Users", testUsersBind)
 }
 
 func TestOne(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsOne)
 	t.Run("LegalEntities", testLegalEntitiesOne)
 	t.Run("Trips", testTripsOne)
 	t.Run("Users", testUsersOne)
 }
 
 func TestAll(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsAll)
 	t.Run("LegalEntities", testLegalEntitiesAll)
 	t.Run("Trips", testTripsAll)
 	t.Run("Users", testUsersAll)
 }
 
 func TestCount(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsCount)
 	t.Run("LegalEntities", testLegalEntitiesCount)
 	t.Run("Trips", testTripsCount)
 	t.Run("Users", testUsersCount)
 }
 
 func TestHooks(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsHooks)
 	t.Run("LegalEntities", testLegalEntitiesHooks)
 	t.Run("Trips", testTripsHooks)
 	t.Run("Users", testUsersHooks)
 }
 
 func TestInsert(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsInsert)
+	t.Run("CompanyCards", testCompanyCardsInsertWhitelist)
 	t.Run("LegalEntities", testLegalEntitiesInsert)
 	t.Run("LegalEntities", testLegalEntitiesInsertWhitelist)
 	t.Run("Trips", testTripsInsert)
@@ -127,30 +140,35 @@ func TestToManySet(t *testing.T) {}
 func TestToManyRemove(t *testing.T) {}
 
 func TestReload(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsReload)
 	t.Run("LegalEntities", testLegalEntitiesReload)
 	t.Run("Trips", testTripsReload)
 	t.Run("Users", testUsersReload)
 }
 
 func TestReloadAll(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsReloadAll)
 	t.Run("LegalEntities", testLegalEntitiesReloadAll)
 	t.Run("Trips", testTripsReloadAll)
 	t.Run("Users", testUsersReloadAll)
 }
 
 func TestSelect(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsSelect)
 	t.Run("LegalEntities", testLegalEntitiesSelect)
 	t.Run("Trips", testTripsSelect)
 	t.Run("Users", testUsersSelect)
 }
 
 func TestUpdate(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsUpdate)
 	t.Run("LegalEntities", testLegalEntitiesUpdate)
 	t.Run("Trips", testTripsUpdate)
 	t.Run("Users", testUsersUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
+	t.Run("CompanyCards", testCompanyCardsSliceUpdateAll)
 	t.Run("LegalEntities", testLegalEntitiesSliceUpdateAll)
 	t.Run("Trips", testTripsSliceUpdateAll)
 	t.Run("Users", testUsersSliceUpdateAll)
