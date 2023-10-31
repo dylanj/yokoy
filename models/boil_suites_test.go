@@ -13,51 +13,64 @@ import "testing"
 // Separating the tests thusly grants avoidance of Postgres deadlocks.
 func TestParent(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntities)
+	t.Run("Users", testUsers)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesDelete)
+	t.Run("Users", testUsersDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesQueryDeleteAll)
+	t.Run("Users", testUsersQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSliceDeleteAll)
+	t.Run("Users", testUsersSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesExists)
+	t.Run("Users", testUsersExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesFind)
+	t.Run("Users", testUsersFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesBind)
+	t.Run("Users", testUsersBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesOne)
+	t.Run("Users", testUsersOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesAll)
+	t.Run("Users", testUsersAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesCount)
+	t.Run("Users", testUsersCount)
 }
 
 func TestHooks(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesHooks)
+	t.Run("Users", testUsersHooks)
 }
 
 func TestInsert(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesInsert)
 	t.Run("LegalEntities", testLegalEntitiesInsertWhitelist)
+	t.Run("Users", testUsersInsert)
+	t.Run("Users", testUsersInsertWhitelist)
 }
 
 // TestToOne tests cannot be run in parallel
@@ -102,20 +115,25 @@ func TestToManyRemove(t *testing.T) {}
 
 func TestReload(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesReload)
+	t.Run("Users", testUsersReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesReloadAll)
+	t.Run("Users", testUsersReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSelect)
+	t.Run("Users", testUsersSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesUpdate)
+	t.Run("Users", testUsersUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("LegalEntities", testLegalEntitiesSliceUpdateAll)
+	t.Run("Users", testUsersSliceUpdateAll)
 }

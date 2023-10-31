@@ -114,6 +114,21 @@ func (s *Sync) SyncLegalEntities() {
 func (s *Sync) SyncUsers() {
 	fmt.Println("syncing users")
 
+	ctx := context.TODO()
+
+	users, err := fetchUsers(ctx, s.apiClient)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println("got", len(*users), "users")
+
+	fmt.Println("truncating users")
+	truncateUsers(ctx, s.db)
+
+	fmt.Println("inserting users into db")
+	insertUsers(ctx, s.db, users)
+
 }
 
 func (s *Sync) SyncTrips() {
@@ -165,7 +180,7 @@ func (s *Sync) Go() {
 	s.setup()
 
 	fmt.Println("syncing")
-	s.SyncLegalEntities()
+	//s.SyncLegalEntities()
 	s.SyncUsers()
 	s.SyncTrips()
 	// fetch all legal entites
