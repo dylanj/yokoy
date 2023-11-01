@@ -35,6 +35,7 @@ CLIENT_ID="abc"
 CLIENT_SECRET="abc"
 YOKOY_URL="test.yokoy.ai"
 YOKOY_ORG_ID="abc"
+DATABASE_URL="postgres://user@localhost:5432/yokoy-sync"
 ```
 
 ### Notes

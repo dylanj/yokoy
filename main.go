@@ -7,17 +7,12 @@ import (
 
 	_ "github.com/lib/pq"
 
-	"github.com/joho/godotenv"
 	"github.com/dylanj/yokoy/yokoy"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	db, err := sql.Open("postgres", "dbname=yokoy user=dylan sslmode=disable")
-	if err != nil {
-		panic(err)
-	}
-
-	err = godotenv.Load()
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -26,6 +21,16 @@ func main() {
 	orgID := os.Getenv("YOKOY_ORG_ID")
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
+	dbURI := os.Getenv("DATABASE_URL")
+
+	db, err := sql.Open("postgres", dbURI)
+	if err != nil {
+		panic(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
 
 	y := yokoy.Sync{}
 	y.SetURL(baseURL)
