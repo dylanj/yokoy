@@ -212,7 +212,7 @@ CREATE TABLE invoice_categories (
     legal_entity_id         text
 );
 
-CREATE TABLE invoice_suppliers (
+CREATE TABLE suppliers (
     id                      text primary key,
     city                    text,
     country_code            text,

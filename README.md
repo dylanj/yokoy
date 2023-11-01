@@ -46,3 +46,4 @@ YOKOY_ORG_ID="abc"
 - `invoices.serverDate` returns string|[]string|null where strings denote dates
 - `invoices.status` returns an integer enum, docs say it is a string
 - `invoices.paymentInformation` is documented as `invoices.bankAccount`
+- `suppliers.country_code` is inconsistent with ever other reference to country

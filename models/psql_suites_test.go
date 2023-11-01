@@ -26,13 +26,13 @@ func TestUpsert(t *testing.T) {
 
 	t.Run("InvoiceLineItems", testInvoiceLineItemsUpsert)
 
-	t.Run("InvoiceSuppliers", testInvoiceSuppliersUpsert)
-
 	t.Run("Invoices", testInvoicesUpsert)
 
 	t.Run("LegalEntities", testLegalEntitiesUpsert)
 
 	t.Run("Policies", testPoliciesUpsert)
+
+	t.Run("Suppliers", testSuppliersUpsert)
 
 	t.Run("Tags", testTagsUpsert)
 
