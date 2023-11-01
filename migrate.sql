@@ -96,32 +96,35 @@ CREATE table expenses (
 );
 
 CREATE table expense_cost_center (
-    expense_id text,
-    cost_center_id text,
-    percent_weight integer,
+    expense_id          text,
+    cost_center_id      text,
+    percent_weight      integer,
+
     PRIMARY KEY (expense_id, cost_center_id)
 );
 
 CREATE table expense_tax_items (
-    expense_id text,
-    rate_id text,
-    gross integer,
-    tax integer,
+    expense_id          text,
+    rate_id             text,
+    gross               integer,
+    tax                 integer,
+
     PRIMARY KEY (expense_id, rate_id)
 );
 
 CREATE table expense_approver_ids (
-    expense_id text,
-    approver_id text,
+    expense_id          text,
+    approver_id         text,
+
     PRIMARY KEY(expense_id, approver_id)
 );
 
 CREATE table expense_event_logs (
-    id serial primary key,
-    expense_id text,
-    action_type text,
-    comment text,
-    name text,
-    timestamp timestamp without time zone,
-    user_id text
+    id                  serial primary key,
+    expense_id          text,
+    action_type         text,
+    comment             text,
+    name                text,
+    timestamp           timestamp without time zone,
+    user_id             text
 )
