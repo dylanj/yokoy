@@ -108,3 +108,9 @@ CREATE table expense_tax_items (
     tax integer,
     PRIMARY KEY (expense_id, rate_id)
 );
+
+CREATE table expense_approver_ids (
+    expense_id text,
+    approver_id text,
+    PRIMARY KEY(expense_id, approver_id)
+);
