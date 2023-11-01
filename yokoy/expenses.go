@@ -32,6 +32,7 @@ func truncateExpenses(ctx context.Context, db *sql.DB) {
 	db.ExecContext(ctx, "truncate expenses;")
 	db.ExecContext(ctx, "truncate expense_cost_center;")
 	db.ExecContext(ctx, "truncate expense_tax_items;")
+	db.ExecContext(ctx, "truncate expense_approver_ids;")
 }
 
 func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) error {
@@ -92,6 +93,17 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			r.RateID = *ti.RateId
 			r.Gross = null.IntFrom(int(*ti.Gross))
 			r.Tax = null.IntFrom(int(*ti.Tax))
+
+			err := r.Insert(ctx, db, boil.Infer())
+			if err != nil {
+				return err
+			}
+		}
+
+		for _, a := range *e.ApproverIds {
+			r := models.ExpenseApproverID{}
+			r.ExpenseID = *e.Id
+			r.ApproverID = a
 
 			err := r.Insert(ctx, db, boil.Infer())
 			if err != nil {
