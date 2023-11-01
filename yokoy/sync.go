@@ -232,6 +232,25 @@ func (s *Sync) SyncPolicies() {
 	}
 }
 
+func (s *Sync) SyncTaxRates() {
+	fmt.Println("syncing tax rates")
+
+	ctx := context.TODO()
+
+	truncateTaxRates(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchTaxRates(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "tax rates in le", legalEntityId)
+
+		insertTaxRates(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) SyncCostCenters() {
 	fmt.Println("syncing cost centers")
 

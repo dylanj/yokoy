@@ -144,5 +144,6 @@ CREATE table tax_rates (
     country             text,
     name                text,
     rate                integer,
+    legal_entity_id     text,
     status_active       boolean
 );
