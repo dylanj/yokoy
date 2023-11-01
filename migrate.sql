@@ -202,3 +202,12 @@ CREATE TABLE invoice_line_items (
     tax_rate_id             text,
     unit                    text
 );
+
+CREATE TABLE invoice_categories (
+    id                      text primary key,
+    account_reference       text,
+    description             text,
+    name                    text,
+    status_active           boolean,
+    legal_entity_id         text
+);

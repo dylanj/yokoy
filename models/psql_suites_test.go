@@ -22,6 +22,8 @@ func TestUpsert(t *testing.T) {
 
 	t.Run("Expenses", testExpensesUpsert)
 
+	t.Run("InvoiceCategories", testInvoiceCategoriesUpsert)
+
 	t.Run("InvoiceLineItems", testInvoiceLineItemsUpsert)
 
 	t.Run("Invoices", testInvoicesUpsert)
