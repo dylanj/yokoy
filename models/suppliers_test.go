@@ -149,7 +149,7 @@ func testSuppliersExists(t *testing.T) {
 		t.Error(err)
 	}
 
-	e, err := SupplierExists(ctx, tx, o.ID)
+	e, err := SupplierExists(ctx, tx, o.LegalEntityID, o.ID)
 	if err != nil {
 		t.Errorf("Unable to check if Supplier exists: %s", err)
 	}
@@ -175,7 +175,7 @@ func testSuppliersFind(t *testing.T) {
 		t.Error(err)
 	}
 
-	supplierFound, err := FindSupplier(ctx, tx, o.ID)
+	supplierFound, err := FindSupplier(ctx, tx, o.LegalEntityID, o.ID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -568,7 +568,7 @@ func testSuppliersSelect(t *testing.T) {
 }
 
 var (
-	supplierDBTypes = map[string]string{`ID`: `text`, `City`: `text`, `CountryCode`: `text`, `ExternalID`: `text`, `Name`: `text`, `SecondaryName`: `text`, `ShortName`: `text`, `StatusActive`: `boolean`, `Street`: `text`, `TaxNumber`: `text`, `URL`: `text`, `ZipCode`: `text`, `DefaultApproverID`: `text`, `DefaultCategoryID`: `text`, `DefaultCostCenter`: `text`, `DefaultPaymentTermID`: `text`, `SupplierID`: `text`}
+	supplierDBTypes = map[string]string{`ID`: `text`, `LegalEntityID`: `text`, `City`: `text`, `CountryCode`: `text`, `ExternalID`: `text`, `Name`: `text`, `SecondaryName`: `text`, `ShortName`: `text`, `StatusActive`: `boolean`, `Street`: `text`, `TaxNumber`: `text`, `URL`: `text`, `ZipCode`: `text`, `DefaultApproverID`: `text`, `DefaultCategoryID`: `text`, `DefaultCostCenter`: `text`, `DefaultPaymentTermID`: `text`, `SupplierID`: `text`}
 	_               = bytes.MinRead
 )
 

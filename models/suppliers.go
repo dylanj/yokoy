@@ -25,6 +25,7 @@ import (
 // Supplier is an object representing the database table.
 type Supplier struct {
 	ID                   string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	LegalEntityID        string      `boil:"legal_entity_id" json:"legal_entity_id" toml:"legal_entity_id" yaml:"legal_entity_id"`
 	City                 null.String `boil:"city" json:"city,omitempty" toml:"city" yaml:"city,omitempty"`
 	CountryCode          null.String `boil:"country_code" json:"country_code,omitempty" toml:"country_code" yaml:"country_code,omitempty"`
 	ExternalID           null.String `boil:"external_id" json:"external_id,omitempty" toml:"external_id" yaml:"external_id,omitempty"`
@@ -48,6 +49,7 @@ type Supplier struct {
 
 var SupplierColumns = struct {
 	ID                   string
+	LegalEntityID        string
 	City                 string
 	CountryCode          string
 	ExternalID           string
@@ -66,6 +68,7 @@ var SupplierColumns = struct {
 	SupplierID           string
 }{
 	ID:                   "id",
+	LegalEntityID:        "legal_entity_id",
 	City:                 "city",
 	CountryCode:          "country_code",
 	ExternalID:           "external_id",
@@ -86,6 +89,7 @@ var SupplierColumns = struct {
 
 var SupplierTableColumns = struct {
 	ID                   string
+	LegalEntityID        string
 	City                 string
 	CountryCode          string
 	ExternalID           string
@@ -104,6 +108,7 @@ var SupplierTableColumns = struct {
 	SupplierID           string
 }{
 	ID:                   "suppliers.id",
+	LegalEntityID:        "suppliers.legal_entity_id",
 	City:                 "suppliers.city",
 	CountryCode:          "suppliers.country_code",
 	ExternalID:           "suppliers.external_id",
@@ -126,6 +131,7 @@ var SupplierTableColumns = struct {
 
 var SupplierWhere = struct {
 	ID                   whereHelperstring
+	LegalEntityID        whereHelperstring
 	City                 whereHelpernull_String
 	CountryCode          whereHelpernull_String
 	ExternalID           whereHelpernull_String
@@ -144,6 +150,7 @@ var SupplierWhere = struct {
 	SupplierID           whereHelpernull_String
 }{
 	ID:                   whereHelperstring{field: "\"suppliers\".\"id\""},
+	LegalEntityID:        whereHelperstring{field: "\"suppliers\".\"legal_entity_id\""},
 	City:                 whereHelpernull_String{field: "\"suppliers\".\"city\""},
 	CountryCode:          whereHelpernull_String{field: "\"suppliers\".\"country_code\""},
 	ExternalID:           whereHelpernull_String{field: "\"suppliers\".\"external_id\""},
@@ -179,10 +186,10 @@ func (*supplierR) NewStruct() *supplierR {
 type supplierL struct{}
 
 var (
-	supplierAllColumns            = []string{"id", "city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id", "supplier_id"}
-	supplierColumnsWithoutDefault = []string{"id"}
+	supplierAllColumns            = []string{"id", "legal_entity_id", "city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id", "supplier_id"}
+	supplierColumnsWithoutDefault = []string{"id", "legal_entity_id"}
 	supplierColumnsWithDefault    = []string{"city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id", "supplier_id"}
-	supplierPrimaryKeyColumns     = []string{"id"}
+	supplierPrimaryKeyColumns     = []string{"legal_entity_id", "id"}
 	supplierGeneratedColumns      = []string{}
 )
 
@@ -477,7 +484,7 @@ func Suppliers(mods ...qm.QueryMod) supplierQuery {
 
 // FindSupplier retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindSupplier(ctx context.Context, exec boil.ContextExecutor, iD string, selectCols ...string) (*Supplier, error) {
+func FindSupplier(ctx context.Context, exec boil.ContextExecutor, legalEntityID string, iD string, selectCols ...string) (*Supplier, error) {
 	supplierObj := &Supplier{}
 
 	sel := "*"
@@ -485,10 +492,10 @@ func FindSupplier(ctx context.Context, exec boil.ContextExecutor, iD string, sel
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"suppliers\" where \"id\"=$1", sel,
+		"select %s from \"suppliers\" where \"legal_entity_id\"=$1 AND \"id\"=$2", sel,
 	)
 
-	q := queries.Raw(query, iD)
+	q := queries.Raw(query, legalEntityID, iD)
 
 	err := q.Bind(ctx, exec, supplierObj)
 	if err != nil {
@@ -840,7 +847,7 @@ func (o *Supplier) Delete(ctx context.Context, exec boil.ContextExecutor) (int64
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), supplierPrimaryKeyMapping)
-	sql := "DELETE FROM \"suppliers\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"suppliers\" WHERE \"legal_entity_id\"=$1 AND \"id\"=$2"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -937,7 +944,7 @@ func (o SupplierSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor)
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *Supplier) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindSupplier(ctx, exec, o.ID)
+	ret, err := FindSupplier(ctx, exec, o.LegalEntityID, o.ID)
 	if err != nil {
 		return err
 	}
@@ -976,16 +983,16 @@ func (o *SupplierSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor
 }
 
 // SupplierExists checks if the Supplier row exists.
-func SupplierExists(ctx context.Context, exec boil.ContextExecutor, iD string) (bool, error) {
+func SupplierExists(ctx context.Context, exec boil.ContextExecutor, legalEntityID string, iD string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"suppliers\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"suppliers\" where \"legal_entity_id\"=$1 AND \"id\"=$2 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
 		fmt.Fprintln(writer, sql)
-		fmt.Fprintln(writer, iD)
+		fmt.Fprintln(writer, legalEntityID, iD)
 	}
-	row := exec.QueryRowContext(ctx, sql, iD)
+	row := exec.QueryRowContext(ctx, sql, legalEntityID, iD)
 
 	err := row.Scan(&exists)
 	if err != nil {
@@ -997,5 +1004,5 @@ func SupplierExists(ctx context.Context, exec boil.ContextExecutor, iD string) (
 
 // Exists checks if the Supplier row exists.
 func (o *Supplier) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return SupplierExists(ctx, exec, o.ID)
+	return SupplierExists(ctx, exec, o.LegalEntityID, o.ID)
 }
