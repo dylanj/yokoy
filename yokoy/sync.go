@@ -270,6 +270,25 @@ func (s *Sync) SyncCostCenters() {
 	}
 }
 
+func (s *Sync) SyncInvoices() {
+	fmt.Println("syncing invoices")
+
+	ctx := context.TODO()
+
+	truncateInvoices(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchInvoices(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "invoices in le", legalEntityId)
+
+		insertInvoices(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) SyncTags() {
 	fmt.Println("syncing tags")
 

@@ -29,6 +29,7 @@ type Invoice struct {
 	LegalEntityID    null.String       `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
 	Country          null.String       `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
 	Currency         null.String       `boil:"currency" json:"currency,omitempty" toml:"currency" yaml:"currency,omitempty"`
+	Duedate          null.Time         `boil:"duedate" json:"duedate,omitempty" toml:"duedate" yaml:"duedate,omitempty"`
 	Date             null.Time         `boil:"date" json:"date,omitempty" toml:"date" yaml:"date,omitempty"`
 	GrossAmount      null.Int          `boil:"gross_amount" json:"gross_amount,omitempty" toml:"gross_amount" yaml:"gross_amount,omitempty"`
 	InvoiceNumber    null.String       `boil:"invoice_number" json:"invoice_number,omitempty" toml:"invoice_number" yaml:"invoice_number,omitempty"`
@@ -42,6 +43,13 @@ type Invoice struct {
 	Submitters       types.StringArray `boil:"submitters" json:"submitters,omitempty" toml:"submitters" yaml:"submitters,omitempty"`
 	SupplierID       null.String       `boil:"supplier_id" json:"supplier_id,omitempty" toml:"supplier_id" yaml:"supplier_id,omitempty"`
 	TaxableAmount    null.Int          `boil:"taxable_amount" json:"taxable_amount,omitempty" toml:"taxable_amount" yaml:"taxable_amount,omitempty"`
+	BankAccount      null.String       `boil:"bank_account" json:"bank_account,omitempty" toml:"bank_account" yaml:"bank_account,omitempty"`
+	BankCountry      null.String       `boil:"bank_country" json:"bank_country,omitempty" toml:"bank_country" yaml:"bank_country,omitempty"`
+	BankKey          null.String       `boil:"bank_key" json:"bank_key,omitempty" toml:"bank_key" yaml:"bank_key,omitempty"`
+	BankNumber       null.String       `boil:"bank_number" json:"bank_number,omitempty" toml:"bank_number" yaml:"bank_number,omitempty"`
+	ExternalID       null.String       `boil:"external_id" json:"external_id,omitempty" toml:"external_id" yaml:"external_id,omitempty"`
+	Iban             null.String       `boil:"iban" json:"iban,omitempty" toml:"iban" yaml:"iban,omitempty"`
+	SwiftCode        null.String       `boil:"swift_code" json:"swift_code,omitempty" toml:"swift_code" yaml:"swift_code,omitempty"`
 
 	R *invoiceR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L invoiceL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -52,6 +60,7 @@ var InvoiceColumns = struct {
 	LegalEntityID    string
 	Country          string
 	Currency         string
+	Duedate          string
 	Date             string
 	GrossAmount      string
 	InvoiceNumber    string
@@ -65,11 +74,19 @@ var InvoiceColumns = struct {
 	Submitters       string
 	SupplierID       string
 	TaxableAmount    string
+	BankAccount      string
+	BankCountry      string
+	BankKey          string
+	BankNumber       string
+	ExternalID       string
+	Iban             string
+	SwiftCode        string
 }{
 	ID:               "id",
 	LegalEntityID:    "legal_entity_id",
 	Country:          "country",
 	Currency:         "currency",
+	Duedate:          "duedate",
 	Date:             "date",
 	GrossAmount:      "gross_amount",
 	InvoiceNumber:    "invoice_number",
@@ -83,6 +100,13 @@ var InvoiceColumns = struct {
 	Submitters:       "submitters",
 	SupplierID:       "supplier_id",
 	TaxableAmount:    "taxable_amount",
+	BankAccount:      "bank_account",
+	BankCountry:      "bank_country",
+	BankKey:          "bank_key",
+	BankNumber:       "bank_number",
+	ExternalID:       "external_id",
+	Iban:             "iban",
+	SwiftCode:        "swift_code",
 }
 
 var InvoiceTableColumns = struct {
@@ -90,6 +114,7 @@ var InvoiceTableColumns = struct {
 	LegalEntityID    string
 	Country          string
 	Currency         string
+	Duedate          string
 	Date             string
 	GrossAmount      string
 	InvoiceNumber    string
@@ -103,11 +128,19 @@ var InvoiceTableColumns = struct {
 	Submitters       string
 	SupplierID       string
 	TaxableAmount    string
+	BankAccount      string
+	BankCountry      string
+	BankKey          string
+	BankNumber       string
+	ExternalID       string
+	Iban             string
+	SwiftCode        string
 }{
 	ID:               "invoices.id",
 	LegalEntityID:    "invoices.legal_entity_id",
 	Country:          "invoices.country",
 	Currency:         "invoices.currency",
+	Duedate:          "invoices.duedate",
 	Date:             "invoices.date",
 	GrossAmount:      "invoices.gross_amount",
 	InvoiceNumber:    "invoices.invoice_number",
@@ -121,6 +154,13 @@ var InvoiceTableColumns = struct {
 	Submitters:       "invoices.submitters",
 	SupplierID:       "invoices.supplier_id",
 	TaxableAmount:    "invoices.taxable_amount",
+	BankAccount:      "invoices.bank_account",
+	BankCountry:      "invoices.bank_country",
+	BankKey:          "invoices.bank_key",
+	BankNumber:       "invoices.bank_number",
+	ExternalID:       "invoices.external_id",
+	Iban:             "invoices.iban",
+	SwiftCode:        "invoices.swift_code",
 }
 
 // Generated where
@@ -156,6 +196,7 @@ var InvoiceWhere = struct {
 	LegalEntityID    whereHelpernull_String
 	Country          whereHelpernull_String
 	Currency         whereHelpernull_String
+	Duedate          whereHelpernull_Time
 	Date             whereHelpernull_Time
 	GrossAmount      whereHelpernull_Int
 	InvoiceNumber    whereHelpernull_String
@@ -169,11 +210,19 @@ var InvoiceWhere = struct {
 	Submitters       whereHelpertypes_StringArray
 	SupplierID       whereHelpernull_String
 	TaxableAmount    whereHelpernull_Int
+	BankAccount      whereHelpernull_String
+	BankCountry      whereHelpernull_String
+	BankKey          whereHelpernull_String
+	BankNumber       whereHelpernull_String
+	ExternalID       whereHelpernull_String
+	Iban             whereHelpernull_String
+	SwiftCode        whereHelpernull_String
 }{
 	ID:               whereHelperstring{field: "\"invoices\".\"id\""},
 	LegalEntityID:    whereHelpernull_String{field: "\"invoices\".\"legal_entity_id\""},
 	Country:          whereHelpernull_String{field: "\"invoices\".\"country\""},
 	Currency:         whereHelpernull_String{field: "\"invoices\".\"currency\""},
+	Duedate:          whereHelpernull_Time{field: "\"invoices\".\"duedate\""},
 	Date:             whereHelpernull_Time{field: "\"invoices\".\"date\""},
 	GrossAmount:      whereHelpernull_Int{field: "\"invoices\".\"gross_amount\""},
 	InvoiceNumber:    whereHelpernull_String{field: "\"invoices\".\"invoice_number\""},
@@ -187,6 +236,13 @@ var InvoiceWhere = struct {
 	Submitters:       whereHelpertypes_StringArray{field: "\"invoices\".\"submitters\""},
 	SupplierID:       whereHelpernull_String{field: "\"invoices\".\"supplier_id\""},
 	TaxableAmount:    whereHelpernull_Int{field: "\"invoices\".\"taxable_amount\""},
+	BankAccount:      whereHelpernull_String{field: "\"invoices\".\"bank_account\""},
+	BankCountry:      whereHelpernull_String{field: "\"invoices\".\"bank_country\""},
+	BankKey:          whereHelpernull_String{field: "\"invoices\".\"bank_key\""},
+	BankNumber:       whereHelpernull_String{field: "\"invoices\".\"bank_number\""},
+	ExternalID:       whereHelpernull_String{field: "\"invoices\".\"external_id\""},
+	Iban:             whereHelpernull_String{field: "\"invoices\".\"iban\""},
+	SwiftCode:        whereHelpernull_String{field: "\"invoices\".\"swift_code\""},
 }
 
 // InvoiceRels is where relationship names are stored.
@@ -206,9 +262,9 @@ func (*invoiceR) NewStruct() *invoiceR {
 type invoiceL struct{}
 
 var (
-	invoiceAllColumns            = []string{"id", "legal_entity_id", "country", "currency", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount"}
+	invoiceAllColumns            = []string{"id", "legal_entity_id", "country", "currency", "duedate", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
 	invoiceColumnsWithoutDefault = []string{"id"}
-	invoiceColumnsWithDefault    = []string{"legal_entity_id", "country", "currency", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount"}
+	invoiceColumnsWithDefault    = []string{"legal_entity_id", "country", "currency", "duedate", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
 	invoicePrimaryKeyColumns     = []string{"id"}
 	invoiceGeneratedColumns      = []string{}
 )

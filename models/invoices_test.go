@@ -568,7 +568,7 @@ func testInvoicesSelect(t *testing.T) {
 }
 
 var (
-	invoiceDBTypes = map[string]string{`ID`: `text`, `LegalEntityID`: `text`, `Country`: `text`, `Currency`: `text`, `Date`: `timestamp without time zone`, `GrossAmount`: `integer`, `InvoiceNumber`: `text`, `IsCreditNode`: `boolean`, `NetAmount`: `integer`, `PaymentTermID`: `text`, `PostingDate`: `timestamp without time zone`, `PurchaseOrderIds`: `ARRAYtext`, `ServiceDate`: `timestamp without time zone`, `Status`: `text`, `Submitters`: `ARRAYtext`, `SupplierID`: `text`, `TaxableAmount`: `integer`}
+	invoiceDBTypes = map[string]string{`ID`: `text`, `LegalEntityID`: `text`, `Country`: `text`, `Currency`: `text`, `Duedate`: `timestamp without time zone`, `Date`: `timestamp without time zone`, `GrossAmount`: `integer`, `InvoiceNumber`: `text`, `IsCreditNode`: `boolean`, `NetAmount`: `integer`, `PaymentTermID`: `text`, `PostingDate`: `timestamp without time zone`, `PurchaseOrderIds`: `ARRAYtext`, `ServiceDate`: `timestamp without time zone`, `Status`: `text`, `Submitters`: `ARRAYtext`, `SupplierID`: `text`, `TaxableAmount`: `integer`, `BankAccount`: `text`, `BankCountry`: `text`, `BankKey`: `text`, `BankNumber`: `text`, `ExternalID`: `text`, `Iban`: `text`, `SwiftCode`: `text`}
 	_              = bytes.MinRead
 )
 

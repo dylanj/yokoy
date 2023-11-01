@@ -162,6 +162,7 @@ CREATE TABLE invoices (
     legal_entity_id     text,
     country             text,
     currency            text,
+    dueDate             timestamp without time zone,
     date                timestamp without time zone,
     gross_amount        integer,
     invoice_number      text,
@@ -174,7 +175,15 @@ CREATE TABLE invoices (
     status              text,
     submitters          text[],
     supplier_id         text,
-    taxable_amount      integer
+    taxable_amount      integer,
+
+    bank_account        text,
+    bank_country        text,
+    bank_key            text,
+    bank_number         text,
+    external_id         text,
+    iban                text,
+    swift_code          text
 );
 
 CREATE TABLE invoice_line_items (

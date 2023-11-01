@@ -18,7 +18,8 @@ This is a quick and dirty app that sync yokoy data from the yokoy api to a postg
     - [x] TaxItem
     - [x] ApproverId
     - [x] EventLog
-- [ ] Invoice - Scoped to LegalEntity
+- [-] Invoice - Scoped to LegalEntity
+    - [-] InvoiceLineItem
 - [ ] InvoiceCategory - Scoped to LegalEntity
 - [ ] InvoicePaymentTerms - Scoped to LegalEntity
 - [ ] InvoiceSupplier - Scoped to LegalEntity
@@ -42,3 +43,6 @@ YOKOY_ORG_ID="abc"
 - there are no policies in the test environment i am using
 - `expenses.eventLog.timestamp` - use format `Wed, 24 Aug 2022 08:58:34 GMT`
 - `expenses.created`/`lastmodified` use format `1970-01-01T00:00:00.000Z`
+- `invoices.serverDate` returns string|[]string|null where strings denote dates
+- `invoices.status` returns an integer enum, docs say it is a string
+- `invoices.paymentInformation` is documented as `invoices.bankAccount`
