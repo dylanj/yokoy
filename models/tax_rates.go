@@ -30,6 +30,7 @@ type TaxRate struct {
 	Country          null.String `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
 	Name             null.String `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
 	Rate             null.Int    `boil:"rate" json:"rate,omitempty" toml:"rate" yaml:"rate,omitempty"`
+	LegalEntityID    null.String `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
 	StatusActive     null.Bool   `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 
 	R *taxRateR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -43,6 +44,7 @@ var TaxRateColumns = struct {
 	Country          string
 	Name             string
 	Rate             string
+	LegalEntityID    string
 	StatusActive     string
 }{
 	ID:               "id",
@@ -51,6 +53,7 @@ var TaxRateColumns = struct {
 	Country:          "country",
 	Name:             "name",
 	Rate:             "rate",
+	LegalEntityID:    "legal_entity_id",
 	StatusActive:     "status_active",
 }
 
@@ -61,6 +64,7 @@ var TaxRateTableColumns = struct {
 	Country          string
 	Name             string
 	Rate             string
+	LegalEntityID    string
 	StatusActive     string
 }{
 	ID:               "tax_rates.id",
@@ -69,6 +73,7 @@ var TaxRateTableColumns = struct {
 	Country:          "tax_rates.country",
 	Name:             "tax_rates.name",
 	Rate:             "tax_rates.rate",
+	LegalEntityID:    "tax_rates.legal_entity_id",
 	StatusActive:     "tax_rates.status_active",
 }
 
@@ -81,6 +86,7 @@ var TaxRateWhere = struct {
 	Country          whereHelpernull_String
 	Name             whereHelpernull_String
 	Rate             whereHelpernull_Int
+	LegalEntityID    whereHelpernull_String
 	StatusActive     whereHelpernull_Bool
 }{
 	ID:               whereHelperstring{field: "\"tax_rates\".\"id\""},
@@ -89,6 +95,7 @@ var TaxRateWhere = struct {
 	Country:          whereHelpernull_String{field: "\"tax_rates\".\"country\""},
 	Name:             whereHelpernull_String{field: "\"tax_rates\".\"name\""},
 	Rate:             whereHelpernull_Int{field: "\"tax_rates\".\"rate\""},
+	LegalEntityID:    whereHelpernull_String{field: "\"tax_rates\".\"legal_entity_id\""},
 	StatusActive:     whereHelpernull_Bool{field: "\"tax_rates\".\"status_active\""},
 }
 
@@ -109,9 +116,9 @@ func (*taxRateR) NewStruct() *taxRateR {
 type taxRateL struct{}
 
 var (
-	taxRateAllColumns            = []string{"id", "account_reference", "code", "country", "name", "rate", "status_active"}
+	taxRateAllColumns            = []string{"id", "account_reference", "code", "country", "name", "rate", "legal_entity_id", "status_active"}
 	taxRateColumnsWithoutDefault = []string{"id"}
-	taxRateColumnsWithDefault    = []string{"account_reference", "code", "country", "name", "rate", "status_active"}
+	taxRateColumnsWithDefault    = []string{"account_reference", "code", "country", "name", "rate", "legal_entity_id", "status_active"}
 	taxRatePrimaryKeyColumns     = []string{"id"}
 	taxRateGeneratedColumns      = []string{}
 )

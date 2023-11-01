@@ -568,7 +568,7 @@ func testTaxRatesSelect(t *testing.T) {
 }
 
 var (
-	taxRateDBTypes = map[string]string{`ID`: `text`, `AccountReference`: `text`, `Code`: `text`, `Country`: `text`, `Name`: `text`, `Rate`: `integer`, `StatusActive`: `boolean`}
+	taxRateDBTypes = map[string]string{`ID`: `text`, `AccountReference`: `text`, `Code`: `text`, `Country`: `text`, `Name`: `text`, `Rate`: `integer`, `LegalEntityID`: `text`, `StatusActive`: `boolean`}
 	_              = bytes.MinRead
 )
 
