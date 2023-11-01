@@ -147,3 +147,12 @@ CREATE table tax_rates (
     legal_entity_id     text,
     status_active       boolean
 );
+
+CREATE TABLE tag (
+    id                  text primary key,
+    dimension_code      text,
+    code                text,
+    name                text,
+    legal_entity_id     text,
+    status_active       boolean
+);
