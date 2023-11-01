@@ -127,4 +127,11 @@ CREATE table expense_event_logs (
     name                text,
     timestamp           timestamp without time zone,
     user_id             text
-)
+);
+
+CREATE table policies (
+    id                  text primary key,
+    code                text,
+    name                text,
+    status_active       boolean
+);
