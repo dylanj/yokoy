@@ -39,6 +39,9 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 	for _, e := range *expenses {
 		r := models.Expense{}
 		r.ID = *e.Id
+		if e.AdditionalCharges != nil {
+			r.AdditionalCharges = null.IntFrom(int(*e.AdditionalCharges))
+		}
 		r.CategoryID = null.StringFromPtr(e.CategoryId)
 		r.Country = null.StringFromPtr(e.Country)
 		r.Created = null.TimeFromPtr(parseTime(e.Created))
