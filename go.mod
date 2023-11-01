@@ -1,6 +1,6 @@
 module github.com/dylanj/yokoy
 
-go 1.18
+go 1.21
 
 require (
 	github.com/friendsofgo/errors v0.9.2
