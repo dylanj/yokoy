@@ -156,3 +156,40 @@ CREATE TABLE tags (
     legal_entity_id     text,
     status_active       boolean
 );
+
+CREATE TABLE invoices (
+    id                  text primary key,
+    legal_entity_id     text,
+    country             text,
+    currency            text,
+    date                timestamp without time zone,
+    gross_amount        integer,
+    invoice_number      text,
+    is_credit_node      boolean,
+    net_amount          integer,
+    payment_term_id     text,
+    posting_date        timestamp without time zone,
+    purchase_order_ids  text[],
+    service_date        timestamp without time zone,
+    status              text,
+    submitters          text[],
+    supplier_id         text,
+    taxable_amount      integer
+);
+
+CREATE TABLE invoice_line_items (
+    id                      serial primary key,
+    invoice_id              text,
+    category_id             text,
+    cost_object_id          text,
+    description             text,
+    gross                   integer,
+    item_price              integer,
+    net                     integer,
+    purchase_order_id       text,
+    purchase_order_item_id  text,
+    quantity                integer,
+    tags                    text,
+    tax_rate_id             text,
+    unit                    text
+);
