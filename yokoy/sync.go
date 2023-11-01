@@ -270,6 +270,25 @@ func (s *Sync) SyncCostCenters() {
 	}
 }
 
+func (s *Sync) SyncTags() {
+	fmt.Println("syncing tags")
+
+	ctx := context.TODO()
+
+	truncateTags(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchTags(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "tags in le", legalEntityId)
+
+		insertTags(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"
