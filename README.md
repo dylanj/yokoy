@@ -10,10 +10,9 @@ This is a quick and dirty app that sync yokoy data from the yokoy api to a postg
 - [x] CostCenter - Scoped to LegalEntity
 - [x] Category - Scoped to LegalEntity
 - [x] CompanyCard - Scoped to LegalEntity
-- [ ] ExpenseCategory - Scoped to LegalEntity
 - [x] Policy - Scoped to LegalEntity
 - [x] TaxRate - Scoped to LegalEntity
-- [ ] Tag - Scoped to LegalEntity
+- [x] Tag - Scoped to LegalEntity
 - [x] Expense
     - [x] CostCenter
     - [x] TaxItem
