@@ -14,7 +14,11 @@ This is a quick and dirty app that sync yokoy data from the yokoy api to a postg
 - [ ] Policy - Scoped to LegalEntity
 - [ ] TaxRate - Scoped to LegalEntity
 - [ ] Tag - Scoped to LegalEntity
-- [ ] Expense
+- [x] Expense
+    - [x] CostCenter
+    - [x] TaxItem
+    - [x] ApproverId
+    - [x] EventLog
 - [ ] Invoice - Scoped to LegalEntity
 - [ ] InvoiceCategory - Scoped to LegalEntity
 - [ ] InvoicePaymentTerms - Scoped to LegalEntity
