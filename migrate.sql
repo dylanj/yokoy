@@ -133,5 +133,6 @@ CREATE table policies (
     id                  text primary key,
     code                text,
     name                text,
+    legal_entity_id     text,
     status_active       boolean
 );

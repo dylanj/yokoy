@@ -213,6 +213,25 @@ func (s *Sync) SyncCategories() {
 	}
 }
 
+func (s *Sync) SyncPolicies() {
+	fmt.Println("syncing policies")
+
+	ctx := context.TODO()
+
+	truncatePolicies(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchPolicies(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "policies in le", legalEntityId)
+
+		insertPolicies(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) SyncCostCenters() {
 	fmt.Println("syncing cost centers")
 

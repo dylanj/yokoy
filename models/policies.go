@@ -24,51 +24,58 @@ import (
 
 // Policy is an object representing the database table.
 type Policy struct {
-	ID           string      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Code         null.String `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
-	Name         null.String `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
-	StatusActive null.Bool   `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
+	ID            string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Code          null.String `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
+	Name          null.String `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
+	LegalEntityID null.String `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
+	StatusActive  null.Bool   `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 
 	R *policyR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L policyL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var PolicyColumns = struct {
-	ID           string
-	Code         string
-	Name         string
-	StatusActive string
+	ID            string
+	Code          string
+	Name          string
+	LegalEntityID string
+	StatusActive  string
 }{
-	ID:           "id",
-	Code:         "code",
-	Name:         "name",
-	StatusActive: "status_active",
+	ID:            "id",
+	Code:          "code",
+	Name:          "name",
+	LegalEntityID: "legal_entity_id",
+	StatusActive:  "status_active",
 }
 
 var PolicyTableColumns = struct {
-	ID           string
-	Code         string
-	Name         string
-	StatusActive string
+	ID            string
+	Code          string
+	Name          string
+	LegalEntityID string
+	StatusActive  string
 }{
-	ID:           "policies.id",
-	Code:         "policies.code",
-	Name:         "policies.name",
-	StatusActive: "policies.status_active",
+	ID:            "policies.id",
+	Code:          "policies.code",
+	Name:          "policies.name",
+	LegalEntityID: "policies.legal_entity_id",
+	StatusActive:  "policies.status_active",
 }
 
 // Generated where
 
 var PolicyWhere = struct {
-	ID           whereHelperstring
-	Code         whereHelpernull_String
-	Name         whereHelpernull_String
-	StatusActive whereHelpernull_Bool
+	ID            whereHelperstring
+	Code          whereHelpernull_String
+	Name          whereHelpernull_String
+	LegalEntityID whereHelpernull_String
+	StatusActive  whereHelpernull_Bool
 }{
-	ID:           whereHelperstring{field: "\"policies\".\"id\""},
-	Code:         whereHelpernull_String{field: "\"policies\".\"code\""},
-	Name:         whereHelpernull_String{field: "\"policies\".\"name\""},
-	StatusActive: whereHelpernull_Bool{field: "\"policies\".\"status_active\""},
+	ID:            whereHelperstring{field: "\"policies\".\"id\""},
+	Code:          whereHelpernull_String{field: "\"policies\".\"code\""},
+	Name:          whereHelpernull_String{field: "\"policies\".\"name\""},
+	LegalEntityID: whereHelpernull_String{field: "\"policies\".\"legal_entity_id\""},
+	StatusActive:  whereHelpernull_Bool{field: "\"policies\".\"status_active\""},
 }
 
 // PolicyRels is where relationship names are stored.
@@ -88,9 +95,9 @@ func (*policyR) NewStruct() *policyR {
 type policyL struct{}
 
 var (
-	policyAllColumns            = []string{"id", "code", "name", "status_active"}
+	policyAllColumns            = []string{"id", "code", "name", "legal_entity_id", "status_active"}
 	policyColumnsWithoutDefault = []string{"id"}
-	policyColumnsWithDefault    = []string{"code", "name", "status_active"}
+	policyColumnsWithDefault    = []string{"code", "name", "legal_entity_id", "status_active"}
 	policyPrimaryKeyColumns     = []string{"id"}
 	policyGeneratedColumns      = []string{}
 )

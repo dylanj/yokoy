@@ -40,5 +40,6 @@ YOKOY_ORG_ID="abc"
 ### Notes
 - `approvalLimit` on cost center can be a string `"999999"` or an int `999999`
 - there are no company cards in the test enviroment i am using
+- there are no policies in the test environment i am using
 - `expenses.eventLog.timestamp` - use format `Wed, 24 Aug 2022 08:58:34 GMT`
 - `expenses.created`/`lastmodified` use format `1970-01-01T00:00:00.000Z`

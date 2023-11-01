@@ -568,7 +568,7 @@ func testPoliciesSelect(t *testing.T) {
 }
 
 var (
-	policyDBTypes = map[string]string{`ID`: `text`, `Code`: `text`, `Name`: `text`, `StatusActive`: `boolean`}
+	policyDBTypes = map[string]string{`ID`: `text`, `Code`: `text`, `Name`: `text`, `LegalEntityID`: `text`, `StatusActive`: `boolean`}
 	_             = bytes.MinRead
 )
 
