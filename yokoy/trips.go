@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"time"
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/dylanj/yokoy/models"
@@ -29,20 +28,6 @@ func fetchTrips(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api
 
 func truncateTrips(ctx context.Context, db *sql.DB) {
 	db.ExecContext(ctx, "truncate trips;")
-}
-
-func parseTime(s *string) *time.Time {
-	if s == nil {
-		return nil
-	}
-
-	t, err := time.Parse("2006-01-02T15:04", *s)
-
-	if err != nil {
-		return nil
-	}
-
-	return &t
 }
 
 func insertTrips(ctx context.Context, db *sql.DB, trips *[]api.Trip) error {

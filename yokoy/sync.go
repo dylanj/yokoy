@@ -149,11 +149,30 @@ func (s *Sync) SyncTrips() {
 
 	fmt.Println("got", len(*Trips), "trips")
 
-	fmt.Println("truncating Trips")
+	fmt.Println("truncating trips")
 	truncateTrips(ctx, s.db)
 
 	fmt.Println("inserting trips into db")
 	insertTrips(ctx, s.db, Trips)
+}
+
+func (s *Sync) SyncExpenses() {
+	fmt.Println("syncing expenses")
+
+	ctx := context.TODO()
+
+	Expenses, err := fetchExpenses(ctx, s.apiClient)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println("got", len(*Expenses), "expenses")
+
+	fmt.Println("truncating expenses")
+	truncateExpenses(ctx, s.db)
+
+	fmt.Println("inserting expenses into db")
+	insertExpenses(ctx, s.db, Expenses)
 }
 
 func (s *Sync) SyncCompanyCards() {
