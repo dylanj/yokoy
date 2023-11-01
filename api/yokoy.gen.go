@@ -88,7 +88,7 @@ const (
 )
 
 // Defines values for InvoiceStatus.
-const (
+/*const (
 	InvoiceStatusDraft          InvoiceStatus = "draft"
 	InvoiceStatusExported       InvoiceStatus = "exported"
 	InvoiceStatusInApproval     InvoiceStatus = "inApproval"
@@ -97,7 +97,7 @@ const (
 	InvoiceStatusNew            InvoiceStatus = "new"
 	InvoiceStatusReadyForExport InvoiceStatus = "readyForExport"
 	InvoiceStatusRejected       InvoiceStatus = "rejected"
-)
+)*/
 
 // Defines values for InvoiceExportTaskInformationResourceMethod.
 const (
@@ -476,7 +476,7 @@ type GoodsReceiptItem struct {
 
 // Invoice defines model for Invoice.
 type Invoice struct {
-	BankAccount *InvoiceBankAccount `json:"bankAccount,omitempty"`
+	BankAccount *InvoiceBankAccount `json:"paymentInformation,omitempty"`
 
 	// Country The invoice's country alpha 2 code as defined in in the ISO3166-1 standard
 	Country *string `json:"country,omitempty"`
@@ -541,7 +541,7 @@ type Invoice_ServiceDate struct {
 }
 
 // InvoiceStatus The invoice's status id. The system manages this and cannot be changed directly.
-type InvoiceStatus string
+type InvoiceStatus int
 
 // InvoiceBankAccount defines model for InvoiceBankAccount.
 type InvoiceBankAccount struct {
@@ -14458,7 +14458,6 @@ func ParseGetLegalEntitiesLegalEntityIdCostCentersResponse(rsp *http.Response) (
 			CostCenters *[]CostCenter `json:"costCenters,omitempty"`
 		}
 
-		fmt.Println(string(bodyBytes))
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
