@@ -33,13 +33,13 @@ type Supplier struct {
 	ShortName            null.String `boil:"short_name" json:"short_name,omitempty" toml:"short_name" yaml:"short_name,omitempty"`
 	StatusActive         null.Bool   `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 	Street               null.String `boil:"street" json:"street,omitempty" toml:"street" yaml:"street,omitempty"`
-	Taxnumber            null.String `boil:"taxnumber" json:"taxnumber,omitempty" toml:"taxnumber" yaml:"taxnumber,omitempty"`
+	TaxNumber            null.String `boil:"tax_number" json:"tax_number,omitempty" toml:"tax_number" yaml:"tax_number,omitempty"`
 	URL                  null.String `boil:"url" json:"url,omitempty" toml:"url" yaml:"url,omitempty"`
-	Zipcode              null.String `boil:"zipcode" json:"zipcode,omitempty" toml:"zipcode" yaml:"zipcode,omitempty"`
-	Defaultapproverid    null.String `boil:"defaultapproverid" json:"defaultapproverid,omitempty" toml:"defaultapproverid" yaml:"defaultapproverid,omitempty"`
-	Defaultcategoryid    null.String `boil:"defaultcategoryid" json:"defaultcategoryid,omitempty" toml:"defaultcategoryid" yaml:"defaultcategoryid,omitempty"`
-	Defaultcostcenter    null.String `boil:"defaultcostcenter" json:"defaultcostcenter,omitempty" toml:"defaultcostcenter" yaml:"defaultcostcenter,omitempty"`
-	Defaultpaymenttermid null.String `boil:"defaultpaymenttermid" json:"defaultpaymenttermid,omitempty" toml:"defaultpaymenttermid" yaml:"defaultpaymenttermid,omitempty"`
+	ZipCode              null.String `boil:"zip_code" json:"zip_code,omitempty" toml:"zip_code" yaml:"zip_code,omitempty"`
+	DefaultApproverID    null.String `boil:"default_approver_id" json:"default_approver_id,omitempty" toml:"default_approver_id" yaml:"default_approver_id,omitempty"`
+	DefaultCategoryID    null.String `boil:"default_category_id" json:"default_category_id,omitempty" toml:"default_category_id" yaml:"default_category_id,omitempty"`
+	DefaultCostCenter    null.String `boil:"default_cost_center" json:"default_cost_center,omitempty" toml:"default_cost_center" yaml:"default_cost_center,omitempty"`
+	DefaultPaymentTermID null.String `boil:"default_payment_term_id" json:"default_payment_term_id,omitempty" toml:"default_payment_term_id" yaml:"default_payment_term_id,omitempty"`
 	SupplierID           null.String `boil:"supplier_id" json:"supplier_id,omitempty" toml:"supplier_id" yaml:"supplier_id,omitempty"`
 
 	R *supplierR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -56,13 +56,13 @@ var SupplierColumns = struct {
 	ShortName            string
 	StatusActive         string
 	Street               string
-	Taxnumber            string
+	TaxNumber            string
 	URL                  string
-	Zipcode              string
-	Defaultapproverid    string
-	Defaultcategoryid    string
-	Defaultcostcenter    string
-	Defaultpaymenttermid string
+	ZipCode              string
+	DefaultApproverID    string
+	DefaultCategoryID    string
+	DefaultCostCenter    string
+	DefaultPaymentTermID string
 	SupplierID           string
 }{
 	ID:                   "id",
@@ -74,13 +74,13 @@ var SupplierColumns = struct {
 	ShortName:            "short_name",
 	StatusActive:         "status_active",
 	Street:               "street",
-	Taxnumber:            "taxnumber",
+	TaxNumber:            "tax_number",
 	URL:                  "url",
-	Zipcode:              "zipcode",
-	Defaultapproverid:    "defaultapproverid",
-	Defaultcategoryid:    "defaultcategoryid",
-	Defaultcostcenter:    "defaultcostcenter",
-	Defaultpaymenttermid: "defaultpaymenttermid",
+	ZipCode:              "zip_code",
+	DefaultApproverID:    "default_approver_id",
+	DefaultCategoryID:    "default_category_id",
+	DefaultCostCenter:    "default_cost_center",
+	DefaultPaymentTermID: "default_payment_term_id",
 	SupplierID:           "supplier_id",
 }
 
@@ -94,13 +94,13 @@ var SupplierTableColumns = struct {
 	ShortName            string
 	StatusActive         string
 	Street               string
-	Taxnumber            string
+	TaxNumber            string
 	URL                  string
-	Zipcode              string
-	Defaultapproverid    string
-	Defaultcategoryid    string
-	Defaultcostcenter    string
-	Defaultpaymenttermid string
+	ZipCode              string
+	DefaultApproverID    string
+	DefaultCategoryID    string
+	DefaultCostCenter    string
+	DefaultPaymentTermID string
 	SupplierID           string
 }{
 	ID:                   "suppliers.id",
@@ -112,13 +112,13 @@ var SupplierTableColumns = struct {
 	ShortName:            "suppliers.short_name",
 	StatusActive:         "suppliers.status_active",
 	Street:               "suppliers.street",
-	Taxnumber:            "suppliers.taxnumber",
+	TaxNumber:            "suppliers.tax_number",
 	URL:                  "suppliers.url",
-	Zipcode:              "suppliers.zipcode",
-	Defaultapproverid:    "suppliers.defaultapproverid",
-	Defaultcategoryid:    "suppliers.defaultcategoryid",
-	Defaultcostcenter:    "suppliers.defaultcostcenter",
-	Defaultpaymenttermid: "suppliers.defaultpaymenttermid",
+	ZipCode:              "suppliers.zip_code",
+	DefaultApproverID:    "suppliers.default_approver_id",
+	DefaultCategoryID:    "suppliers.default_category_id",
+	DefaultCostCenter:    "suppliers.default_cost_center",
+	DefaultPaymentTermID: "suppliers.default_payment_term_id",
 	SupplierID:           "suppliers.supplier_id",
 }
 
@@ -134,13 +134,13 @@ var SupplierWhere = struct {
 	ShortName            whereHelpernull_String
 	StatusActive         whereHelpernull_Bool
 	Street               whereHelpernull_String
-	Taxnumber            whereHelpernull_String
+	TaxNumber            whereHelpernull_String
 	URL                  whereHelpernull_String
-	Zipcode              whereHelpernull_String
-	Defaultapproverid    whereHelpernull_String
-	Defaultcategoryid    whereHelpernull_String
-	Defaultcostcenter    whereHelpernull_String
-	Defaultpaymenttermid whereHelpernull_String
+	ZipCode              whereHelpernull_String
+	DefaultApproverID    whereHelpernull_String
+	DefaultCategoryID    whereHelpernull_String
+	DefaultCostCenter    whereHelpernull_String
+	DefaultPaymentTermID whereHelpernull_String
 	SupplierID           whereHelpernull_String
 }{
 	ID:                   whereHelperstring{field: "\"suppliers\".\"id\""},
@@ -152,13 +152,13 @@ var SupplierWhere = struct {
 	ShortName:            whereHelpernull_String{field: "\"suppliers\".\"short_name\""},
 	StatusActive:         whereHelpernull_Bool{field: "\"suppliers\".\"status_active\""},
 	Street:               whereHelpernull_String{field: "\"suppliers\".\"street\""},
-	Taxnumber:            whereHelpernull_String{field: "\"suppliers\".\"taxnumber\""},
+	TaxNumber:            whereHelpernull_String{field: "\"suppliers\".\"tax_number\""},
 	URL:                  whereHelpernull_String{field: "\"suppliers\".\"url\""},
-	Zipcode:              whereHelpernull_String{field: "\"suppliers\".\"zipcode\""},
-	Defaultapproverid:    whereHelpernull_String{field: "\"suppliers\".\"defaultapproverid\""},
-	Defaultcategoryid:    whereHelpernull_String{field: "\"suppliers\".\"defaultcategoryid\""},
-	Defaultcostcenter:    whereHelpernull_String{field: "\"suppliers\".\"defaultcostcenter\""},
-	Defaultpaymenttermid: whereHelpernull_String{field: "\"suppliers\".\"defaultpaymenttermid\""},
+	ZipCode:              whereHelpernull_String{field: "\"suppliers\".\"zip_code\""},
+	DefaultApproverID:    whereHelpernull_String{field: "\"suppliers\".\"default_approver_id\""},
+	DefaultCategoryID:    whereHelpernull_String{field: "\"suppliers\".\"default_category_id\""},
+	DefaultCostCenter:    whereHelpernull_String{field: "\"suppliers\".\"default_cost_center\""},
+	DefaultPaymentTermID: whereHelpernull_String{field: "\"suppliers\".\"default_payment_term_id\""},
 	SupplierID:           whereHelpernull_String{field: "\"suppliers\".\"supplier_id\""},
 }
 
@@ -179,9 +179,9 @@ func (*supplierR) NewStruct() *supplierR {
 type supplierL struct{}
 
 var (
-	supplierAllColumns            = []string{"id", "city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "taxnumber", "url", "zipcode", "defaultapproverid", "defaultcategoryid", "defaultcostcenter", "defaultpaymenttermid", "supplier_id"}
+	supplierAllColumns            = []string{"id", "city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id", "supplier_id"}
 	supplierColumnsWithoutDefault = []string{"id"}
-	supplierColumnsWithDefault    = []string{"city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "taxnumber", "url", "zipcode", "defaultapproverid", "defaultcategoryid", "defaultcostcenter", "defaultpaymenttermid", "supplier_id"}
+	supplierColumnsWithDefault    = []string{"city", "country_code", "external_id", "name", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id", "supplier_id"}
 	supplierPrimaryKeyColumns     = []string{"id"}
 	supplierGeneratedColumns      = []string{}
 )

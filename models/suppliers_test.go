@@ -568,7 +568,7 @@ func testSuppliersSelect(t *testing.T) {
 }
 
 var (
-	supplierDBTypes = map[string]string{`ID`: `text`, `City`: `text`, `CountryCode`: `text`, `ExternalID`: `text`, `Name`: `text`, `SecondaryName`: `text`, `ShortName`: `text`, `StatusActive`: `boolean`, `Street`: `text`, `Taxnumber`: `text`, `URL`: `text`, `Zipcode`: `text`, `Defaultapproverid`: `text`, `Defaultcategoryid`: `text`, `Defaultcostcenter`: `text`, `Defaultpaymenttermid`: `text`, `SupplierID`: `text`}
+	supplierDBTypes = map[string]string{`ID`: `text`, `City`: `text`, `CountryCode`: `text`, `ExternalID`: `text`, `Name`: `text`, `SecondaryName`: `text`, `ShortName`: `text`, `StatusActive`: `boolean`, `Street`: `text`, `TaxNumber`: `text`, `URL`: `text`, `ZipCode`: `text`, `DefaultApproverID`: `text`, `DefaultCategoryID`: `text`, `DefaultCostCenter`: `text`, `DefaultPaymentTermID`: `text`, `SupplierID`: `text`}
 	_               = bytes.MinRead
 )
 
