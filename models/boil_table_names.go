@@ -14,6 +14,7 @@ var TableNames = struct {
 	Expenses           string
 	LegalEntities      string
 	Policies           string
+	TaxRates           string
 	Trips              string
 	Users              string
 }{
@@ -27,6 +28,7 @@ var TableNames = struct {
 	Expenses:           "expenses",
 	LegalEntities:      "legal_entities",
 	Policies:           "policies",
+	TaxRates:           "tax_rates",
 	Trips:              "trips",
 	Users:              "users",
 }

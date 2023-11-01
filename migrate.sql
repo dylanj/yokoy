@@ -136,3 +136,13 @@ CREATE table policies (
     legal_entity_id     text,
     status_active       boolean
 );
+
+CREATE table tax_rates (
+    id                  text primary key,
+    account_reference   text,
+    code                text,
+    country             text,
+    name                text,
+    rate                integer,
+    status_active       boolean
+);
