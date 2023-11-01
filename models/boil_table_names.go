@@ -4,19 +4,23 @@
 package models
 
 var TableNames = struct {
-	Categories    string
-	CompanyCards  string
-	CostCenter    string
-	Expenses      string
-	LegalEntities string
-	Trips         string
-	Users         string
+	Categories        string
+	CompanyCards      string
+	CostCenter        string
+	ExpenseCostCenter string
+	ExpenseTaxItems   string
+	Expenses          string
+	LegalEntities     string
+	Trips             string
+	Users             string
 }{
-	Categories:    "categories",
-	CompanyCards:  "company_cards",
-	CostCenter:    "cost_center",
-	Expenses:      "expenses",
-	LegalEntities: "legal_entities",
-	Trips:         "trips",
-	Users:         "users",
+	Categories:        "categories",
+	CompanyCards:      "company_cards",
+	CostCenter:        "cost_center",
+	ExpenseCostCenter: "expense_cost_center",
+	ExpenseTaxItems:   "expense_tax_items",
+	Expenses:          "expenses",
+	LegalEntities:     "legal_entities",
+	Trips:             "trips",
+	Users:             "users",
 }

@@ -93,3 +93,18 @@ CREATE table expenses (
     trip_id             text,
     user_id             text
 );
+
+CREATE table expense_cost_center (
+    expense_id text,
+    cost_center_id text,
+    percent_weight integer,
+    PRIMARY KEY (expense_id, cost_center_id)
+);
+
+CREATE table expense_tax_items (
+    expense_id text,
+    rate_id text,
+    gross integer,
+    tax integer,
+    PRIMARY KEY (expense_id, rate_id)
+);
