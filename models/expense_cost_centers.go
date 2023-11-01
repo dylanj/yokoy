@@ -47,9 +47,9 @@ var ExpenseCostCenterTableColumns = struct {
 	CostCenterID  string
 	PercentWeight string
 }{
-	ExpenseID:     "expense_cost_center.expense_id",
-	CostCenterID:  "expense_cost_center.cost_center_id",
-	PercentWeight: "expense_cost_center.percent_weight",
+	ExpenseID:     "expense_cost_centers.expense_id",
+	CostCenterID:  "expense_cost_centers.cost_center_id",
+	PercentWeight: "expense_cost_centers.percent_weight",
 }
 
 // Generated where
@@ -59,9 +59,9 @@ var ExpenseCostCenterWhere = struct {
 	CostCenterID  whereHelperstring
 	PercentWeight whereHelpernull_Int
 }{
-	ExpenseID:     whereHelperstring{field: "\"expense_cost_center\".\"expense_id\""},
-	CostCenterID:  whereHelperstring{field: "\"expense_cost_center\".\"cost_center_id\""},
-	PercentWeight: whereHelpernull_Int{field: "\"expense_cost_center\".\"percent_weight\""},
+	ExpenseID:     whereHelperstring{field: "\"expense_cost_centers\".\"expense_id\""},
+	CostCenterID:  whereHelperstring{field: "\"expense_cost_centers\".\"cost_center_id\""},
+	PercentWeight: whereHelpernull_Int{field: "\"expense_cost_centers\".\"percent_weight\""},
 }
 
 // ExpenseCostCenterRels is where relationship names are stored.
@@ -305,7 +305,7 @@ func (q expenseCostCenterQuery) One(ctx context.Context, exec boil.ContextExecut
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: failed to execute a one query for expense_cost_center")
+		return nil, errors.Wrap(err, "models: failed to execute a one query for expense_cost_centers")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -344,7 +344,7 @@ func (q expenseCostCenterQuery) Count(ctx context.Context, exec boil.ContextExec
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to count expense_cost_center rows")
+		return 0, errors.Wrap(err, "models: failed to count expense_cost_centers rows")
 	}
 
 	return count, nil
@@ -360,7 +360,7 @@ func (q expenseCostCenterQuery) Exists(ctx context.Context, exec boil.ContextExe
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "models: failed to check if expense_cost_center exists")
+		return false, errors.Wrap(err, "models: failed to check if expense_cost_centers exists")
 	}
 
 	return count > 0, nil
@@ -368,10 +368,10 @@ func (q expenseCostCenterQuery) Exists(ctx context.Context, exec boil.ContextExe
 
 // ExpenseCostCenters retrieves all the records using an executor.
 func ExpenseCostCenters(mods ...qm.QueryMod) expenseCostCenterQuery {
-	mods = append(mods, qm.From("\"expense_cost_center\""))
+	mods = append(mods, qm.From("\"expense_cost_centers\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"expense_cost_center\".*"})
+		queries.SetSelect(q, []string{"\"expense_cost_centers\".*"})
 	}
 
 	return expenseCostCenterQuery{q}
@@ -387,7 +387,7 @@ func FindExpenseCostCenter(ctx context.Context, exec boil.ContextExecutor, expen
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"expense_cost_center\" where \"expense_id\"=$1 AND \"cost_center_id\"=$2", sel,
+		"select %s from \"expense_cost_centers\" where \"expense_id\"=$1 AND \"cost_center_id\"=$2", sel,
 	)
 
 	q := queries.Raw(query, expenseID, costCenterID)
@@ -397,7 +397,7 @@ func FindExpenseCostCenter(ctx context.Context, exec boil.ContextExecutor, expen
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: unable to select from expense_cost_center")
+		return nil, errors.Wrap(err, "models: unable to select from expense_cost_centers")
 	}
 
 	if err = expenseCostCenterObj.doAfterSelectHooks(ctx, exec); err != nil {
@@ -411,7 +411,7 @@ func FindExpenseCostCenter(ctx context.Context, exec boil.ContextExecutor, expen
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
 func (o *ExpenseCostCenter) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no expense_cost_center provided for insertion")
+		return errors.New("models: no expense_cost_centers provided for insertion")
 	}
 
 	var err error
@@ -444,9 +444,9 @@ func (o *ExpenseCostCenter) Insert(ctx context.Context, exec boil.ContextExecuto
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"expense_cost_center\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"expense_cost_centers\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"expense_cost_center\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"expense_cost_centers\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -474,7 +474,7 @@ func (o *ExpenseCostCenter) Insert(ctx context.Context, exec boil.ContextExecuto
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "models: unable to insert into expense_cost_center")
+		return errors.Wrap(err, "models: unable to insert into expense_cost_centers")
 	}
 
 	if !cached {
@@ -509,10 +509,10 @@ func (o *ExpenseCostCenter) Update(ctx context.Context, exec boil.ContextExecuto
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("models: unable to update expense_cost_center, could not build whitelist")
+			return 0, errors.New("models: unable to update expense_cost_centers, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"expense_cost_center\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"expense_cost_centers\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
 			strmangle.WhereClause("\"", "\"", len(wl)+1, expenseCostCenterPrimaryKeyColumns),
 		)
@@ -532,12 +532,12 @@ func (o *ExpenseCostCenter) Update(ctx context.Context, exec boil.ContextExecuto
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update expense_cost_center row")
+		return 0, errors.Wrap(err, "models: unable to update expense_cost_centers row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by update for expense_cost_center")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by update for expense_cost_centers")
 	}
 
 	if !cached {
@@ -555,12 +555,12 @@ func (q expenseCostCenterQuery) UpdateAll(ctx context.Context, exec boil.Context
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all for expense_cost_center")
+		return 0, errors.Wrap(err, "models: unable to update all for expense_cost_centers")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for expense_cost_center")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for expense_cost_centers")
 	}
 
 	return rowsAff, nil
@@ -593,7 +593,7 @@ func (o ExpenseCostCenterSlice) UpdateAll(ctx context.Context, exec boil.Context
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"expense_cost_center\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"expense_cost_centers\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, expenseCostCenterPrimaryKeyColumns, len(o)))
 
@@ -618,7 +618,7 @@ func (o ExpenseCostCenterSlice) UpdateAll(ctx context.Context, exec boil.Context
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
 func (o *ExpenseCostCenter) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no expense_cost_center provided for upsert")
+		return errors.New("models: no expense_cost_centers provided for upsert")
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {
@@ -675,7 +675,7 @@ func (o *ExpenseCostCenter) Upsert(ctx context.Context, exec boil.ContextExecuto
 		)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("models: unable to upsert expense_cost_center, could not build update column list")
+			return errors.New("models: unable to upsert expense_cost_centers, could not build update column list")
 		}
 
 		conflict := conflictColumns
@@ -683,7 +683,7 @@ func (o *ExpenseCostCenter) Upsert(ctx context.Context, exec boil.ContextExecuto
 			conflict = make([]string, len(expenseCostCenterPrimaryKeyColumns))
 			copy(conflict, expenseCostCenterPrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"expense_cost_center\"", updateOnConflict, ret, update, conflict, insert)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"expense_cost_centers\"", updateOnConflict, ret, update, conflict, insert)
 
 		cache.valueMapping, err = queries.BindMapping(expenseCostCenterType, expenseCostCenterMapping, insert)
 		if err != nil {
@@ -718,7 +718,7 @@ func (o *ExpenseCostCenter) Upsert(ctx context.Context, exec boil.ContextExecuto
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "models: unable to upsert expense_cost_center")
+		return errors.Wrap(err, "models: unable to upsert expense_cost_centers")
 	}
 
 	if !cached {
@@ -742,7 +742,7 @@ func (o *ExpenseCostCenter) Delete(ctx context.Context, exec boil.ContextExecuto
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), expenseCostCenterPrimaryKeyMapping)
-	sql := "DELETE FROM \"expense_cost_center\" WHERE \"expense_id\"=$1 AND \"cost_center_id\"=$2"
+	sql := "DELETE FROM \"expense_cost_centers\" WHERE \"expense_id\"=$1 AND \"cost_center_id\"=$2"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -751,12 +751,12 @@ func (o *ExpenseCostCenter) Delete(ctx context.Context, exec boil.ContextExecuto
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete from expense_cost_center")
+		return 0, errors.Wrap(err, "models: unable to delete from expense_cost_centers")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for expense_cost_center")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for expense_cost_centers")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -776,12 +776,12 @@ func (q expenseCostCenterQuery) DeleteAll(ctx context.Context, exec boil.Context
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from expense_cost_center")
+		return 0, errors.Wrap(err, "models: unable to delete all from expense_cost_centers")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for expense_cost_center")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for expense_cost_centers")
 	}
 
 	return rowsAff, nil
@@ -807,7 +807,7 @@ func (o ExpenseCostCenterSlice) DeleteAll(ctx context.Context, exec boil.Context
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"expense_cost_center\" WHERE " +
+	sql := "DELETE FROM \"expense_cost_centers\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, expenseCostCenterPrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
@@ -822,7 +822,7 @@ func (o ExpenseCostCenterSlice) DeleteAll(ctx context.Context, exec boil.Context
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for expense_cost_center")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for expense_cost_centers")
 	}
 
 	if len(expenseCostCenterAfterDeleteHooks) != 0 {
@@ -862,7 +862,7 @@ func (o *ExpenseCostCenterSlice) ReloadAll(ctx context.Context, exec boil.Contex
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"expense_cost_center\".* FROM \"expense_cost_center\" WHERE " +
+	sql := "SELECT \"expense_cost_centers\".* FROM \"expense_cost_centers\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, expenseCostCenterPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
@@ -880,7 +880,7 @@ func (o *ExpenseCostCenterSlice) ReloadAll(ctx context.Context, exec boil.Contex
 // ExpenseCostCenterExists checks if the ExpenseCostCenter row exists.
 func ExpenseCostCenterExists(ctx context.Context, exec boil.ContextExecutor, expenseID string, costCenterID string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"expense_cost_center\" where \"expense_id\"=$1 AND \"cost_center_id\"=$2 limit 1)"
+	sql := "select exists(select 1 from \"expense_cost_centers\" where \"expense_id\"=$1 AND \"cost_center_id\"=$2 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -891,7 +891,7 @@ func ExpenseCostCenterExists(ctx context.Context, exec boil.ContextExecutor, exp
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "models: unable to check if expense_cost_center exists")
+		return false, errors.Wrap(err, "models: unable to check if expense_cost_centers exists")
 	}
 
 	return exists, nil

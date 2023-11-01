@@ -56,7 +56,7 @@ CREATE table categories (
     status_active       boolean
 );
 
-CREATE table cost_center (
+CREATE table cost_centers (
     id                  text primary key,
     approval_limit      integer,
     approver_id         text,
@@ -95,7 +95,7 @@ CREATE table expenses (
     user_id             text
 );
 
-CREATE table expense_cost_center (
+CREATE table expense_cost_centers (
     expense_id          text,
     cost_center_id      text,
     percent_weight      integer,

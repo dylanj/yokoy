@@ -6,9 +6,9 @@ package models
 var TableNames = struct {
 	Categories         string
 	CompanyCards       string
-	CostCenter         string
+	CostCenters        string
 	ExpenseApproverIds string
-	ExpenseCostCenter  string
+	ExpenseCostCenters string
 	ExpenseEventLogs   string
 	ExpenseTaxItems    string
 	Expenses           string
@@ -25,9 +25,9 @@ var TableNames = struct {
 }{
 	Categories:         "categories",
 	CompanyCards:       "company_cards",
-	CostCenter:         "cost_center",
+	CostCenters:        "cost_centers",
 	ExpenseApproverIds: "expense_approver_ids",
-	ExpenseCostCenter:  "expense_cost_center",
+	ExpenseCostCenters: "expense_cost_centers",
 	ExpenseEventLogs:   "expense_event_logs",
 	ExpenseTaxItems:    "expense_tax_items",
 	Expenses:           "expenses",
