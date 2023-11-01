@@ -213,7 +213,8 @@ CREATE TABLE invoice_categories (
 );
 
 CREATE TABLE suppliers (
-    id                      text primary key,
+    id                      text,
+    legal_entity_id         text,
     city                    text,
     country_code            text,
     external_id             text,
@@ -222,12 +223,14 @@ CREATE TABLE suppliers (
     short_name              text,
     status_active           boolean,
     street                  text,
-    taxNumber               integer,
+    tax_number              text,
     url                     text,
-    zipCode                 integer,
-    defaultApproverId       text,
-    defaultCategoryId       text,
-    defaultCostCenter       text,
-    defaultPaymentTermId    text,
-    supplier_id             text
+    zip_code                text,
+    default_approver_id     text,
+    default_category_id     text,
+    default_cost_center     text,
+    default_payment_term_id text,
+    supplier_id             text,
+
+    PRIMARY KEY (legal_entity_id, id)
 );

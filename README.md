@@ -46,4 +46,7 @@ YOKOY_ORG_ID="abc"
 - `invoices.serverDate` returns string|[]string|null where strings denote dates
 - `invoices.status` returns an integer enum, docs say it is a string
 - `invoices.paymentInformation` is documented as `invoices.bankAccount`
-- `suppliers.country_code` is inconsistent with ever other reference to country
+- `invoice suppliers.country_code` is inconsistent with every other reference to country
+- invoice supplier documentation references org level `/suppliers` which is not documented
+- `invoice supplier.taxNumber` example is a `number`, documented as `string`
+- `invoice supplier.zipCode` example is a `number`, documented as `string`
