@@ -9,6 +9,7 @@ var TableNames = struct {
 	CostCenter         string
 	ExpenseApproverIds string
 	ExpenseCostCenter  string
+	ExpenseEventLogs   string
 	ExpenseTaxItems    string
 	Expenses           string
 	LegalEntities      string
@@ -20,6 +21,7 @@ var TableNames = struct {
 	CostCenter:         "cost_center",
 	ExpenseApproverIds: "expense_approver_ids",
 	ExpenseCostCenter:  "expense_cost_center",
+	ExpenseEventLogs:   "expense_event_logs",
 	ExpenseTaxItems:    "expense_tax_items",
 	Expenses:           "expenses",
 	LegalEntities:      "legal_entities",

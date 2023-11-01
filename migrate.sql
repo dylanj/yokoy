@@ -115,3 +115,13 @@ CREATE table expense_approver_ids (
     approver_id text,
     PRIMARY KEY(expense_id, approver_id)
 );
+
+CREATE table expense_event_logs (
+    id serial primary key,
+    expense_id text,
+    action_type text,
+    comment text,
+    name text,
+    timestamp timestamp without time zone,
+    user_id text
+)
