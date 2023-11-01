@@ -308,6 +308,25 @@ func (s *Sync) SyncTags() {
 	}
 }
 
+func (s *Sync) SyncInvoiceCategories() {
+	fmt.Println("syncing invoice categories")
+
+	ctx := context.TODO()
+
+	truncateInvoiceCategories(ctx, s.db)
+	for _, legalEntityId := range s.legalEntityIds {
+		ccs, err := fetchInvoiceCategories(ctx, legalEntityId, s.apiClient)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*ccs), "invoice categories in le", legalEntityId)
+
+		insertInvoiceCategories(ctx, s.db, legalEntityId, ccs)
+	}
+}
+
 func (s *Sync) configApiClient() error {
 	client := http.Client{Transport: NewTransport(s.accessToken)}
 	server := "https://api." + s.baseURL + "/v1/organizations/" + s.organizationID + "/"

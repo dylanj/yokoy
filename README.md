@@ -20,7 +20,7 @@ This is a quick and dirty app that sync yokoy data from the yokoy api to a postg
     - [x] EventLog
 - [-] Invoice - Scoped to LegalEntity
     - [-] InvoiceLineItem
-- [ ] InvoiceCategory - Scoped to LegalEntity
+- [x] InvoiceCategory - Scoped to LegalEntity
 - [ ] InvoicePaymentTerms - Scoped to LegalEntity
 - [ ] InvoiceSupplier - Scoped to LegalEntity
 - [ ] InvoicePurchaseOrder - Scoped to LegalEntity
