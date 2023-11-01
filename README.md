@@ -1,6 +1,6 @@
-# yokoy -> db sync
+# yokoy postgres sync
 
-This is a quick and dirty app that sync yokoy data from the yokoy api to a postgres database.
+This application syncs data from your [yokoy](https://yokoy.io) organization to a postgres databse via the [yokoy api](https://docs.yokoy.ai/).
 
 ### Objects
 
@@ -22,7 +22,7 @@ This is a quick and dirty app that sync yokoy data from the yokoy api to a postg
     - [-] InvoiceLineItem
 - [x] InvoiceCategory - Scoped to LegalEntity
 - [ ] InvoicePaymentTerms - Scoped to LegalEntity
-- [ ] InvoiceSupplier - Scoped to LegalEntity
+- [x] InvoiceSupplier - Scoped to LegalEntity
 - [ ] InvoicePurchaseOrder - Scoped to LegalEntity
 
 
@@ -50,3 +50,44 @@ YOKOY_ORG_ID="abc"
 - invoice supplier documentation references org level `/suppliers` which is not documented
 - `invoice supplier.taxNumber` example is a `number`, documented as `string`
 - `invoice supplier.zipCode` example is a `number`, documented as `string`
+
+### Fetch OpenAPI Definition
+
+**note**: there are some manual changes to the `swagger.json` due to issues with
+the source swagger.json
+
+```
+# download swagger as json
+curl https://api.yokoy.ai/v1/swagger.json > swagger.json
+
+# convert to yaml (so we can inspect)
+yq eval -P swagger.json > swagger.yaml
+
+# generate code with oapi-codegen
+oapi-codegen -package api swagger.yaml &> api/yokoy.gen.go
+```
+
+### Generate models from DB
+
+This project uses [SQLBoiler](https://github.com/volatiletech/sqlboiler) to
+generate code for communicating with the database. You can modify the
+migrate.sql, recreate the database and generate the models with sqlboiler.
+
+```
+# install sqlboiler
+go install github.com/volatiletech/sqlboiler/v4@latest
+go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
+
+# modify migrate.sql
+# ...
+
+# recreate db and run migrations
+dropdb yokoy; createdb yokoy; cat migrate.sql | psql yokoy
+
+# generate models with sqlboiler
+sqlboiler psql
+```
+
+### Thanks
+
+Special thanks to [Yokoy Switzerland](https://yokoy.io) Ltd for having an Open API.
