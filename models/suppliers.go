@@ -33,9 +33,9 @@ type Supplier struct {
 	ShortName            null.String `boil:"short_name" json:"short_name,omitempty" toml:"short_name" yaml:"short_name,omitempty"`
 	StatusActive         null.Bool   `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 	Street               null.String `boil:"street" json:"street,omitempty" toml:"street" yaml:"street,omitempty"`
-	Taxnumber            null.Int    `boil:"taxnumber" json:"taxnumber,omitempty" toml:"taxnumber" yaml:"taxnumber,omitempty"`
+	Taxnumber            null.String `boil:"taxnumber" json:"taxnumber,omitempty" toml:"taxnumber" yaml:"taxnumber,omitempty"`
 	URL                  null.String `boil:"url" json:"url,omitempty" toml:"url" yaml:"url,omitempty"`
-	Zipcode              null.Int    `boil:"zipcode" json:"zipcode,omitempty" toml:"zipcode" yaml:"zipcode,omitempty"`
+	Zipcode              null.String `boil:"zipcode" json:"zipcode,omitempty" toml:"zipcode" yaml:"zipcode,omitempty"`
 	Defaultapproverid    null.String `boil:"defaultapproverid" json:"defaultapproverid,omitempty" toml:"defaultapproverid" yaml:"defaultapproverid,omitempty"`
 	Defaultcategoryid    null.String `boil:"defaultcategoryid" json:"defaultcategoryid,omitempty" toml:"defaultcategoryid" yaml:"defaultcategoryid,omitempty"`
 	Defaultcostcenter    null.String `boil:"defaultcostcenter" json:"defaultcostcenter,omitempty" toml:"defaultcostcenter" yaml:"defaultcostcenter,omitempty"`
@@ -134,9 +134,9 @@ var SupplierWhere = struct {
 	ShortName            whereHelpernull_String
 	StatusActive         whereHelpernull_Bool
 	Street               whereHelpernull_String
-	Taxnumber            whereHelpernull_Int
+	Taxnumber            whereHelpernull_String
 	URL                  whereHelpernull_String
-	Zipcode              whereHelpernull_Int
+	Zipcode              whereHelpernull_String
 	Defaultapproverid    whereHelpernull_String
 	Defaultcategoryid    whereHelpernull_String
 	Defaultcostcenter    whereHelpernull_String
@@ -152,9 +152,9 @@ var SupplierWhere = struct {
 	ShortName:            whereHelpernull_String{field: "\"suppliers\".\"short_name\""},
 	StatusActive:         whereHelpernull_Bool{field: "\"suppliers\".\"status_active\""},
 	Street:               whereHelpernull_String{field: "\"suppliers\".\"street\""},
-	Taxnumber:            whereHelpernull_Int{field: "\"suppliers\".\"taxnumber\""},
+	Taxnumber:            whereHelpernull_String{field: "\"suppliers\".\"taxnumber\""},
 	URL:                  whereHelpernull_String{field: "\"suppliers\".\"url\""},
-	Zipcode:              whereHelpernull_Int{field: "\"suppliers\".\"zipcode\""},
+	Zipcode:              whereHelpernull_String{field: "\"suppliers\".\"zipcode\""},
 	Defaultapproverid:    whereHelpernull_String{field: "\"suppliers\".\"defaultapproverid\""},
 	Defaultcategoryid:    whereHelpernull_String{field: "\"suppliers\".\"defaultcategoryid\""},
 	Defaultcostcenter:    whereHelpernull_String{field: "\"suppliers\".\"defaultcostcenter\""},
