@@ -50,6 +50,7 @@ YOKOY_ORG_ID="abc"
 - invoice supplier documentation references org level `/suppliers` which is not documented
 - `invoice supplier.taxNumber` example is a `number`, documented as `string`
 - `invoice supplier.zipCode` example is a `number`, documented as `string`
+- yokoy api client generated with swagger code generation - consider a different generator
 
 ### Fetch OpenAPI Definition
 
@@ -63,8 +64,12 @@ curl https://api.yokoy.ai/v1/swagger.json > swagger.json
 # convert to yaml (so we can inspect)
 yq eval -P swagger.json > swagger.yaml
 
+# hack: we need to remove the 200response code from export-tasks/{exportTaskId}/artefacts so that we can generate a valid api
+
 # generate code with oapi-codegen
 oapi-codegen -package api swagger.yaml &> api/yokoy.gen.go
+
+# hack: we need to comment out the usage of InvoiceStatus as the API returns ints and the api docs say string
 ```
 
 ### Generate models from DB
