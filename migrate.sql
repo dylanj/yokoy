@@ -148,7 +148,7 @@ CREATE table tax_rates (
     status_active       boolean
 );
 
-CREATE TABLE tag (
+CREATE TABLE tags (
     id                  text primary key,
     dimension_code      text,
     code                text,
