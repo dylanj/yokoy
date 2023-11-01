@@ -33,6 +33,7 @@ func truncateExpenses(ctx context.Context, db *sql.DB) {
 	db.ExecContext(ctx, "truncate expense_cost_center;")
 	db.ExecContext(ctx, "truncate expense_tax_items;")
 	db.ExecContext(ctx, "truncate expense_approver_ids;")
+	db.ExecContext(ctx, "truncate expense_event_logs;")
 }
 
 func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) error {
