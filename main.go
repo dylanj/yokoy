@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/joho/godotenv"
-	"github.com/salesfive/yokoy/yokoy"
+	"github.com/dylanj/yokoy/yokoy"
 )
 
 func main() {

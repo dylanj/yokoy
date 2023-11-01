@@ -1,9 +1,8 @@
-module github.com/salesfive/yokoy
+module github.com/dylanj/yokoy
 
 go 1.18
 
 require (
-	github.com/davecgh/go-spew v1.1.1
 	github.com/friendsofgo/errors v0.9.2
 	github.com/getkin/kin-openapi v0.120.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
@@ -13,7 +12,6 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/randomize v0.0.1
-	github.com/volatiletech/sqlboiler v3.7.1+incompatible
 	github.com/volatiletech/sqlboiler/v4 v4.15.0
 	github.com/volatiletech/strmangle v0.0.5
 )

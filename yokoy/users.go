@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/salesfive/yokoy/api"
-	"github.com/salesfive/yokoy/models"
+	"github.com/dylanj/yokoy/api"
+	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )

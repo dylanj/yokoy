@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/salesfive/yokoy/api"
+	"github.com/dylanj/yokoy/api"
 )
 
 type Sync struct {
