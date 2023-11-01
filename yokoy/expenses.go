@@ -113,6 +113,23 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 				return err
 			}
 		}
+
+		for _, l := range *e.EventLog {
+			r := models.ExpenseEventLog{}
+			r.ExpenseID = null.StringFromPtr(e.Id)
+			if l.ActionType != nil {
+				r.ActionType = null.StringFrom(string(*l.ActionType))
+			}
+			r.Comment = null.StringFromPtr(l.Comment)
+			r.Name = null.StringFromPtr(l.Name)
+			r.Timestamp = null.TimeFromPtr(parseLongTime(l.Timestamp))
+			r.UserID = null.StringFromPtr(l.UserId)
+
+			err := r.Insert(ctx, db, boil.Infer())
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil
