@@ -30,6 +30,8 @@ func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface) (*[]
 
 func truncateExpenses(ctx context.Context, db *sql.DB) {
 	db.ExecContext(ctx, "truncate expenses;")
+	db.ExecContext(ctx, "truncate expense_cost_center;")
+	db.ExecContext(ctx, "truncate expense_tax_items;")
 }
 
 func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) error {
@@ -67,6 +69,34 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 		err := r.Insert(ctx, db, boil.Infer())
 		if err != nil {
 			return err
+		}
+
+		for _, cci := range *e.CostCenterItems {
+			r := models.ExpenseCostCenter{}
+			r.ExpenseID = *e.Id
+			r.CostCenterID = *cci.Id
+			if cci.PctWeight != nil {
+				r.PercentWeight = null.IntFrom(int(*cci.PctWeight))
+			}
+
+			fmt.Println("inserting", r.ExpenseID, r.CostCenterID)
+			err := r.Insert(ctx, db, boil.Infer())
+			if err != nil {
+				return err
+			}
+		}
+
+		for _, ti := range *e.TaxItems {
+			r := models.ExpenseTaxItem{}
+			r.ExpenseID = *e.Id
+			r.RateID = *ti.RateId
+			r.Gross = null.IntFrom(int(*ti.Gross))
+			r.Tax = null.IntFrom(int(*ti.Tax))
+
+			err := r.Insert(ctx, db, boil.Infer())
+			if err != nil {
+				return err
+			}
 		}
 	}
 
