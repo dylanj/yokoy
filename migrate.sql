@@ -211,3 +211,23 @@ CREATE TABLE invoice_categories (
     status_active           boolean,
     legal_entity_id         text
 );
+
+CREATE TABLE invoice_suppliers (
+    id                      text primary key,
+    city                    text,
+    country_code            text,
+    external_id             text,
+    name                    text,
+    secondary_name          text,
+    short_name              text,
+    status_active           boolean,
+    street                  text,
+    taxNumber               integer,
+    url                     text,
+    zipCode                 integer,
+    defaultApproverId       text,
+    defaultCategoryId       text,
+    defaultCostCenter       text,
+    defaultPaymentTermId    text,
+    supplier_id             text
+);

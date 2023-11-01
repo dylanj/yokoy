@@ -14,6 +14,7 @@ var TableNames = struct {
 	Expenses           string
 	InvoiceCategories  string
 	InvoiceLineItems   string
+	InvoiceSuppliers   string
 	Invoices           string
 	LegalEntities      string
 	Policies           string
@@ -32,6 +33,7 @@ var TableNames = struct {
 	Expenses:           "expenses",
 	InvoiceCategories:  "invoice_categories",
 	InvoiceLineItems:   "invoice_line_items",
+	InvoiceSuppliers:   "invoice_suppliers",
 	Invoices:           "invoices",
 	LegalEntities:      "legal_entities",
 	Policies:           "policies",
