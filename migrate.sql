@@ -70,3 +70,26 @@ CREATE table cost_center (
     legal_entity_id     text,
     status_active       boolean
 );
+
+CREATE table expenses (
+    id                  text primary key,
+    category_id         text,
+    country             text,
+    created             timestamp without time zone,
+    currency            text,
+    description         text,
+    expense_date        timestamp without time zone,
+    expense_end_date    timestamp without time zone,
+    expense_type        text,
+    is_credit_note      boolean,
+    last_modified       timestamp without time zone,
+    legal_entity_id     text,
+    payment_method      text,
+    posting_date        timestamp without time zone,
+    status              text,
+    tax_number          text,
+    total_amount        integer,
+    total_claim         integer,
+    trip_id             text,
+    user_id             text
+);
