@@ -73,6 +73,7 @@ CREATE table cost_center (
 
 CREATE table expenses (
     id                  text primary key,
+    additional_charges  integer,
     category_id         text,
     country             text,
     created             timestamp without time zone,

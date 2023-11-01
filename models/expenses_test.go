@@ -568,7 +568,7 @@ func testExpensesSelect(t *testing.T) {
 }
 
 var (
-	expenseDBTypes = map[string]string{`ID`: `text`, `CategoryID`: `text`, `Country`: `text`, `Created`: `timestamp without time zone`, `Currency`: `text`, `Description`: `text`, `ExpenseDate`: `timestamp without time zone`, `ExpenseEndDate`: `timestamp without time zone`, `ExpenseType`: `text`, `IsCreditNote`: `boolean`, `LastModified`: `timestamp without time zone`, `LegalEntityID`: `text`, `PaymentMethod`: `text`, `PostingDate`: `timestamp without time zone`, `Status`: `text`, `TaxNumber`: `text`, `TotalAmount`: `integer`, `TotalClaim`: `integer`, `TripID`: `text`, `UserID`: `text`}
+	expenseDBTypes = map[string]string{`ID`: `text`, `AdditionalCharges`: `integer`, `CategoryID`: `text`, `Country`: `text`, `Created`: `timestamp without time zone`, `Currency`: `text`, `Description`: `text`, `ExpenseDate`: `timestamp without time zone`, `ExpenseEndDate`: `timestamp without time zone`, `ExpenseType`: `text`, `IsCreditNote`: `boolean`, `LastModified`: `timestamp without time zone`, `LegalEntityID`: `text`, `PaymentMethod`: `text`, `PostingDate`: `timestamp without time zone`, `Status`: `text`, `TaxNumber`: `text`, `TotalAmount`: `integer`, `TotalClaim`: `integer`, `TripID`: `text`, `UserID`: `text`}
 	_              = bytes.MinRead
 )
 
