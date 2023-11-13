@@ -51,6 +51,7 @@ DATABASE_URL="postgres://user@localhost:5432/yokoy-sync"
 - invoice supplier documentation references org level `/suppliers` which is not documented
 - `invoice supplier.taxNumber` example is a `number`, documented as `string`
 - `invoice supplier.zipCode` example is a `number`, documented as `string`
+- `cost center.approvalLimit` can return `NaN`
 - yokoy api client generated with swagger code generation - consider a different generator
 
 ### Fetch OpenAPI Definition
