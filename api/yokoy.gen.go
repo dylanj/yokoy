@@ -14442,6 +14442,10 @@ func ParsePutLegalEntitiesLegalEntityIdCompanyCardsCompanyCardIdResponse(rsp *ht
 // ParseGetLegalEntitiesLegalEntityIdCostCentersResponse parses an HTTP response from a GetLegalEntitiesLegalEntityIdCostCentersWithResponse call
 func ParseGetLegalEntitiesLegalEntityIdCostCentersResponse(rsp *http.Response) (*GetLegalEntitiesLegalEntityIdCostCentersResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
+
+	// hack for NaN in response
+	bodyBytes = bytes.Replace(bodyBytes, []byte(":NaN"), []byte(":null"), -1)
+
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
