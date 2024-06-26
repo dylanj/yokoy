@@ -45,7 +45,7 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 		}
 		if e.GrossAmount != nil {
 
-			r.GrossAmount = null.IntFrom(int(*e.GrossAmount))
+			r.GrossAmount = NullDecimalFromFloat32(*e.GrossAmount)
 		}
 		r.InvoiceNumber = null.StringFrom(e.InvoiceNumber)
 		if e.IsCreditNote != nil {
@@ -53,7 +53,7 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 		}
 		if e.NetAmount != nil {
 
-			r.NetAmount = null.IntFrom(int(*e.NetAmount))
+			r.NetAmount = NullDecimalFromFloat32(*e.NetAmount)
 		}
 		r.PaymentTermID = null.StringFromPtr(e.PaymentTermId)
 		if e.PostingDate != nil {
@@ -75,7 +75,7 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 		//r.ServiceDate = null.TimeFromPtr(parseDate(e.ServiceDate.AsDateString()))
 
 		if e.TaxableAmount != nil {
-			r.TaxableAmount = null.IntFrom(int(*e.TaxableAmount))
+			r.TaxableAmount = NullDecimalFromFloat32(*e.TaxableAmount)
 		}
 		r.LegalEntityID = null.StringFrom(legalEntityID)
 		if e.PostingDate != nil {
@@ -104,16 +104,16 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 			r.CategoryID = null.StringFromPtr(li.CategoryId)
 			r.CostObjectID = null.StringFromPtr(li.CostObjectId)
 			r.Description = null.StringFromPtr(li.Description)
-			r.Gross = null.IntFrom(int(li.Gross))
+			r.Gross = NullDecimalFromFloat32(li.Gross)
 			if li.ItemPrice != nil {
-				r.ItemPrice = null.IntFrom(int(*li.ItemPrice))
+				r.ItemPrice = NullDecimalFromFloat32(*li.ItemPrice)
 			}
 
-			r.Net = null.IntFrom(int(li.Net))
+			r.Net = NullDecimalFromFloat32(li.Net)
 			r.PurchaseOrderID = null.StringFromPtr(li.PurchaseOrderId)
 			r.PurchaseOrderItemID = null.StringFromPtr(li.PurchaseOrderItemId)
 			if li.Quantity != nil {
-				r.Quantity = null.IntFrom(int(*li.Quantity))
+				r.Quantity = NullDecimalFromFloat32(*li.Quantity)
 			}
 
 			// tags is being deserialized into a map
