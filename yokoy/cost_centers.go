@@ -28,7 +28,6 @@ func fetchCostCenters(ctx context.Context, legalEntityId string, c api.ClientWit
 	}
 
 	return h.JSON200.CostCenters, nil
-
 }
 
 func truncateCostCenters(ctx context.Context, db *sql.DB) {

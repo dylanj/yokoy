@@ -15,7 +15,6 @@ func fetchTaxRates(ctx context.Context, legalEntityId string, c api.ClientWithRe
 	p := &api.GetLegalEntitiesLegalEntityIdTaxRatesParams{}
 
 	h, err := c.GetLegalEntitiesLegalEntityIdTaxRatesWithResponse(ctx, legalEntityId, p)
-
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +24,6 @@ func fetchTaxRates(ctx context.Context, legalEntityId string, c api.ClientWithRe
 	}
 
 	return h.JSON200.TaxRates, nil
-
 }
 
 func truncateTaxRates(ctx context.Context, db *sql.DB) {

@@ -48,19 +48,21 @@ CREATE table company_cards (
 );
 
 CREATE table categories (
-    id                  text primary key,
+    id                  text,
     account_reference   text,
     charge_to_employee  boolean,
     name                text,
     legal_entity_id     text,
-    status_active       boolean
+    status_active       boolean,
+
+    PRIMARY KEY(legal_entity_id, id)
 );
 
 CREATE table cost_centers (
     id                  text primary key,
-    approval_limit      numeric(9,2) not null,
+    approval_limit      numeric(14,2) not null,
     approver_id         text,
-    auto_approval_limit numeric(9,2) not null,
+    auto_approval_limit numeric(14,2) not null,
     code                text,
     delegate_expiry     timestamp without time zone,
     delegate_id         text,
@@ -138,14 +140,16 @@ CREATE table policies (
 );
 
 CREATE table tax_rates (
-    id                  text primary key,
+    id                  text,
     account_reference   text,
     code                text,
     country             text,
     name                text,
     rate                numeric(9,2) not null,
     legal_entity_id     text,
-    status_active       boolean
+    status_active       boolean,
+
+    PRIMARY KEY(legal_entity_id, id)
 );
 
 CREATE TABLE tags (

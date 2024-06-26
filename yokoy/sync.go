@@ -142,7 +142,10 @@ func (s *Sync) SyncUsers() {
 	truncateUsers(ctx, s.db)
 
 	fmt.Println("inserting users into db")
-	insertUsers(ctx, s.db, users)
+	err = insertUsers(ctx, s.db, users)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *Sync) SyncTrips() {
@@ -161,7 +164,10 @@ func (s *Sync) SyncTrips() {
 	truncateTrips(ctx, s.db)
 
 	fmt.Println("inserting trips into db")
-	insertTrips(ctx, s.db, Trips)
+	err = insertTrips(ctx, s.db, Trips)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *Sync) SyncExpenses() {
@@ -204,7 +210,10 @@ func (s *Sync) SyncCompanyCards() {
 
 		fmt.Println("got", len(*ccs), "cards in le", legalEntityId)
 
-		insertCompanyCards(ctx, s.db, legalEntityId, ccs)
+		err = insertCompanyCards(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -223,7 +232,10 @@ func (s *Sync) SyncCategories() {
 
 		fmt.Println("got", len(*ccs), "categories in le", legalEntityId)
 
-		insertCategories(ctx, s.db, legalEntityId, ccs)
+		err = insertCategories(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -242,7 +254,10 @@ func (s *Sync) SyncPolicies() {
 
 		fmt.Println("got", len(*ccs), "policies in le", legalEntityId)
 
-		insertPolicies(ctx, s.db, legalEntityId, ccs)
+		err = insertPolicies(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -261,7 +276,10 @@ func (s *Sync) SyncTaxRates() {
 
 		fmt.Println("got", len(*ccs), "tax rates in le", legalEntityId)
 
-		insertTaxRates(ctx, s.db, legalEntityId, ccs)
+		err = insertTaxRates(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -280,7 +298,10 @@ func (s *Sync) SyncCostCenters() {
 
 		fmt.Println("got", len(*ccs), "cost centers in le", legalEntityId)
 
-		insertCostCenters(ctx, s.db, legalEntityId, ccs)
+		err = insertCostCenters(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -299,7 +320,10 @@ func (s *Sync) SyncInvoices() {
 
 		fmt.Println("got", len(*ccs), "invoices in le", legalEntityId)
 
-		insertInvoices(ctx, s.db, legalEntityId, ccs)
+		err = insertInvoices(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -318,7 +342,10 @@ func (s *Sync) SyncTags() {
 
 		fmt.Println("got", len(*ccs), "tags in le", legalEntityId)
 
-		insertTags(ctx, s.db, legalEntityId, ccs)
+		err = insertTags(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -337,7 +364,10 @@ func (s *Sync) SyncInvoiceCategories() {
 
 		fmt.Println("got", len(*ccs), "invoice categories in le", legalEntityId)
 
-		insertInvoiceCategories(ctx, s.db, legalEntityId, ccs)
+		err = insertInvoiceCategories(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -356,7 +386,10 @@ func (s *Sync) SyncSuppliers() {
 
 		fmt.Println("got", len(*ccs), "suppliers in le", legalEntityId)
 
-		insertSuppliers(ctx, s.db, legalEntityId, ccs)
+		err = insertSuppliers(ctx, s.db, legalEntityId, ccs)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
