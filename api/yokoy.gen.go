@@ -253,7 +253,7 @@ type CostCenterItem struct {
 	Id *string `json:"id,omitempty"`
 
 	// PctWeight Cost percentage assigned to the dedicated cost center/cost object.
-	PctWeight *float32 `json:"pctWeight,omitempty"`
+	PctWeight *float64 `json:"pctWeight,omitempty"`
 }
 
 // DateRange defines model for DateRange.
@@ -312,9 +312,6 @@ type Expense struct {
 
 	// CurrentAproverIds List of users that currently need to approve the expense
 	CurrentAproverIds *[]string `json:"currentAproverIds,omitempty"`
-
-	// CustomInformation Dictionary of custom information associated to the expense.
-	CustomInformation *map[string]string `json:"customInformation"`
 
 	// Description Description including business purpose (free text descriptions added by users).
 	Description *string          `json:"description,omitempty"`
@@ -13654,6 +13651,9 @@ func ParseGetExpensesResponse(rsp *http.Response) (*GetExpensesResponse, error) 
 	if err != nil {
 		return nil, err
 	}
+	// fmt.Println("code", rsp.StatusCode)
+	// fmt.Println("length", len(bodyBytes))
+	// fmt.Println(string(bodyBytes))
 
 	response := &GetExpensesResponse{
 		Body:         bodyBytes,

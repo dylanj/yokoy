@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
@@ -31,10 +32,10 @@ type Invoice struct {
 	Currency         null.String       `boil:"currency" json:"currency,omitempty" toml:"currency" yaml:"currency,omitempty"`
 	Duedate          null.Time         `boil:"duedate" json:"duedate,omitempty" toml:"duedate" yaml:"duedate,omitempty"`
 	Date             null.Time         `boil:"date" json:"date,omitempty" toml:"date" yaml:"date,omitempty"`
-	GrossAmount      types.NullDecimal `boil:"gross_amount" json:"gross_amount,omitempty" toml:"gross_amount" yaml:"gross_amount,omitempty"`
+	GrossAmount      decimal.Decimal   `boil:"gross_amount" json:"gross_amount" toml:"gross_amount" yaml:"gross_amount"`
 	InvoiceNumber    null.String       `boil:"invoice_number" json:"invoice_number,omitempty" toml:"invoice_number" yaml:"invoice_number,omitempty"`
 	IsCreditNode     null.Bool         `boil:"is_credit_node" json:"is_credit_node,omitempty" toml:"is_credit_node" yaml:"is_credit_node,omitempty"`
-	NetAmount        types.NullDecimal `boil:"net_amount" json:"net_amount,omitempty" toml:"net_amount" yaml:"net_amount,omitempty"`
+	NetAmount        decimal.Decimal   `boil:"net_amount" json:"net_amount" toml:"net_amount" yaml:"net_amount"`
 	PaymentTermID    null.String       `boil:"payment_term_id" json:"payment_term_id,omitempty" toml:"payment_term_id" yaml:"payment_term_id,omitempty"`
 	PostingDate      null.Time         `boil:"posting_date" json:"posting_date,omitempty" toml:"posting_date" yaml:"posting_date,omitempty"`
 	PurchaseOrderIds types.StringArray `boil:"purchase_order_ids" json:"purchase_order_ids,omitempty" toml:"purchase_order_ids" yaml:"purchase_order_ids,omitempty"`
@@ -42,7 +43,7 @@ type Invoice struct {
 	Status           null.String       `boil:"status" json:"status,omitempty" toml:"status" yaml:"status,omitempty"`
 	Submitters       types.StringArray `boil:"submitters" json:"submitters,omitempty" toml:"submitters" yaml:"submitters,omitempty"`
 	SupplierID       null.String       `boil:"supplier_id" json:"supplier_id,omitempty" toml:"supplier_id" yaml:"supplier_id,omitempty"`
-	TaxableAmount    types.NullDecimal `boil:"taxable_amount" json:"taxable_amount,omitempty" toml:"taxable_amount" yaml:"taxable_amount,omitempty"`
+	TaxableAmount    decimal.Decimal   `boil:"taxable_amount" json:"taxable_amount" toml:"taxable_amount" yaml:"taxable_amount"`
 	BankAccount      null.String       `boil:"bank_account" json:"bank_account,omitempty" toml:"bank_account" yaml:"bank_account,omitempty"`
 	BankCountry      null.String       `boil:"bank_country" json:"bank_country,omitempty" toml:"bank_country" yaml:"bank_country,omitempty"`
 	BankKey          null.String       `boil:"bank_key" json:"bank_key,omitempty" toml:"bank_key" yaml:"bank_key,omitempty"`
@@ -198,10 +199,10 @@ var InvoiceWhere = struct {
 	Currency         whereHelpernull_String
 	Duedate          whereHelpernull_Time
 	Date             whereHelpernull_Time
-	GrossAmount      whereHelpertypes_NullDecimal
+	GrossAmount      whereHelperdecimal_Decimal
 	InvoiceNumber    whereHelpernull_String
 	IsCreditNode     whereHelpernull_Bool
-	NetAmount        whereHelpertypes_NullDecimal
+	NetAmount        whereHelperdecimal_Decimal
 	PaymentTermID    whereHelpernull_String
 	PostingDate      whereHelpernull_Time
 	PurchaseOrderIds whereHelpertypes_StringArray
@@ -209,7 +210,7 @@ var InvoiceWhere = struct {
 	Status           whereHelpernull_String
 	Submitters       whereHelpertypes_StringArray
 	SupplierID       whereHelpernull_String
-	TaxableAmount    whereHelpertypes_NullDecimal
+	TaxableAmount    whereHelperdecimal_Decimal
 	BankAccount      whereHelpernull_String
 	BankCountry      whereHelpernull_String
 	BankKey          whereHelpernull_String
@@ -224,10 +225,10 @@ var InvoiceWhere = struct {
 	Currency:         whereHelpernull_String{field: "\"invoices\".\"currency\""},
 	Duedate:          whereHelpernull_Time{field: "\"invoices\".\"duedate\""},
 	Date:             whereHelpernull_Time{field: "\"invoices\".\"date\""},
-	GrossAmount:      whereHelpertypes_NullDecimal{field: "\"invoices\".\"gross_amount\""},
+	GrossAmount:      whereHelperdecimal_Decimal{field: "\"invoices\".\"gross_amount\""},
 	InvoiceNumber:    whereHelpernull_String{field: "\"invoices\".\"invoice_number\""},
 	IsCreditNode:     whereHelpernull_Bool{field: "\"invoices\".\"is_credit_node\""},
-	NetAmount:        whereHelpertypes_NullDecimal{field: "\"invoices\".\"net_amount\""},
+	NetAmount:        whereHelperdecimal_Decimal{field: "\"invoices\".\"net_amount\""},
 	PaymentTermID:    whereHelpernull_String{field: "\"invoices\".\"payment_term_id\""},
 	PostingDate:      whereHelpernull_Time{field: "\"invoices\".\"posting_date\""},
 	PurchaseOrderIds: whereHelpertypes_StringArray{field: "\"invoices\".\"purchase_order_ids\""},
@@ -235,7 +236,7 @@ var InvoiceWhere = struct {
 	Status:           whereHelpernull_String{field: "\"invoices\".\"status\""},
 	Submitters:       whereHelpertypes_StringArray{field: "\"invoices\".\"submitters\""},
 	SupplierID:       whereHelpernull_String{field: "\"invoices\".\"supplier_id\""},
-	TaxableAmount:    whereHelpertypes_NullDecimal{field: "\"invoices\".\"taxable_amount\""},
+	TaxableAmount:    whereHelperdecimal_Decimal{field: "\"invoices\".\"taxable_amount\""},
 	BankAccount:      whereHelpernull_String{field: "\"invoices\".\"bank_account\""},
 	BankCountry:      whereHelpernull_String{field: "\"invoices\".\"bank_country\""},
 	BankKey:          whereHelpernull_String{field: "\"invoices\".\"bank_key\""},
@@ -263,8 +264,8 @@ type invoiceL struct{}
 
 var (
 	invoiceAllColumns            = []string{"id", "legal_entity_id", "country", "currency", "duedate", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
-	invoiceColumnsWithoutDefault = []string{"id"}
-	invoiceColumnsWithDefault    = []string{"legal_entity_id", "country", "currency", "duedate", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "taxable_amount", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
+	invoiceColumnsWithoutDefault = []string{"id", "gross_amount", "net_amount", "taxable_amount"}
+	invoiceColumnsWithDefault    = []string{"legal_entity_id", "country", "currency", "duedate", "date", "invoice_number", "is_credit_node", "payment_term_id", "posting_date", "purchase_order_ids", "service_date", "status", "submitters", "supplier_id", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
 	invoicePrimaryKeyColumns     = []string{"id"}
 	invoiceGeneratedColumns      = []string{}
 )

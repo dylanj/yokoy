@@ -14,19 +14,19 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // ExpenseCostCenter is an object representing the database table.
 type ExpenseCostCenter struct {
-	ExpenseID     string            `boil:"expense_id" json:"expense_id" toml:"expense_id" yaml:"expense_id"`
-	CostCenterID  string            `boil:"cost_center_id" json:"cost_center_id" toml:"cost_center_id" yaml:"cost_center_id"`
-	PercentWeight types.NullDecimal `boil:"percent_weight" json:"percent_weight,omitempty" toml:"percent_weight" yaml:"percent_weight,omitempty"`
+	ExpenseID     string          `boil:"expense_id" json:"expense_id" toml:"expense_id" yaml:"expense_id"`
+	CostCenterID  string          `boil:"cost_center_id" json:"cost_center_id" toml:"cost_center_id" yaml:"cost_center_id"`
+	PercentWeight decimal.Decimal `boil:"percent_weight" json:"percent_weight" toml:"percent_weight" yaml:"percent_weight"`
 
 	R *expenseCostCenterR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L expenseCostCenterL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -57,11 +57,11 @@ var ExpenseCostCenterTableColumns = struct {
 var ExpenseCostCenterWhere = struct {
 	ExpenseID     whereHelperstring
 	CostCenterID  whereHelperstring
-	PercentWeight whereHelpertypes_NullDecimal
+	PercentWeight whereHelperdecimal_Decimal
 }{
 	ExpenseID:     whereHelperstring{field: "\"expense_cost_centers\".\"expense_id\""},
 	CostCenterID:  whereHelperstring{field: "\"expense_cost_centers\".\"cost_center_id\""},
-	PercentWeight: whereHelpertypes_NullDecimal{field: "\"expense_cost_centers\".\"percent_weight\""},
+	PercentWeight: whereHelperdecimal_Decimal{field: "\"expense_cost_centers\".\"percent_weight\""},
 }
 
 // ExpenseCostCenterRels is where relationship names are stored.
@@ -82,8 +82,8 @@ type expenseCostCenterL struct{}
 
 var (
 	expenseCostCenterAllColumns            = []string{"expense_id", "cost_center_id", "percent_weight"}
-	expenseCostCenterColumnsWithoutDefault = []string{"expense_id", "cost_center_id"}
-	expenseCostCenterColumnsWithDefault    = []string{"percent_weight"}
+	expenseCostCenterColumnsWithoutDefault = []string{"expense_id", "cost_center_id", "percent_weight"}
+	expenseCostCenterColumnsWithDefault    = []string{}
 	expenseCostCenterPrimaryKeyColumns     = []string{"expense_id", "cost_center_id"}
 	expenseCostCenterGeneratedColumns      = []string{}
 )

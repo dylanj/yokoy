@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/dylanj/yokoy/api"
 )
@@ -20,6 +21,7 @@ type Sync struct {
 	clientSecret   string
 	organizationID string
 	accessToken    string
+	syncStart      time.Time
 
 	legalEntityIds []string
 
@@ -66,7 +68,13 @@ func (s *Sync) fetchAccessToken() error {
 	s.accessToken = tok.AccessToken
 	return nil
 }
-
+func (s *Sync) SetSyncStart(date string) {
+	d, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		panic(err)
+	}
+	s.syncStart = d
+}
 func (s *Sync) SetCredentials(clientID, clientSecret string) {
 	s.clientID = clientID
 	s.clientSecret = clientSecret
@@ -161,18 +169,24 @@ func (s *Sync) SyncExpenses() {
 
 	ctx := context.TODO()
 
-	Expenses, err := fetchExpenses(ctx, s.apiClient)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Println("got", len(*Expenses), "expenses")
-
 	fmt.Println("truncating expenses")
 	truncateExpenses(ctx, s.db)
+	for _, filter := range forEachMonthSince("created", s.syncStart) {
+		fmt.Println("fetching", filter)
 
-	fmt.Println("inserting expenses into db")
-	insertExpenses(ctx, s.db, Expenses)
+		Expenses, err := fetchExpenses(ctx, s.apiClient, filter)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("got", len(*Expenses), "expenses")
+
+		fmt.Println("inserting expenses into db")
+		err = insertExpenses(ctx, s.db, Expenses)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (s *Sync) SyncCompanyCards() {
@@ -401,4 +415,5 @@ func (s *Sync) Go() {
 	s.SyncInvoices()
 	s.SyncInvoiceCategories()
 	s.SyncSuppliers()
+	fmt.Println("done")
 }

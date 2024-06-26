@@ -14,38 +14,38 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // Expense is an object representing the database table.
 type Expense struct {
-	ID                string            `boil:"id" json:"id" toml:"id" yaml:"id"`
-	AdditionalCharges null.Int          `boil:"additional_charges" json:"additional_charges,omitempty" toml:"additional_charges" yaml:"additional_charges,omitempty"`
-	CategoryID        null.String       `boil:"category_id" json:"category_id,omitempty" toml:"category_id" yaml:"category_id,omitempty"`
-	Country           null.String       `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
-	Created           null.Time         `boil:"created" json:"created,omitempty" toml:"created" yaml:"created,omitempty"`
-	Currency          null.String       `boil:"currency" json:"currency,omitempty" toml:"currency" yaml:"currency,omitempty"`
-	Description       null.String       `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
-	ExpenseDate       null.Time         `boil:"expense_date" json:"expense_date,omitempty" toml:"expense_date" yaml:"expense_date,omitempty"`
-	ExpenseEndDate    null.Time         `boil:"expense_end_date" json:"expense_end_date,omitempty" toml:"expense_end_date" yaml:"expense_end_date,omitempty"`
-	ExpenseType       null.String       `boil:"expense_type" json:"expense_type,omitempty" toml:"expense_type" yaml:"expense_type,omitempty"`
-	IsCreditNote      null.Bool         `boil:"is_credit_note" json:"is_credit_note,omitempty" toml:"is_credit_note" yaml:"is_credit_note,omitempty"`
-	LastModified      null.Time         `boil:"last_modified" json:"last_modified,omitempty" toml:"last_modified" yaml:"last_modified,omitempty"`
-	LegalEntityID     null.String       `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
-	PaymentMethod     null.String       `boil:"payment_method" json:"payment_method,omitempty" toml:"payment_method" yaml:"payment_method,omitempty"`
-	PostingDate       null.Time         `boil:"posting_date" json:"posting_date,omitempty" toml:"posting_date" yaml:"posting_date,omitempty"`
-	Status            null.String       `boil:"status" json:"status,omitempty" toml:"status" yaml:"status,omitempty"`
-	TaxNumber         null.String       `boil:"tax_number" json:"tax_number,omitempty" toml:"tax_number" yaml:"tax_number,omitempty"`
-	TotalAmount       types.NullDecimal `boil:"total_amount" json:"total_amount,omitempty" toml:"total_amount" yaml:"total_amount,omitempty"`
-	TotalClaim        types.NullDecimal `boil:"total_claim" json:"total_claim,omitempty" toml:"total_claim" yaml:"total_claim,omitempty"`
-	TripID            null.String       `boil:"trip_id" json:"trip_id,omitempty" toml:"trip_id" yaml:"trip_id,omitempty"`
-	UserID            null.String       `boil:"user_id" json:"user_id,omitempty" toml:"user_id" yaml:"user_id,omitempty"`
+	ID                string          `boil:"id" json:"id" toml:"id" yaml:"id"`
+	AdditionalCharges null.Int        `boil:"additional_charges" json:"additional_charges,omitempty" toml:"additional_charges" yaml:"additional_charges,omitempty"`
+	CategoryID        null.String     `boil:"category_id" json:"category_id,omitempty" toml:"category_id" yaml:"category_id,omitempty"`
+	Country           null.String     `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
+	Created           null.Time       `boil:"created" json:"created,omitempty" toml:"created" yaml:"created,omitempty"`
+	Currency          null.String     `boil:"currency" json:"currency,omitempty" toml:"currency" yaml:"currency,omitempty"`
+	Description       null.String     `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
+	ExpenseDate       null.Time       `boil:"expense_date" json:"expense_date,omitempty" toml:"expense_date" yaml:"expense_date,omitempty"`
+	ExpenseEndDate    null.Time       `boil:"expense_end_date" json:"expense_end_date,omitempty" toml:"expense_end_date" yaml:"expense_end_date,omitempty"`
+	ExpenseType       null.String     `boil:"expense_type" json:"expense_type,omitempty" toml:"expense_type" yaml:"expense_type,omitempty"`
+	IsCreditNote      null.Bool       `boil:"is_credit_note" json:"is_credit_note,omitempty" toml:"is_credit_note" yaml:"is_credit_note,omitempty"`
+	LastModified      null.Time       `boil:"last_modified" json:"last_modified,omitempty" toml:"last_modified" yaml:"last_modified,omitempty"`
+	LegalEntityID     null.String     `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
+	PaymentMethod     null.String     `boil:"payment_method" json:"payment_method,omitempty" toml:"payment_method" yaml:"payment_method,omitempty"`
+	PostingDate       null.Time       `boil:"posting_date" json:"posting_date,omitempty" toml:"posting_date" yaml:"posting_date,omitempty"`
+	Status            null.String     `boil:"status" json:"status,omitempty" toml:"status" yaml:"status,omitempty"`
+	TaxNumber         null.String     `boil:"tax_number" json:"tax_number,omitempty" toml:"tax_number" yaml:"tax_number,omitempty"`
+	TotalAmount       decimal.Decimal `boil:"total_amount" json:"total_amount" toml:"total_amount" yaml:"total_amount"`
+	TotalClaim        decimal.Decimal `boil:"total_claim" json:"total_claim" toml:"total_claim" yaml:"total_claim"`
+	TripID            null.String     `boil:"trip_id" json:"trip_id,omitempty" toml:"trip_id" yaml:"trip_id,omitempty"`
+	UserID            null.String     `boil:"user_id" json:"user_id,omitempty" toml:"user_id" yaml:"user_id,omitempty"`
 
 	R *expenseR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L expenseL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -201,8 +201,8 @@ var ExpenseWhere = struct {
 	PostingDate       whereHelpernull_Time
 	Status            whereHelpernull_String
 	TaxNumber         whereHelpernull_String
-	TotalAmount       whereHelpertypes_NullDecimal
-	TotalClaim        whereHelpertypes_NullDecimal
+	TotalAmount       whereHelperdecimal_Decimal
+	TotalClaim        whereHelperdecimal_Decimal
 	TripID            whereHelpernull_String
 	UserID            whereHelpernull_String
 }{
@@ -223,8 +223,8 @@ var ExpenseWhere = struct {
 	PostingDate:       whereHelpernull_Time{field: "\"expenses\".\"posting_date\""},
 	Status:            whereHelpernull_String{field: "\"expenses\".\"status\""},
 	TaxNumber:         whereHelpernull_String{field: "\"expenses\".\"tax_number\""},
-	TotalAmount:       whereHelpertypes_NullDecimal{field: "\"expenses\".\"total_amount\""},
-	TotalClaim:        whereHelpertypes_NullDecimal{field: "\"expenses\".\"total_claim\""},
+	TotalAmount:       whereHelperdecimal_Decimal{field: "\"expenses\".\"total_amount\""},
+	TotalClaim:        whereHelperdecimal_Decimal{field: "\"expenses\".\"total_claim\""},
 	TripID:            whereHelpernull_String{field: "\"expenses\".\"trip_id\""},
 	UserID:            whereHelpernull_String{field: "\"expenses\".\"user_id\""},
 }
@@ -247,8 +247,8 @@ type expenseL struct{}
 
 var (
 	expenseAllColumns            = []string{"id", "additional_charges", "category_id", "country", "created", "currency", "description", "expense_date", "expense_end_date", "expense_type", "is_credit_note", "last_modified", "legal_entity_id", "payment_method", "posting_date", "status", "tax_number", "total_amount", "total_claim", "trip_id", "user_id"}
-	expenseColumnsWithoutDefault = []string{"id"}
-	expenseColumnsWithDefault    = []string{"additional_charges", "category_id", "country", "created", "currency", "description", "expense_date", "expense_end_date", "expense_type", "is_credit_note", "last_modified", "legal_entity_id", "payment_method", "posting_date", "status", "tax_number", "total_amount", "total_claim", "trip_id", "user_id"}
+	expenseColumnsWithoutDefault = []string{"id", "total_amount", "total_claim"}
+	expenseColumnsWithDefault    = []string{"additional_charges", "category_id", "country", "created", "currency", "description", "expense_date", "expense_end_date", "expense_type", "is_credit_note", "last_modified", "legal_entity_id", "payment_method", "posting_date", "status", "tax_number", "trip_id", "user_id"}
 	expensePrimaryKeyColumns     = []string{"id"}
 	expenseGeneratedColumns      = []string{}
 )

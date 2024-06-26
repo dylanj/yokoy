@@ -9,10 +9,9 @@ import (
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/dylanj/yokoy/models"
-	"github.com/ericlagergren/decimal"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
 func fetchCostCenters(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.CostCenter, error) {
@@ -59,15 +58,12 @@ func insertCostCenters(ctx context.Context, db *sql.DB, legalEntityID string, co
 
 		approvalLimit, err := getInt(cc.ApprovalLimit)
 		if err == nil {
-			r.ApprovalLimit = types.NewNullDecimal(decimal.New(int64(approvalLimit), 2))
+			r.ApprovalLimit = NullDecimalFromInt64(int64(approvalLimit))
 		}
 
 		r.ApproverID = null.StringFromPtr(cc.ApproverId)
 		if cc.AutoApprovalLimit != nil {
-			limit := decimal.Big{}
-			limit.SetFloat64(float64(*cc.AutoApprovalLimit))
-			r.AutoApprovalLimit = types.NewNullDecimal(&limit)
-			//r.AutoApprovalLimit = decimal.NewFromFloat32(*cc.AutoApprovalLimit)
+			r.AutoApprovalLimit = NullDecimalFromFloat32(*cc.AutoApprovalLimit)
 		}
 
 		r.Code = null.StringFrom(cc.Code)
@@ -85,4 +81,22 @@ func insertCostCenters(ctx context.Context, db *sql.DB, legalEntityID string, co
 	}
 
 	return nil
+}
+
+func NullDecimalFromFloat32(v float32) decimal.Decimal {
+	return NullDecimalFromFloat64(float64(v))
+}
+
+func NullDecimalFromFloat64(v float64) decimal.Decimal {
+	b := decimal.NewFromFloat(v)
+	return b
+}
+
+func NullDecimalFromInt64(v int64) decimal.Decimal {
+	b := decimal.NewFromInt(v)
+	return b
+}
+
+func NullDecimalFromInt32(v int32) decimal.Decimal {
+	return NullDecimalFromInt64(int64(v))
 }

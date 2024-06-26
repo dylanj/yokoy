@@ -5,18 +5,56 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/dylanj/yokoy/models"
-	"github.com/ericlagergren/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
-func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.Expense, error) {
-	filter := "created ge 2024-01-01 and created lt 2024-01-02"
-	// filter := "created ge \"Mon, 12 Feb 2023 10:08:45 GMT\""
+func isoString(t time.Time) string {
+	return t.Format("2006-01-02")
+}
+
+func filterString(field string, startDate, endDate time.Time) string {
+	start := isoString(startDate)
+	end := isoString(endDate)
+
+	return field + " ge " + start + " and " + field + " lt " + end
+}
+
+func forEachMonthSince(field string, startDate time.Time) []string {
+	filters := make([]string, 0)
+
+	now := time.Now()
+	endDate := startDate.AddDate(0, 1, 0)
+	cnt := 0
+
+	for {
+		cnt = cnt + 1
+		if cnt > 500 {
+			fmt.Println("hit limit")
+			break
+		}
+
+		f := filterString(field, startDate, endDate)
+		filters = append(filters, f)
+
+		if endDate.After(now) {
+			break
+		}
+
+		startDate = startDate.AddDate(0, 1, 0)
+		endDate = startDate.AddDate(0, 1, 0)
+	}
+
+	return filters
+}
+
+func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface, filter string) (*[]api.Expense, error) {
+	//filter := "created ge 2024-01-01 and created lt 2024-01-02"
+	//filter := "created ge \"Mon, 12 Feb 2023 10:08:45 GMT\""
 	//filter := "legalEntityId eq BzTHfPWrnm"
 	p := &api.GetExpensesParams{
 		Filter: &filter,
@@ -31,14 +69,14 @@ func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface) (*[]
 	if h.StatusCode() != 200 {
 		return nil, errors.New("got non 200 response code")
 	}
-	fmt.Println(string(h.Body))
+	//fmt.Println(string(h.Body))
 
 	return h.JSON200.Expenses, nil
 }
 
 func truncateExpenses(ctx context.Context, db *sql.DB) {
 	db.ExecContext(ctx, "truncate expenses;")
-	db.ExecContext(ctx, "truncate expense_cost_center;")
+	db.ExecContext(ctx, "truncate expense_cost_centers;")
 	db.ExecContext(ctx, "truncate expense_tax_items;")
 	db.ExecContext(ctx, "truncate expense_approver_ids;")
 	db.ExecContext(ctx, "truncate expense_event_logs;")
@@ -89,14 +127,10 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			r.ExpenseID = *e.Id
 			r.CostCenterID = *cci.Id
 			if cci.PctWeight != nil {
-				weight := decimal.Big{}
-				weight.SetFloat64(*cci.PctWeight)
-				r.PercentWeight = types.NewNullDecimal(&weight)
-
-				null.IntFrom(int(*cci.PctWeight))
+				r.PercentWeight = NullDecimalFromFloat64(*cci.PctWeight)
 			}
 
-			fmt.Println("inserting", r.ExpenseID, r.CostCenterID)
+			//fmt.Println("inserting", r.ExpenseID, r.CostCenterID)
 			err := r.Insert(ctx, db, boil.Infer())
 			if err != nil {
 				return err

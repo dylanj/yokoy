@@ -58,9 +58,9 @@ CREATE table categories (
 
 CREATE table cost_centers (
     id                  text primary key,
-    approval_limit      integer,
+    approval_limit      numeric(9,2) not null,
     approver_id         text,
-    auto_approval_limit integer,
+    auto_approval_limit numeric(9,2) not null,
     code                text,
     delegate_expiry     timestamp without time zone,
     delegate_id         text,
@@ -89,8 +89,8 @@ CREATE table expenses (
     posting_date        timestamp without time zone,
     status              text,
     tax_number          text,
-    total_amount        integer,
-    total_claim         integer,
+    total_amount        numeric(9,2) not null,
+    total_claim         numeric(9,2) not null,
     trip_id             text,
     user_id             text
 );
@@ -98,7 +98,7 @@ CREATE table expenses (
 CREATE table expense_cost_centers (
     expense_id          text,
     cost_center_id      text,
-    percent_weight      integer,
+    percent_weight      numeric(9,2) not null,
 
     PRIMARY KEY (expense_id, cost_center_id)
 );
@@ -106,8 +106,8 @@ CREATE table expense_cost_centers (
 CREATE table expense_tax_items (
     expense_id          text,
     rate_id             text,
-    gross               integer,
-    tax                 integer,
+    gross               numeric(9,2) not null,
+    tax                 numeric(9,2) not null,
 
     PRIMARY KEY (expense_id, rate_id)
 );
@@ -143,7 +143,7 @@ CREATE table tax_rates (
     code                text,
     country             text,
     name                text,
-    rate                integer,
+    rate                numeric(9,2) not null,
     legal_entity_id     text,
     status_active       boolean
 );
@@ -164,10 +164,10 @@ CREATE TABLE invoices (
     currency            text,
     dueDate             timestamp without time zone,
     date                timestamp without time zone,
-    gross_amount        integer,
+    gross_amount        numeric(9,2) not null,
     invoice_number      text,
     is_credit_node      boolean,
-    net_amount          integer,
+    net_amount          numeric(9,2) not null,
     payment_term_id     text,
     posting_date        timestamp without time zone,
     purchase_order_ids  text[],
@@ -175,7 +175,7 @@ CREATE TABLE invoices (
     status              text,
     submitters          text[],
     supplier_id         text,
-    taxable_amount      integer,
+    taxable_amount      numeric(9,2) not null,
 
     bank_account        text,
     bank_country        text,
@@ -192,12 +192,12 @@ CREATE TABLE invoice_line_items (
     category_id             text,
     cost_object_id          text,
     description             text,
-    gross                   integer,
-    item_price              integer,
-    net                     integer,
+    gross                   numeric(9,2) not null,
+    item_price              numeric(9,2) not null,
+    net                     numeric(9,2) not null,
     purchase_order_id       text,
     purchase_order_item_id  text,
-    quantity                integer,
+    quantity                numeric(9,2) not null,
     tags                    text,
     tax_rate_id             text,
     unit                    text

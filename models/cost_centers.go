@@ -14,29 +14,29 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // CostCenter is an object representing the database table.
 type CostCenter struct {
-	ID                string            `boil:"id" json:"id" toml:"id" yaml:"id"`
-	ApprovalLimit     types.NullDecimal `boil:"approval_limit" json:"approval_limit,omitempty" toml:"approval_limit" yaml:"approval_limit,omitempty"`
-	ApproverID        null.String       `boil:"approver_id" json:"approver_id,omitempty" toml:"approver_id" yaml:"approver_id,omitempty"`
-	AutoApprovalLimit types.NullDecimal `boil:"auto_approval_limit" json:"auto_approval_limit,omitempty" toml:"auto_approval_limit" yaml:"auto_approval_limit,omitempty"`
-	Code              null.String       `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
-	DelegateExpiry    null.Time         `boil:"delegate_expiry" json:"delegate_expiry,omitempty" toml:"delegate_expiry" yaml:"delegate_expiry,omitempty"`
-	DelegateID        null.String       `boil:"delegate_id" json:"delegate_id,omitempty" toml:"delegate_id" yaml:"delegate_id,omitempty"`
-	Description       null.String       `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
-	Name              null.String       `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
-	ParentID          null.String       `boil:"parent_id" json:"parent_id,omitempty" toml:"parent_id" yaml:"parent_id,omitempty"`
-	LegalEntityID     null.String       `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
-	StatusActive      null.Bool         `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
+	ID                string          `boil:"id" json:"id" toml:"id" yaml:"id"`
+	ApprovalLimit     decimal.Decimal `boil:"approval_limit" json:"approval_limit" toml:"approval_limit" yaml:"approval_limit"`
+	ApproverID        null.String     `boil:"approver_id" json:"approver_id,omitempty" toml:"approver_id" yaml:"approver_id,omitempty"`
+	AutoApprovalLimit decimal.Decimal `boil:"auto_approval_limit" json:"auto_approval_limit" toml:"auto_approval_limit" yaml:"auto_approval_limit"`
+	Code              null.String     `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
+	DelegateExpiry    null.Time       `boil:"delegate_expiry" json:"delegate_expiry,omitempty" toml:"delegate_expiry" yaml:"delegate_expiry,omitempty"`
+	DelegateID        null.String     `boil:"delegate_id" json:"delegate_id,omitempty" toml:"delegate_id" yaml:"delegate_id,omitempty"`
+	Description       null.String     `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
+	Name              null.String     `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
+	ParentID          null.String     `boil:"parent_id" json:"parent_id,omitempty" toml:"parent_id" yaml:"parent_id,omitempty"`
+	LegalEntityID     null.String     `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
+	StatusActive      null.Bool       `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 
 	R *costCenterR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L costCenterL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -100,30 +100,25 @@ var CostCenterTableColumns = struct {
 
 // Generated where
 
-type whereHelpertypes_NullDecimal struct{ field string }
+type whereHelperdecimal_Decimal struct{ field string }
 
-func (w whereHelpertypes_NullDecimal) EQ(x types.NullDecimal) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
+func (w whereHelperdecimal_Decimal) EQ(x decimal.Decimal) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.EQ, x)
 }
-func (w whereHelpertypes_NullDecimal) NEQ(x types.NullDecimal) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
+func (w whereHelperdecimal_Decimal) NEQ(x decimal.Decimal) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.NEQ, x)
 }
-func (w whereHelpertypes_NullDecimal) LT(x types.NullDecimal) qm.QueryMod {
+func (w whereHelperdecimal_Decimal) LT(x decimal.Decimal) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LT, x)
 }
-func (w whereHelpertypes_NullDecimal) LTE(x types.NullDecimal) qm.QueryMod {
+func (w whereHelperdecimal_Decimal) LTE(x decimal.Decimal) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LTE, x)
 }
-func (w whereHelpertypes_NullDecimal) GT(x types.NullDecimal) qm.QueryMod {
+func (w whereHelperdecimal_Decimal) GT(x decimal.Decimal) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GT, x)
 }
-func (w whereHelpertypes_NullDecimal) GTE(x types.NullDecimal) qm.QueryMod {
+func (w whereHelperdecimal_Decimal) GTE(x decimal.Decimal) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
-func (w whereHelpertypes_NullDecimal) IsNull() qm.QueryMod { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpertypes_NullDecimal) IsNotNull() qm.QueryMod {
-	return qmhelper.WhereIsNotNull(w.field)
 }
 
 type whereHelpernull_Time struct{ field string }
@@ -152,9 +147,9 @@ func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsN
 
 var CostCenterWhere = struct {
 	ID                whereHelperstring
-	ApprovalLimit     whereHelpertypes_NullDecimal
+	ApprovalLimit     whereHelperdecimal_Decimal
 	ApproverID        whereHelpernull_String
-	AutoApprovalLimit whereHelpertypes_NullDecimal
+	AutoApprovalLimit whereHelperdecimal_Decimal
 	Code              whereHelpernull_String
 	DelegateExpiry    whereHelpernull_Time
 	DelegateID        whereHelpernull_String
@@ -165,9 +160,9 @@ var CostCenterWhere = struct {
 	StatusActive      whereHelpernull_Bool
 }{
 	ID:                whereHelperstring{field: "\"cost_centers\".\"id\""},
-	ApprovalLimit:     whereHelpertypes_NullDecimal{field: "\"cost_centers\".\"approval_limit\""},
+	ApprovalLimit:     whereHelperdecimal_Decimal{field: "\"cost_centers\".\"approval_limit\""},
 	ApproverID:        whereHelpernull_String{field: "\"cost_centers\".\"approver_id\""},
-	AutoApprovalLimit: whereHelpertypes_NullDecimal{field: "\"cost_centers\".\"auto_approval_limit\""},
+	AutoApprovalLimit: whereHelperdecimal_Decimal{field: "\"cost_centers\".\"auto_approval_limit\""},
 	Code:              whereHelpernull_String{field: "\"cost_centers\".\"code\""},
 	DelegateExpiry:    whereHelpernull_Time{field: "\"cost_centers\".\"delegate_expiry\""},
 	DelegateID:        whereHelpernull_String{field: "\"cost_centers\".\"delegate_id\""},
@@ -196,8 +191,8 @@ type costCenterL struct{}
 
 var (
 	costCenterAllColumns            = []string{"id", "approval_limit", "approver_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
-	costCenterColumnsWithoutDefault = []string{"id"}
-	costCenterColumnsWithDefault    = []string{"approval_limit", "approver_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
+	costCenterColumnsWithoutDefault = []string{"id", "approval_limit", "auto_approval_limit"}
+	costCenterColumnsWithDefault    = []string{"approver_id", "code", "delegate_expiry", "delegate_id", "description", "name", "parent_id", "legal_entity_id", "status_active"}
 	costCenterPrimaryKeyColumns     = []string{"id"}
 	costCenterGeneratedColumns      = []string{}
 )

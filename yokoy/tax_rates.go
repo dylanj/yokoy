@@ -38,7 +38,7 @@ func insertTaxRates(ctx context.Context, db *sql.DB, legalEntityID string, taxRa
 		r.ID = *cc.Id
 		r.AccountReference = null.StringFrom(cc.AccountReference)
 		r.Country = null.StringFrom(cc.Country)
-		r.Rate = null.IntFrom(int(cc.Rate))
+		r.Rate = NullDecimalFromFloat32(cc.Rate)
 		r.Name = null.StringFrom(cc.Name)
 		r.Code = null.StringFrom(cc.Code)
 		r.StatusActive = null.BoolFrom(cc.StatusActive)

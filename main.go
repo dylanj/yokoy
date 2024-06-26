@@ -21,6 +21,7 @@ func main() {
 	orgID := os.Getenv("YOKOY_ORG_ID")
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
+	syncStart := os.Getenv("SYNC_START")
 	dbURI := os.Getenv("DATABASE_URL")
 
 	db, err := sql.Open("postgres", dbURI)
@@ -33,6 +34,7 @@ func main() {
 	}
 
 	y := yokoy.Sync{}
+	y.SetSyncStart(syncStart)
 	y.SetURL(baseURL)
 	y.SetDB(db)
 	y.SetCredentials(clientID, clientSecret)

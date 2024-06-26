@@ -14,20 +14,20 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // ExpenseTaxItem is an object representing the database table.
 type ExpenseTaxItem struct {
-	ExpenseID string            `boil:"expense_id" json:"expense_id" toml:"expense_id" yaml:"expense_id"`
-	RateID    string            `boil:"rate_id" json:"rate_id" toml:"rate_id" yaml:"rate_id"`
-	Gross     types.NullDecimal `boil:"gross" json:"gross,omitempty" toml:"gross" yaml:"gross,omitempty"`
-	Tax       types.NullDecimal `boil:"tax" json:"tax,omitempty" toml:"tax" yaml:"tax,omitempty"`
+	ExpenseID string          `boil:"expense_id" json:"expense_id" toml:"expense_id" yaml:"expense_id"`
+	RateID    string          `boil:"rate_id" json:"rate_id" toml:"rate_id" yaml:"rate_id"`
+	Gross     decimal.Decimal `boil:"gross" json:"gross" toml:"gross" yaml:"gross"`
+	Tax       decimal.Decimal `boil:"tax" json:"tax" toml:"tax" yaml:"tax"`
 
 	R *expenseTaxItemR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L expenseTaxItemL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -62,13 +62,13 @@ var ExpenseTaxItemTableColumns = struct {
 var ExpenseTaxItemWhere = struct {
 	ExpenseID whereHelperstring
 	RateID    whereHelperstring
-	Gross     whereHelpertypes_NullDecimal
-	Tax       whereHelpertypes_NullDecimal
+	Gross     whereHelperdecimal_Decimal
+	Tax       whereHelperdecimal_Decimal
 }{
 	ExpenseID: whereHelperstring{field: "\"expense_tax_items\".\"expense_id\""},
 	RateID:    whereHelperstring{field: "\"expense_tax_items\".\"rate_id\""},
-	Gross:     whereHelpertypes_NullDecimal{field: "\"expense_tax_items\".\"gross\""},
-	Tax:       whereHelpertypes_NullDecimal{field: "\"expense_tax_items\".\"tax\""},
+	Gross:     whereHelperdecimal_Decimal{field: "\"expense_tax_items\".\"gross\""},
+	Tax:       whereHelperdecimal_Decimal{field: "\"expense_tax_items\".\"tax\""},
 }
 
 // ExpenseTaxItemRels is where relationship names are stored.
@@ -89,8 +89,8 @@ type expenseTaxItemL struct{}
 
 var (
 	expenseTaxItemAllColumns            = []string{"expense_id", "rate_id", "gross", "tax"}
-	expenseTaxItemColumnsWithoutDefault = []string{"expense_id", "rate_id"}
-	expenseTaxItemColumnsWithDefault    = []string{"gross", "tax"}
+	expenseTaxItemColumnsWithoutDefault = []string{"expense_id", "rate_id", "gross", "tax"}
+	expenseTaxItemColumnsWithDefault    = []string{}
 	expenseTaxItemPrimaryKeyColumns     = []string{"expense_id", "rate_id"}
 	expenseTaxItemGeneratedColumns      = []string{}
 )

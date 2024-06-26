@@ -14,25 +14,25 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // TaxRate is an object representing the database table.
 type TaxRate struct {
-	ID               string            `boil:"id" json:"id" toml:"id" yaml:"id"`
-	AccountReference null.String       `boil:"account_reference" json:"account_reference,omitempty" toml:"account_reference" yaml:"account_reference,omitempty"`
-	Code             null.String       `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
-	Country          null.String       `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
-	Name             null.String       `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
-	Rate             types.NullDecimal `boil:"rate" json:"rate,omitempty" toml:"rate" yaml:"rate,omitempty"`
-	LegalEntityID    null.String       `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
-	StatusActive     null.Bool         `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
+	ID               string          `boil:"id" json:"id" toml:"id" yaml:"id"`
+	AccountReference null.String     `boil:"account_reference" json:"account_reference,omitempty" toml:"account_reference" yaml:"account_reference,omitempty"`
+	Code             null.String     `boil:"code" json:"code,omitempty" toml:"code" yaml:"code,omitempty"`
+	Country          null.String     `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
+	Name             null.String     `boil:"name" json:"name,omitempty" toml:"name" yaml:"name,omitempty"`
+	Rate             decimal.Decimal `boil:"rate" json:"rate" toml:"rate" yaml:"rate"`
+	LegalEntityID    null.String     `boil:"legal_entity_id" json:"legal_entity_id,omitempty" toml:"legal_entity_id" yaml:"legal_entity_id,omitempty"`
+	StatusActive     null.Bool       `boil:"status_active" json:"status_active,omitempty" toml:"status_active" yaml:"status_active,omitempty"`
 
 	R *taxRateR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L taxRateL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -86,7 +86,7 @@ var TaxRateWhere = struct {
 	Code             whereHelpernull_String
 	Country          whereHelpernull_String
 	Name             whereHelpernull_String
-	Rate             whereHelpertypes_NullDecimal
+	Rate             whereHelperdecimal_Decimal
 	LegalEntityID    whereHelpernull_String
 	StatusActive     whereHelpernull_Bool
 }{
@@ -95,7 +95,7 @@ var TaxRateWhere = struct {
 	Code:             whereHelpernull_String{field: "\"tax_rates\".\"code\""},
 	Country:          whereHelpernull_String{field: "\"tax_rates\".\"country\""},
 	Name:             whereHelpernull_String{field: "\"tax_rates\".\"name\""},
-	Rate:             whereHelpertypes_NullDecimal{field: "\"tax_rates\".\"rate\""},
+	Rate:             whereHelperdecimal_Decimal{field: "\"tax_rates\".\"rate\""},
 	LegalEntityID:    whereHelpernull_String{field: "\"tax_rates\".\"legal_entity_id\""},
 	StatusActive:     whereHelpernull_Bool{field: "\"tax_rates\".\"status_active\""},
 }
@@ -118,8 +118,8 @@ type taxRateL struct{}
 
 var (
 	taxRateAllColumns            = []string{"id", "account_reference", "code", "country", "name", "rate", "legal_entity_id", "status_active"}
-	taxRateColumnsWithoutDefault = []string{"id"}
-	taxRateColumnsWithDefault    = []string{"account_reference", "code", "country", "name", "rate", "legal_entity_id", "status_active"}
+	taxRateColumnsWithoutDefault = []string{"id", "rate"}
+	taxRateColumnsWithDefault    = []string{"account_reference", "code", "country", "name", "legal_entity_id", "status_active"}
 	taxRatePrimaryKeyColumns     = []string{"id"}
 	taxRateGeneratedColumns      = []string{}
 )

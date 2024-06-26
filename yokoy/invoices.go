@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/dylanj/yokoy/models"
@@ -23,8 +22,6 @@ func fetchInvoices(ctx context.Context, legalEntityId string, c api.ClientWithRe
 	if h.StatusCode() != 200 {
 		return nil, errors.New("got non 200 response code")
 	}
-
-	fmt.Println(string(h.Body))
 
 	return h.JSON200.Invoices, nil
 }
@@ -120,7 +117,6 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 			//r.Tags = null.StringFrom(*li.Tags[])
 			r.TaxRateID = null.StringFromPtr(li.TaxRateId)
 			r.Unit = null.StringFromPtr(li.Unit)
-			fmt.Println("inserting", r.InvoiceID)
 			err := r.Insert(ctx, db, boil.Infer())
 			if err != nil {
 				return err

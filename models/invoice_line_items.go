@@ -14,31 +14,31 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
-	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/volatiletech/strmangle"
 )
 
 // InvoiceLineItem is an object representing the database table.
 type InvoiceLineItem struct {
-	ID                  int               `boil:"id" json:"id" toml:"id" yaml:"id"`
-	InvoiceID           null.String       `boil:"invoice_id" json:"invoice_id,omitempty" toml:"invoice_id" yaml:"invoice_id,omitempty"`
-	CategoryID          null.String       `boil:"category_id" json:"category_id,omitempty" toml:"category_id" yaml:"category_id,omitempty"`
-	CostObjectID        null.String       `boil:"cost_object_id" json:"cost_object_id,omitempty" toml:"cost_object_id" yaml:"cost_object_id,omitempty"`
-	Description         null.String       `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
-	Gross               types.NullDecimal `boil:"gross" json:"gross,omitempty" toml:"gross" yaml:"gross,omitempty"`
-	ItemPrice           types.NullDecimal `boil:"item_price" json:"item_price,omitempty" toml:"item_price" yaml:"item_price,omitempty"`
-	Net                 types.NullDecimal `boil:"net" json:"net,omitempty" toml:"net" yaml:"net,omitempty"`
-	PurchaseOrderID     null.String       `boil:"purchase_order_id" json:"purchase_order_id,omitempty" toml:"purchase_order_id" yaml:"purchase_order_id,omitempty"`
-	PurchaseOrderItemID null.String       `boil:"purchase_order_item_id" json:"purchase_order_item_id,omitempty" toml:"purchase_order_item_id" yaml:"purchase_order_item_id,omitempty"`
-	Quantity            types.NullDecimal `boil:"quantity" json:"quantity,omitempty" toml:"quantity" yaml:"quantity,omitempty"`
-	Tags                null.String       `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
-	TaxRateID           null.String       `boil:"tax_rate_id" json:"tax_rate_id,omitempty" toml:"tax_rate_id" yaml:"tax_rate_id,omitempty"`
-	Unit                null.String       `boil:"unit" json:"unit,omitempty" toml:"unit" yaml:"unit,omitempty"`
+	ID                  int             `boil:"id" json:"id" toml:"id" yaml:"id"`
+	InvoiceID           null.String     `boil:"invoice_id" json:"invoice_id,omitempty" toml:"invoice_id" yaml:"invoice_id,omitempty"`
+	CategoryID          null.String     `boil:"category_id" json:"category_id,omitempty" toml:"category_id" yaml:"category_id,omitempty"`
+	CostObjectID        null.String     `boil:"cost_object_id" json:"cost_object_id,omitempty" toml:"cost_object_id" yaml:"cost_object_id,omitempty"`
+	Description         null.String     `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
+	Gross               decimal.Decimal `boil:"gross" json:"gross" toml:"gross" yaml:"gross"`
+	ItemPrice           decimal.Decimal `boil:"item_price" json:"item_price" toml:"item_price" yaml:"item_price"`
+	Net                 decimal.Decimal `boil:"net" json:"net" toml:"net" yaml:"net"`
+	PurchaseOrderID     null.String     `boil:"purchase_order_id" json:"purchase_order_id,omitempty" toml:"purchase_order_id" yaml:"purchase_order_id,omitempty"`
+	PurchaseOrderItemID null.String     `boil:"purchase_order_item_id" json:"purchase_order_item_id,omitempty" toml:"purchase_order_item_id" yaml:"purchase_order_item_id,omitempty"`
+	Quantity            decimal.Decimal `boil:"quantity" json:"quantity" toml:"quantity" yaml:"quantity"`
+	Tags                null.String     `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
+	TaxRateID           null.String     `boil:"tax_rate_id" json:"tax_rate_id,omitempty" toml:"tax_rate_id" yaml:"tax_rate_id,omitempty"`
+	Unit                null.String     `boil:"unit" json:"unit,omitempty" toml:"unit" yaml:"unit,omitempty"`
 
 	R *invoiceLineItemR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L invoiceLineItemL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -116,12 +116,12 @@ var InvoiceLineItemWhere = struct {
 	CategoryID          whereHelpernull_String
 	CostObjectID        whereHelpernull_String
 	Description         whereHelpernull_String
-	Gross               whereHelpertypes_NullDecimal
-	ItemPrice           whereHelpertypes_NullDecimal
-	Net                 whereHelpertypes_NullDecimal
+	Gross               whereHelperdecimal_Decimal
+	ItemPrice           whereHelperdecimal_Decimal
+	Net                 whereHelperdecimal_Decimal
 	PurchaseOrderID     whereHelpernull_String
 	PurchaseOrderItemID whereHelpernull_String
-	Quantity            whereHelpertypes_NullDecimal
+	Quantity            whereHelperdecimal_Decimal
 	Tags                whereHelpernull_String
 	TaxRateID           whereHelpernull_String
 	Unit                whereHelpernull_String
@@ -131,12 +131,12 @@ var InvoiceLineItemWhere = struct {
 	CategoryID:          whereHelpernull_String{field: "\"invoice_line_items\".\"category_id\""},
 	CostObjectID:        whereHelpernull_String{field: "\"invoice_line_items\".\"cost_object_id\""},
 	Description:         whereHelpernull_String{field: "\"invoice_line_items\".\"description\""},
-	Gross:               whereHelpertypes_NullDecimal{field: "\"invoice_line_items\".\"gross\""},
-	ItemPrice:           whereHelpertypes_NullDecimal{field: "\"invoice_line_items\".\"item_price\""},
-	Net:                 whereHelpertypes_NullDecimal{field: "\"invoice_line_items\".\"net\""},
+	Gross:               whereHelperdecimal_Decimal{field: "\"invoice_line_items\".\"gross\""},
+	ItemPrice:           whereHelperdecimal_Decimal{field: "\"invoice_line_items\".\"item_price\""},
+	Net:                 whereHelperdecimal_Decimal{field: "\"invoice_line_items\".\"net\""},
 	PurchaseOrderID:     whereHelpernull_String{field: "\"invoice_line_items\".\"purchase_order_id\""},
 	PurchaseOrderItemID: whereHelpernull_String{field: "\"invoice_line_items\".\"purchase_order_item_id\""},
-	Quantity:            whereHelpertypes_NullDecimal{field: "\"invoice_line_items\".\"quantity\""},
+	Quantity:            whereHelperdecimal_Decimal{field: "\"invoice_line_items\".\"quantity\""},
 	Tags:                whereHelpernull_String{field: "\"invoice_line_items\".\"tags\""},
 	TaxRateID:           whereHelpernull_String{field: "\"invoice_line_items\".\"tax_rate_id\""},
 	Unit:                whereHelpernull_String{field: "\"invoice_line_items\".\"unit\""},
@@ -160,8 +160,8 @@ type invoiceLineItemL struct{}
 
 var (
 	invoiceLineItemAllColumns            = []string{"id", "invoice_id", "category_id", "cost_object_id", "description", "gross", "item_price", "net", "purchase_order_id", "purchase_order_item_id", "quantity", "tags", "tax_rate_id", "unit"}
-	invoiceLineItemColumnsWithoutDefault = []string{}
-	invoiceLineItemColumnsWithDefault    = []string{"id", "invoice_id", "category_id", "cost_object_id", "description", "gross", "item_price", "net", "purchase_order_id", "purchase_order_item_id", "quantity", "tags", "tax_rate_id", "unit"}
+	invoiceLineItemColumnsWithoutDefault = []string{"gross", "item_price", "net", "quantity"}
+	invoiceLineItemColumnsWithDefault    = []string{"id", "invoice_id", "category_id", "cost_object_id", "description", "purchase_order_id", "purchase_order_item_id", "tags", "tax_rate_id", "unit"}
 	invoiceLineItemPrimaryKeyColumns     = []string{"id"}
 	invoiceLineItemGeneratedColumns      = []string{}
 )
