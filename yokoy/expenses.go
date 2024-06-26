@@ -8,13 +8,21 @@ import (
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/dylanj/yokoy/models"
+	"github.com/ericlagergren/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
 func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.Expense, error) {
-	p := &api.GetExpensesParams{}
+	filter := "created ge 2024-01-01 and created lt 2024-01-02"
+	// filter := "created ge \"Mon, 12 Feb 2023 10:08:45 GMT\""
+	//filter := "legalEntityId eq BzTHfPWrnm"
+	p := &api.GetExpensesParams{
+		Filter: &filter,
+	}
 	h, err := c.GetExpensesWithResponse(ctx, p)
+	fmt.Println("finished?")
 
 	if err != nil {
 		return nil, err
@@ -63,10 +71,10 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 		r.Status = null.StringFrom(string(e.Status))
 		r.TaxNumber = null.StringFromPtr(e.TaxNumber)
 		if e.TotalAmount != nil {
-			r.TotalAmount = null.IntFrom(int(*e.TotalAmount))
+			r.TotalAmount = NullDecimalFromFloat32(*e.TotalAmount)
 		}
 		if e.TotalClaim != nil {
-			r.TotalClaim = null.IntFrom(int(*e.TotalClaim))
+			r.TotalClaim = NullDecimalFromFloat32(*e.TotalClaim)
 		}
 		r.TripID = null.StringFromPtr(e.TripId)
 		r.UserID = null.StringFromPtr(e.UserId)
@@ -81,7 +89,11 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			r.ExpenseID = *e.Id
 			r.CostCenterID = *cci.Id
 			if cci.PctWeight != nil {
-				r.PercentWeight = null.IntFrom(int(*cci.PctWeight))
+				weight := decimal.Big{}
+				weight.SetFloat64(*cci.PctWeight)
+				r.PercentWeight = types.NewNullDecimal(&weight)
+
+				null.IntFrom(int(*cci.PctWeight))
 			}
 
 			fmt.Println("inserting", r.ExpenseID, r.CostCenterID)
@@ -95,8 +107,9 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			r := models.ExpenseTaxItem{}
 			r.ExpenseID = *e.Id
 			r.RateID = *ti.RateId
-			r.Gross = null.IntFrom(int(*ti.Gross))
-			r.Tax = null.IntFrom(int(*ti.Tax))
+
+			r.Gross = NullDecimalFromFloat32(*ti.Gross)
+			r.Tax = NullDecimalFromFloat32(*ti.Tax)
 
 			err := r.Insert(ctx, db, boil.Infer())
 			if err != nil {
