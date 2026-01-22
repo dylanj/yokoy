@@ -114,14 +114,20 @@ func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoi
 
 		// Collect line items
 		for _, li := range inv.LineItems {
-			var itemPrice, quantity *decimal.Decimal
+			// ItemPrice is required (NOT NULL constraint), default to 0 if nil
+			var itemPrice decimal.Decimal
 			if li.ItemPrice != nil {
-				price := NullDecimalFromFloat32(*li.ItemPrice)
-				itemPrice = &price
+				itemPrice = NullDecimalFromFloat32(*li.ItemPrice)
+			} else {
+				itemPrice = decimal.Zero
 			}
+
+			// Quantity is required (NOT NULL constraint), default to 0 if nil
+			var quantity decimal.Decimal
 			if li.Quantity != nil {
-				qty := NullDecimalFromFloat32(*li.Quantity)
-				quantity = &qty
+				quantity = NullDecimalFromFloat32(*li.Quantity)
+			} else {
+				quantity = decimal.Zero
 			}
 
 			lineRow := []interface{}{
