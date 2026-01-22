@@ -39,6 +39,11 @@ func insertTags(ctx context.Context, db *sql.DB, legalEntityID string, tags *[]a
 	values := make([][]interface{}, 0, len(*tags))
 
 	for _, tag := range *tags {
+		// Skip tags with nil IDs - they cannot be inserted
+		if tag.Id == nil {
+			continue
+		}
+
 		row := []interface{}{
 			*tag.Id,
 			NullStringValue(null.StringFrom(tag.DimensionCode)),
