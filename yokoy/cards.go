@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchCompanyCards(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.CompanyCard, error) {
@@ -33,23 +31,27 @@ func truncateCompanyCards(ctx context.Context, db *sql.DB) {
 }
 
 func insertCompanyCards(ctx context.Context, db *sql.DB, legalEntityID string, companyCards *[]api.CompanyCard) error {
-	for _, cc := range *companyCards {
-		r := models.CompanyCard{}
-		r.ID = *cc.Id
-		r.AccountReference = null.StringFrom(cc.AccountReference)
-		r.Currency = null.StringFrom(cc.Currency)
-		r.Name = null.StringFrom(cc.Name)
-		r.Description = null.StringFromPtr(cc.Description)
-		r.Number = null.StringFrom(cc.Number)
-		r.OwnerID = null.StringFrom(cc.OwnerId)
-		r.StatusActive = null.BoolFrom(cc.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*companyCards) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "account_reference", "currency", "name", "description", "number", "owner_id", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*companyCards))
+
+	for _, cc := range *companyCards {
+		row := []interface{}{
+			*cc.Id,
+			NullStringValue(null.StringFrom(cc.AccountReference)),
+			NullStringValue(null.StringFrom(cc.Currency)),
+			NullStringValue(null.StringFrom(cc.Name)),
+			NullStringValue(null.StringFromPtr(cc.Description)),
+			NullStringValue(null.StringFrom(cc.Number)),
+			NullStringValue(null.StringFrom(cc.OwnerId)),
+			NullBoolValue(null.BoolFrom(cc.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "company_cards", columns, values)
 }

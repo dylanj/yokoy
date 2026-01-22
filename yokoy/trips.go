@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchTrips(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.Trip, error) {
@@ -31,23 +29,27 @@ func truncateTrips(ctx context.Context, db *sql.DB) {
 }
 
 func insertTrips(ctx context.Context, db *sql.DB, trips *[]api.Trip) error {
-	for _, t := range *trips {
-		r := models.Trip{}
-		r.ID = *t.Id
-		r.Currency = null.StringFromPtr(t.Currency)
-		r.StartDateTime = null.TimeFromPtr(parseTime(t.StartDatetime))
-		r.EndDateTime = null.TimeFromPtr(parseTime(t.EndDatetime))
-		r.LegalEntityID = null.StringFromPtr(t.LegalEntityId)
-		r.Name = null.StringFromPtr(t.Name)
-		r.Status = null.StringFrom(string(t.Status))
-		r.TotalClaim = null.IntFrom(int(*t.TotalClaim))
-		r.UserID = null.StringFromPtr(t.UserId)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*trips) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "currency", "start_date_time", "end_date_time", "legal_entity_id", "name", "status", "total_claim", "user_id"}
+	values := make([][]interface{}, 0, len(*trips))
+
+	for _, t := range *trips {
+		row := []interface{}{
+			*t.Id,
+			NullStringValue(null.StringFromPtr(t.Currency)),
+			NullTimeValue(null.TimeFromPtr(parseTime(t.StartDatetime))),
+			NullTimeValue(null.TimeFromPtr(parseTime(t.EndDatetime))),
+			NullStringValue(null.StringFromPtr(t.LegalEntityId)),
+			NullStringValue(null.StringFromPtr(t.Name)),
+			string(t.Status),
+			int(*t.TotalClaim),
+			NullStringValue(null.StringFromPtr(t.UserId)),
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "trips", columns, values)
 }

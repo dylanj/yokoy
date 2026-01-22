@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchPolicies(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Policy, error) {
@@ -33,19 +31,23 @@ func truncatePolicies(ctx context.Context, db *sql.DB) {
 }
 
 func insertPolicies(ctx context.Context, db *sql.DB, legalEntityID string, policies *[]api.Policy) error {
-	for _, p := range *policies {
-		r := models.Policy{}
-		r.ID = *p.Id
-		r.Name = null.StringFrom(p.Name)
-		r.Code = null.StringFrom(p.Code)
-		r.StatusActive = null.BoolFrom(p.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*policies) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "name", "code", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*policies))
+
+	for _, p := range *policies {
+		row := []interface{}{
+			*p.Id,
+			NullStringValue(null.StringFrom(p.Name)),
+			NullStringValue(null.StringFrom(p.Code)),
+			NullBoolValue(null.BoolFrom(p.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "policies", columns, values)
 }

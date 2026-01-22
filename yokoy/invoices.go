@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
 func fetchInvoices(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Invoice, error) {
@@ -32,95 +33,124 @@ func truncateInvoices(ctx context.Context, db *sql.DB) {
 }
 
 func insertInvoices(ctx context.Context, db *sql.DB, legalEntityID string, invoices *[]api.Invoice) error {
-	for _, e := range *invoices {
-		r := models.Invoice{}
-		r.ID = *e.Id
-		r.Country = null.StringFromPtr(e.Country)
-		r.Currency = null.StringFromPtr(e.Currency)
-		if e.Date != nil {
-			r.Date = null.TimeFrom(e.Date.Time)
-		}
-		if e.GrossAmount != nil {
+	if len(*invoices) == 0 {
+		return nil
+	}
 
-			r.GrossAmount = NullDecimalFromFloat32(*e.GrossAmount)
-		}
-		r.InvoiceNumber = null.StringFrom(e.InvoiceNumber)
-		if e.IsCreditNote != nil {
-			r.IsCreditNode = null.BoolFrom(*e.IsCreditNote)
-		}
-		if e.NetAmount != nil {
+	// Collect invoices for bulk insert
+	invoiceColumns := []string{"id", "country", "currency", "date", "gross_amount", "invoice_number", "is_credit_node", "net_amount", "payment_term_id", "posting_date", "purchase_order_ids", "submitters", "supplier_id", "taxable_amount", "legal_entity_id", "bank_account", "bank_country", "bank_key", "bank_number", "external_id", "iban", "swift_code"}
+	invoiceValues := make([][]interface{}, 0, len(*invoices))
 
-			r.NetAmount = NullDecimalFromFloat32(*e.NetAmount)
-		}
-		r.PaymentTermID = null.StringFromPtr(e.PaymentTermId)
-		if e.PostingDate != nil {
-			r.PostingDate = null.TimeFrom(e.PostingDate.Time)
-		}
-		if e.PurchaseOrderIds != nil {
-			r.PurchaseOrderIds = *e.PurchaseOrderIds
-		}
-		/*
-			if e.Status != nil {
-				r.Status = null.StringFrom(string(*e.Status))
-			}
-		*/
-		if e.Submitters != nil {
-			r.Submitters = *e.Submitters
-		}
-		r.SupplierID = null.StringFromPtr(e.SupplierId)
-		// service date can be a date, a range of dates or null
-		//r.ServiceDate = null.TimeFromPtr(parseDate(e.ServiceDate.AsDateString()))
+	// Collect line items for bulk insert
+	lineItemColumns := []string{"invoice_id", "category_id", "cost_object_id", "description", "gross", "item_price", "net", "purchase_order_id", "purchase_order_item_id", "quantity", "tax_rate_id", "unit"}
+	lineItemValues := make([][]interface{}, 0)
 
-		if e.TaxableAmount != nil {
-			r.TaxableAmount = NullDecimalFromFloat32(*e.TaxableAmount)
+	for _, inv := range *invoices {
+		var grossAmount, netAmount, taxableAmount decimal.Decimal
+		if inv.GrossAmount != nil {
+			grossAmount = NullDecimalFromFloat32(*inv.GrossAmount)
 		}
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-		if e.PostingDate != nil {
-			r.PostingDate = null.TimeFrom(e.PostingDate.Time)
+		if inv.NetAmount != nil {
+			netAmount = NullDecimalFromFloat32(*inv.NetAmount)
+		}
+		if inv.TaxableAmount != nil {
+			taxableAmount = NullDecimalFromFloat32(*inv.TaxableAmount)
 		}
 
-		if e.BankAccount != nil {
-			ba := e.BankAccount
-			r.BankAccount = null.StringFromPtr(ba.BankAccount)
-			r.BankCountry = null.StringFromPtr(ba.BankCountry)
-			r.BankKey = null.StringFromPtr(ba.BankKey)
-			r.BankNumber = null.StringFromPtr(ba.BankNumber)
-			r.ExternalID = null.StringFromPtr(ba.ExternalId)
-			r.Iban = null.StringFromPtr(ba.Iban)
-			r.SwiftCode = null.StringFromPtr(ba.SwiftCode)
+		var purchaseOrderIds types.StringArray
+		if inv.PurchaseOrderIds != nil {
+			purchaseOrderIds = *inv.PurchaseOrderIds
 		}
 
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
+		var submitters types.StringArray
+		if inv.Submitters != nil {
+			submitters = *inv.Submitters
 		}
 
-		for _, li := range e.LineItems {
-			r := models.InvoiceLineItem{}
-			r.InvoiceID = null.StringFromPtr(e.Id)
-			r.CategoryID = null.StringFromPtr(li.CategoryId)
-			r.CostObjectID = null.StringFromPtr(li.CostObjectId)
-			r.Description = null.StringFromPtr(li.Description)
-			r.Gross = NullDecimalFromFloat32(li.Gross)
+		var date, postingDate *time.Time
+		if inv.Date != nil {
+			date = &inv.Date.Time
+		}
+		if inv.PostingDate != nil {
+			postingDate = &inv.PostingDate.Time
+		}
+
+		var bankAccount, bankCountry, bankKey, bankNumber, externalID, iban, swiftCode *string
+		if inv.BankAccount != nil {
+			bankAccount = inv.BankAccount.BankAccount
+			bankCountry = inv.BankAccount.BankCountry
+			bankKey = inv.BankAccount.BankKey
+			bankNumber = inv.BankAccount.BankNumber
+			externalID = inv.BankAccount.ExternalId
+			iban = inv.BankAccount.Iban
+			swiftCode = inv.BankAccount.SwiftCode
+		}
+
+		row := []interface{}{
+			*inv.Id,
+			NullStringValue(null.StringFromPtr(inv.Country)),
+			NullStringValue(null.StringFromPtr(inv.Currency)),
+			NullTimeValue(null.TimeFromPtr(date)),
+			grossAmount,
+			NullStringValue(null.StringFrom(inv.InvoiceNumber)),
+			NullBoolValue(null.BoolFromPtr(inv.IsCreditNote)),
+			netAmount,
+			NullStringValue(null.StringFromPtr(inv.PaymentTermId)),
+			NullTimeValue(null.TimeFromPtr(postingDate)),
+			purchaseOrderIds,
+			submitters,
+			NullStringValue(null.StringFromPtr(inv.SupplierId)),
+			taxableAmount,
+			legalEntityID,
+			NullStringValue(null.StringFromPtr(bankAccount)),
+			NullStringValue(null.StringFromPtr(bankCountry)),
+			NullStringValue(null.StringFromPtr(bankKey)),
+			NullStringValue(null.StringFromPtr(bankNumber)),
+			NullStringValue(null.StringFromPtr(externalID)),
+			NullStringValue(null.StringFromPtr(iban)),
+			NullStringValue(null.StringFromPtr(swiftCode)),
+		}
+		invoiceValues = append(invoiceValues, row)
+
+		// Collect line items
+		for _, li := range inv.LineItems {
+			var itemPrice, quantity *decimal.Decimal
 			if li.ItemPrice != nil {
-				r.ItemPrice = NullDecimalFromFloat32(*li.ItemPrice)
+				price := NullDecimalFromFloat32(*li.ItemPrice)
+				itemPrice = &price
 			}
-
-			r.Net = NullDecimalFromFloat32(li.Net)
-			r.PurchaseOrderID = null.StringFromPtr(li.PurchaseOrderId)
-			r.PurchaseOrderItemID = null.StringFromPtr(li.PurchaseOrderItemId)
 			if li.Quantity != nil {
-				r.Quantity = NullDecimalFromFloat32(*li.Quantity)
+				qty := NullDecimalFromFloat32(*li.Quantity)
+				quantity = &qty
 			}
 
-			// tags is being deserialized into a map
-			//r.Tags = null.StringFrom(*li.Tags[])
-			r.TaxRateID = null.StringFromPtr(li.TaxRateId)
-			r.Unit = null.StringFromPtr(li.Unit)
-			err := r.Insert(ctx, db, boil.Infer())
-			if err != nil {
-				return err
+			lineRow := []interface{}{
+				*inv.Id,
+				NullStringValue(null.StringFromPtr(li.CategoryId)),
+				NullStringValue(null.StringFromPtr(li.CostObjectId)),
+				NullStringValue(null.StringFromPtr(li.Description)),
+				NullDecimalFromFloat32(li.Gross),
+				itemPrice,
+				NullDecimalFromFloat32(li.Net),
+				NullStringValue(null.StringFromPtr(li.PurchaseOrderId)),
+				NullStringValue(null.StringFromPtr(li.PurchaseOrderItemId)),
+				quantity,
+				NullStringValue(null.StringFromPtr(li.TaxRateId)),
+				NullStringValue(null.StringFromPtr(li.Unit)),
 			}
+			lineItemValues = append(lineItemValues, lineRow)
+		}
+	}
+
+	// Bulk insert invoices
+	if err := BulkInsert(ctx, db, "invoices", invoiceColumns, invoiceValues); err != nil {
+		return err
+	}
+
+	// Bulk insert line items
+	if len(lineItemValues) > 0 {
+		if err := BulkInsert(ctx, db, "invoice_line_items", lineItemColumns, lineItemValues); err != nil {
+			return err
 		}
 	}
 

@@ -8,10 +8,8 @@ import (
 	"strconv"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchCostCenters(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.CostCenter, error) {
@@ -50,36 +48,43 @@ func getInt(v interface{}) (int, error) {
 }
 
 func insertCostCenters(ctx context.Context, db *sql.DB, legalEntityID string, costCenters *[]api.CostCenter) error {
-	for _, cc := range *costCenters {
-		r := models.CostCenter{}
-		r.ID = *cc.Id
-		r.Name = null.StringFrom(cc.Name)
-
-		approvalLimit, err := getInt(cc.ApprovalLimit)
-		if err == nil {
-			r.ApprovalLimit = NullDecimalFromInt64(int64(approvalLimit))
-		}
-
-		r.ApproverID = null.StringFromPtr(cc.ApproverId)
-		if cc.AutoApprovalLimit != nil {
-			r.AutoApprovalLimit = NullDecimalFromFloat32(*cc.AutoApprovalLimit)
-		}
-
-		r.Code = null.StringFrom(cc.Code)
-		r.DelegateExpiry = null.TimeFromPtr(parseTime(cc.DelegateExpiry))
-		r.DelegateID = null.StringFromPtr(cc.DelegateId)
-		r.Description = null.StringFrom(cc.Description)
-		r.ParentID = null.StringFromPtr(cc.ParentId)
-		r.StatusActive = null.BoolFrom(cc.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err = r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*costCenters) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "name", "approval_limit", "approver_id", "auto_approval_limit", "code", "delegate_expiry", "delegate_id", "description", "parent_id", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*costCenters))
+
+	for _, cc := range *costCenters {
+		var approvalLimit decimal.Decimal
+		approvalLimitInt, err := getInt(cc.ApprovalLimit)
+		if err == nil {
+			approvalLimit = NullDecimalFromInt64(int64(approvalLimitInt))
+		}
+
+		var autoApprovalLimit decimal.Decimal
+		if cc.AutoApprovalLimit != nil {
+			autoApprovalLimit = NullDecimalFromFloat32(*cc.AutoApprovalLimit)
+		}
+
+		row := []interface{}{
+			*cc.Id,
+			NullStringValue(null.StringFrom(cc.Name)),
+			approvalLimit,
+			NullStringValue(null.StringFromPtr(cc.ApproverId)),
+			autoApprovalLimit, // Will be zero value if nil
+			NullStringValue(null.StringFrom(cc.Code)),
+			NullTimeValue(null.TimeFromPtr(parseTime(cc.DelegateExpiry))),
+			NullStringValue(null.StringFromPtr(cc.DelegateId)),
+			NullStringValue(null.StringFrom(cc.Description)),
+			NullStringValue(null.StringFromPtr(cc.ParentId)),
+			NullBoolValue(null.BoolFrom(cc.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "cost_centers", columns, values)
 }
 
 func NullDecimalFromFloat32(v float32) decimal.Decimal {

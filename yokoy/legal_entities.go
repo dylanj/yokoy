@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchLegalEntities(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.LegalEntity, error) {
@@ -31,18 +29,22 @@ func truncateLegalEntities(ctx context.Context, db *sql.DB) {
 }
 
 func insertLegalEntities(ctx context.Context, db *sql.DB, legalEntities *[]api.LegalEntity) error {
-	for _, le := range *legalEntities {
-		dbLE := models.LegalEntity{}
-		dbLE.Name = null.StringFromPtr(le.Name)
-		dbLE.ID = *le.Id
-		dbLE.Code = null.StringFrom(le.Code)
-		dbLE.Language = null.StringFrom(string(le.Language))
-
-		err := dbLE.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*legalEntities) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "name", "code", "language"}
+	values := make([][]interface{}, 0, len(*legalEntities))
+
+	for _, le := range *legalEntities {
+		row := []interface{}{
+			*le.Id,
+			NullStringValue(null.StringFromPtr(le.Name)),
+			NullStringValue(null.StringFrom(le.Code)),
+			string(le.Language),
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "legal_entities", columns, values)
 }

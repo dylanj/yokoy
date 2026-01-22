@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchSuppliers(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Supplier, error) {
@@ -32,32 +30,36 @@ func truncateSuppliers(ctx context.Context, db *sql.DB) {
 }
 
 func insertSuppliers(ctx context.Context, db *sql.DB, legalEntityID string, suppliers *[]api.Supplier) error {
-	for _, p := range *suppliers {
-		r := models.Supplier{}
-		r.ID = *p.Id
-		r.LegalEntityID = legalEntityID
-		r.SupplierID = null.StringFrom(p.SupplierId)
-		r.Name = null.StringFrom(p.Name)
-		r.City = null.StringFromPtr(p.City)
-		r.CountryCode = null.StringFromPtr(p.CountryCode)
-		r.ExternalID = null.StringFrom(p.ExternalId)
-		r.SecondaryName = null.StringFromPtr(p.SecondaryName)
-		r.ShortName = null.StringFromPtr(p.ShortName)
-		r.StatusActive = null.BoolFrom(p.StatusActive)
-		r.Street = null.StringFromPtr(p.Street)
-		r.TaxNumber = null.StringFromPtr(p.TaxNumber)
-		r.URL = null.StringFromPtr(p.Url)
-		r.ZipCode = null.StringFromPtr(p.ZipCode)
-		r.DefaultApproverID = null.StringFromPtr(p.DefaultApproverId)
-		r.DefaultCategoryID = null.StringFromPtr(p.DefaultCategoryId)
-		r.DefaultCostCenter = null.StringFromPtr(p.DefaultCostCenterId)
-		r.DefaultPaymentTermID = null.StringFromPtr(p.DefaultPaymentTermId)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*suppliers) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "legal_entity_id", "supplier_id", "name", "city", "country_code", "external_id", "secondary_name", "short_name", "status_active", "street", "tax_number", "url", "zip_code", "default_approver_id", "default_category_id", "default_cost_center", "default_payment_term_id"}
+	values := make([][]interface{}, 0, len(*suppliers))
+
+	for _, s := range *suppliers {
+		row := []interface{}{
+			*s.Id,
+			legalEntityID,
+			NullStringValue(null.StringFrom(s.SupplierId)),
+			NullStringValue(null.StringFrom(s.Name)),
+			NullStringValue(null.StringFromPtr(s.City)),
+			NullStringValue(null.StringFromPtr(s.CountryCode)),
+			NullStringValue(null.StringFrom(s.ExternalId)),
+			NullStringValue(null.StringFromPtr(s.SecondaryName)),
+			NullStringValue(null.StringFromPtr(s.ShortName)),
+			NullBoolValue(null.BoolFrom(s.StatusActive)),
+			NullStringValue(null.StringFromPtr(s.Street)),
+			NullStringValue(null.StringFromPtr(s.TaxNumber)),
+			NullStringValue(null.StringFromPtr(s.Url)),
+			NullStringValue(null.StringFromPtr(s.ZipCode)),
+			NullStringValue(null.StringFromPtr(s.DefaultApproverId)),
+			NullStringValue(null.StringFromPtr(s.DefaultCategoryId)),
+			NullStringValue(null.StringFromPtr(s.DefaultCostCenterId)),
+			NullStringValue(null.StringFromPtr(s.DefaultPaymentTermId)),
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "suppliers", columns, values)
 }

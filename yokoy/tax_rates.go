@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchTaxRates(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.TaxRate, error) {
@@ -31,22 +29,26 @@ func truncateTaxRates(ctx context.Context, db *sql.DB) {
 }
 
 func insertTaxRates(ctx context.Context, db *sql.DB, legalEntityID string, taxRates *[]api.TaxRate) error {
-	for _, cc := range *taxRates {
-		r := models.TaxRate{}
-		r.ID = *cc.Id
-		r.AccountReference = null.StringFrom(cc.AccountReference)
-		r.Country = null.StringFrom(cc.Country)
-		r.Rate = NullDecimalFromFloat32(cc.Rate)
-		r.Name = null.StringFrom(cc.Name)
-		r.Code = null.StringFrom(cc.Code)
-		r.StatusActive = null.BoolFrom(cc.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*taxRates) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "account_reference", "country", "rate", "name", "code", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*taxRates))
+
+	for _, tr := range *taxRates {
+		row := []interface{}{
+			*tr.Id,
+			NullStringValue(null.StringFrom(tr.AccountReference)),
+			NullStringValue(null.StringFrom(tr.Country)),
+			NullDecimalFromFloat32(tr.Rate),
+			NullStringValue(null.StringFrom(tr.Name)),
+			NullStringValue(null.StringFrom(tr.Code)),
+			NullBoolValue(null.BoolFrom(tr.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "tax_rates", columns, values)
 }

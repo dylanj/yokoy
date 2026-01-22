@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchTags(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Tag, error) {
@@ -29,24 +27,33 @@ func fetchTags(ctx context.Context, legalEntityId string, c api.ClientWithRespon
 }
 
 func truncateTags(ctx context.Context, db *sql.DB) {
-	db.ExecContext(ctx, "truncate tax_rates;")
+	db.ExecContext(ctx, "truncate tags;")
 }
 
 func insertTags(ctx context.Context, db *sql.DB, legalEntityID string, tags *[]api.Tag) error {
-	for _, cc := range *tags {
-		r := models.Tag{}
-		r.ID = *cc.Id
-		r.DimensionCode = null.StringFrom(cc.DimensionCode)
-		r.Name = null.StringFrom(cc.Name)
-		r.Code = null.StringFrom(cc.Code)
-		r.StatusActive = null.BoolFrom(cc.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*tags) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "dimension_code", "name", "code", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*tags))
+
+	for _, tag := range *tags {
+		row := []interface{}{
+			*tag.Id,
+			NullStringValue(null.StringFrom(tag.DimensionCode)),
+			NullStringValue(null.StringFrom(tag.Name)),
+			NullStringValue(null.StringFrom(tag.Code)),
+			NullBoolValue(null.BoolFrom(tag.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	// Use ON CONFLICT DO NOTHING to handle duplicate tags across legal entities
+	opts := BulkInsertOptions{
+		OnConflict:    "DO NOTHING",
+		ConflictTarget: "id",
+	}
+	return BulkInsert(ctx, db, "tags", columns, values, opts)
 }

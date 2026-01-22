@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchCategories(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Category, error) {
@@ -33,20 +31,24 @@ func truncateCategories(ctx context.Context, db *sql.DB) {
 }
 
 func insertCategories(ctx context.Context, db *sql.DB, legalEntityID string, categories *[]api.Category) error {
-	for _, c := range *categories {
-		r := models.Category{}
-		r.ID = *c.Id
-		r.AccountReference = null.StringFrom(c.AccountReference)
-		r.ChargeToEmployee = null.BoolFromPtr(c.ChargeToEmployee)
-		r.Name = null.StringFrom(c.Name)
-		r.StatusActive = null.BoolFrom(c.StatusActive)
-		r.LegalEntityID = null.StringFrom(legalEntityID)
-
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*categories) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "account_reference", "charge_to_employee", "name", "status_active", "legal_entity_id"}
+	values := make([][]interface{}, 0, len(*categories))
+
+	for _, c := range *categories {
+		row := []interface{}{
+			*c.Id,
+			NullStringValue(null.StringFrom(c.AccountReference)),
+			NullBoolValue(null.BoolFromPtr(c.ChargeToEmployee)),
+			NullStringValue(null.StringFrom(c.Name)),
+			NullBoolValue(null.BoolFrom(c.StatusActive)),
+			legalEntityID,
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "categories", columns, values)
 }

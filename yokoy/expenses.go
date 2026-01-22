@@ -4,13 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
+	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func isoString(t time.Time) string {
@@ -34,7 +32,7 @@ func forEachMonthSince(field string, startDate time.Time) []string {
 	for {
 		cnt = cnt + 1
 		if cnt > 500 {
-			fmt.Println("hit limit")
+			// Log limit hit - this should not normally happen
 			break
 		}
 
@@ -60,7 +58,6 @@ func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface, filt
 		Filter: &filter,
 	}
 	h, err := c.GetExpensesWithResponse(ctx, p)
-	fmt.Println("finished?")
 
 	if err != nil {
 		return nil, err
@@ -83,100 +80,154 @@ func truncateExpenses(ctx context.Context, db *sql.DB) {
 }
 
 func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) error {
-	for _, e := range *expenses {
-		r := models.Expense{}
-		r.ID = *e.Id
-		if e.AdditionalCharges != nil {
-			r.AdditionalCharges = null.IntFrom(int(*e.AdditionalCharges))
-		}
-		r.CategoryID = null.StringFromPtr(e.CategoryId)
-		r.Country = null.StringFromPtr(e.Country)
-		r.Created = null.TimeFromPtr(parseTime(e.Created))
-		r.Currency = null.StringFromPtr(e.Currency)
-		r.Description = null.StringFromPtr(e.Description)
-		r.ExpenseDate = null.TimeFromPtr(parseDate(e.ExpenseDate))
-		r.ExpenseEndDate = null.TimeFromPtr(parseTime(e.ExpenseEndDate))
-		if e.ExpenseType != nil {
-			r.ExpenseType = null.StringFrom(string(*e.ExpenseType))
-		}
-		r.IsCreditNote = null.BoolFromPtr(e.IsCreditNote)
-		r.LastModified = null.TimeFromPtr(parseTime(e.LastModified))
-		r.LegalEntityID = null.StringFromPtr(e.LegalEntityId)
-		if e.PaymentMethod != nil {
-			r.PaymentMethod = null.StringFrom((string(*e.PaymentMethod)))
-		}
-		r.PostingDate = null.TimeFromPtr(parseDate(e.PostingDate))
-		r.Status = null.StringFrom(string(e.Status))
-		r.TaxNumber = null.StringFromPtr(e.TaxNumber)
-		if e.TotalAmount != nil {
-			r.TotalAmount = NullDecimalFromFloat32(*e.TotalAmount)
-		}
-		if e.TotalClaim != nil {
-			r.TotalClaim = NullDecimalFromFloat32(*e.TotalClaim)
-		}
-		r.TripID = null.StringFromPtr(e.TripId)
-		r.UserID = null.StringFromPtr(e.UserId)
+	if len(*expenses) == 0 {
+		return nil
+	}
 
-		err := r.Insert(ctx, db, boil.Infer())
-		if err != nil {
+	// Collect expenses for bulk insert
+	expenseColumns := []string{"id", "additional_charges", "category_id", "country", "created", "currency", "description", "expense_date", "expense_end_date", "expense_type", "is_credit_note", "last_modified", "legal_entity_id", "payment_method", "posting_date", "status", "tax_number", "total_amount", "total_claim", "trip_id", "user_id"}
+	expenseValues := make([][]interface{}, 0, len(*expenses))
+
+	// Collect related records for bulk insert
+	costCenterColumns := []string{"expense_id", "cost_center_id", "percent_weight"}
+	costCenterValues := make([][]interface{}, 0)
+
+	taxItemColumns := []string{"expense_id", "rate_id", "gross", "tax"}
+	taxItemValues := make([][]interface{}, 0)
+
+	approverColumns := []string{"expense_id", "approver_id"}
+	approverValues := make([][]interface{}, 0)
+
+	eventLogColumns := []string{"expense_id", "action_type", "comment", "name", "timestamp", "user_id"}
+	eventLogValues := make([][]interface{}, 0)
+
+	for _, exp := range *expenses {
+		var additionalCharges interface{}
+		if exp.AdditionalCharges != nil {
+			additionalCharges = int(*exp.AdditionalCharges)
+		}
+
+		var expenseType interface{}
+		if exp.ExpenseType != nil {
+			expenseType = string(*exp.ExpenseType)
+		}
+
+		var paymentMethod interface{}
+		if exp.PaymentMethod != nil {
+			paymentMethod = string(*exp.PaymentMethod)
+		}
+
+		var totalAmount, totalClaim *decimal.Decimal
+		if exp.TotalAmount != nil {
+			amount := NullDecimalFromFloat32(*exp.TotalAmount)
+			totalAmount = &amount
+		}
+		if exp.TotalClaim != nil {
+			claim := NullDecimalFromFloat32(*exp.TotalClaim)
+			totalClaim = &claim
+		}
+
+		row := []interface{}{
+			*exp.Id,
+			additionalCharges,
+			NullStringValue(null.StringFromPtr(exp.CategoryId)),
+			NullStringValue(null.StringFromPtr(exp.Country)),
+			NullTimeValue(null.TimeFromPtr(parseTime(exp.Created))),
+			NullStringValue(null.StringFromPtr(exp.Currency)),
+			NullStringValue(null.StringFromPtr(exp.Description)),
+			NullTimeValue(null.TimeFromPtr(parseDate(exp.ExpenseDate))),
+			NullTimeValue(null.TimeFromPtr(parseTime(exp.ExpenseEndDate))),
+			expenseType,
+			NullBoolValue(null.BoolFromPtr(exp.IsCreditNote)),
+			NullTimeValue(null.TimeFromPtr(parseTime(exp.LastModified))),
+			NullStringValue(null.StringFromPtr(exp.LegalEntityId)),
+			paymentMethod,
+			NullTimeValue(null.TimeFromPtr(parseDate(exp.PostingDate))),
+			string(exp.Status),
+			NullStringValue(null.StringFromPtr(exp.TaxNumber)),
+			totalAmount,
+			totalClaim,
+			NullStringValue(null.StringFromPtr(exp.TripId)),
+			NullStringValue(null.StringFromPtr(exp.UserId)),
+		}
+		expenseValues = append(expenseValues, row)
+
+		// Collect cost center items
+		for _, cci := range *exp.CostCenterItems {
+			var percentWeight *decimal.Decimal
+			if cci.PctWeight != nil {
+				weight := NullDecimalFromFloat64(*cci.PctWeight)
+				percentWeight = &weight
+			}
+			costCenterValues = append(costCenterValues, []interface{}{
+				*exp.Id,
+				*cci.Id,
+				percentWeight,
+			})
+		}
+
+		// Collect tax items
+		for _, ti := range *exp.TaxItems {
+			taxItemValues = append(taxItemValues, []interface{}{
+				*exp.Id,
+				*ti.RateId,
+				NullDecimalFromFloat32(*ti.Gross),
+				NullDecimalFromFloat32(*ti.Tax),
+			})
+		}
+
+		// Collect approver IDs
+		for _, a := range *exp.ApproverIds {
+			approverValues = append(approverValues, []interface{}{
+				*exp.Id,
+				a,
+			})
+		}
+
+		// Collect event logs
+		for _, l := range *exp.EventLog {
+			var actionType interface{}
+			if l.ActionType != nil {
+				actionType = string(*l.ActionType)
+			}
+			eventLogValues = append(eventLogValues, []interface{}{
+				*exp.Id,
+				actionType,
+				NullStringValue(null.StringFromPtr(l.Comment)),
+				NullStringValue(null.StringFromPtr(l.Name)),
+				NullTimeValue(null.TimeFromPtr(parseLongTime(l.Timestamp))),
+				NullStringValue(null.StringFromPtr(l.UserId)),
+			})
+		}
+	}
+
+	// Bulk insert expenses
+	if err := BulkInsert(ctx, db, "expenses", expenseColumns, expenseValues); err != nil {
+		return err
+	}
+
+	// Bulk insert related records
+	if len(costCenterValues) > 0 {
+		if err := BulkInsert(ctx, db, "expense_cost_centers", costCenterColumns, costCenterValues); err != nil {
 			return err
 		}
+	}
 
-		for _, cci := range *e.CostCenterItems {
-			r := models.ExpenseCostCenter{}
-			r.ExpenseID = *e.Id
-			r.CostCenterID = *cci.Id
-			if cci.PctWeight != nil {
-				r.PercentWeight = NullDecimalFromFloat64(*cci.PctWeight)
-			}
-
-			//fmt.Println("inserting", r.ExpenseID, r.CostCenterID)
-			err := r.Insert(ctx, db, boil.Infer())
-			if err != nil {
-				return err
-			}
+	if len(taxItemValues) > 0 {
+		if err := BulkInsert(ctx, db, "expense_tax_items", taxItemColumns, taxItemValues); err != nil {
+			return err
 		}
+	}
 
-		for _, ti := range *e.TaxItems {
-			r := models.ExpenseTaxItem{}
-			r.ExpenseID = *e.Id
-			r.RateID = *ti.RateId
-
-			r.Gross = NullDecimalFromFloat32(*ti.Gross)
-			r.Tax = NullDecimalFromFloat32(*ti.Tax)
-
-			err := r.Insert(ctx, db, boil.Infer())
-			if err != nil {
-				return err
-			}
+	if len(approverValues) > 0 {
+		if err := BulkInsert(ctx, db, "expense_approver_ids", approverColumns, approverValues); err != nil {
+			return err
 		}
+	}
 
-		for _, a := range *e.ApproverIds {
-			r := models.ExpenseApproverID{}
-			r.ExpenseID = *e.Id
-			r.ApproverID = a
-
-			err := r.Insert(ctx, db, boil.Infer())
-			if err != nil {
-				return err
-			}
-		}
-
-		for _, l := range *e.EventLog {
-			r := models.ExpenseEventLog{}
-			r.ExpenseID = null.StringFromPtr(e.Id)
-			if l.ActionType != nil {
-				r.ActionType = null.StringFrom(string(*l.ActionType))
-			}
-			r.Comment = null.StringFromPtr(l.Comment)
-			r.Name = null.StringFromPtr(l.Name)
-			r.Timestamp = null.TimeFromPtr(parseLongTime(l.Timestamp))
-			r.UserID = null.StringFromPtr(l.UserId)
-
-			err := r.Insert(ctx, db, boil.Infer())
-			if err != nil {
-				return err
-			}
+	if len(eventLogValues) > 0 {
+		if err := BulkInsert(ctx, db, "expense_event_logs", eventLogColumns, eventLogValues); err != nil {
+			return err
 		}
 	}
 

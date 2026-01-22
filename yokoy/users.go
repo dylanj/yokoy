@@ -6,9 +6,7 @@ import (
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
-	"github.com/dylanj/yokoy/models"
 	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func fetchUsers(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.User, error) {
@@ -31,31 +29,40 @@ func truncateUsers(ctx context.Context, db *sql.DB) {
 }
 
 func insertUsers(ctx context.Context, db *sql.DB, users *[]api.User) error {
-	for _, u := range *users {
-		dbU := models.User{}
-		dbU.ID = *u.Id
-		dbU.CostCenterID = null.StringFromPtr(u.CostCenterId)
-		dbU.Email = null.StringFrom(u.Email)
-		//dbU.EmployeeID = u.EmployeeId
-		if u.Language != nil {
-			dbU.Language = null.StringFrom(string(*u.Language))
-		}
-		dbU.FirstName = null.StringFrom(u.FirstName)
-		dbU.LastName = null.StringFrom(u.LastName)
-		dbU.LegalEntityID = null.StringFrom(u.LegalEntityId)
-		dbU.LineManagerID = null.StringFromPtr(u.LineManagerId)
-		if u.LineManagerThreshold != nil {
-			dbU.LineManagerThreshold = null.IntFrom(int(*u.LineManagerThreshold))
-		}
-		dbU.PolicyID = null.StringFromPtr(u.PolicyId)
-		dbU.StatusActive = null.BoolFrom(u.StatusActive)
-		dbU.SubmissionDelegateID = null.StringFromPtr(u.SubmissionDelegateId)
-
-		err := dbU.Insert(ctx, db, boil.Infer())
-		if err != nil {
-			return err
-		}
+	if len(*users) == 0 {
+		return nil
 	}
 
-	return nil
+	columns := []string{"id", "cost_center_id", "email", "language", "first_name", "last_name", "legal_entity_id", "line_manager_id", "line_manager_threshold", "policy_id", "status_active", "submission_delegate_id"}
+	values := make([][]interface{}, 0, len(*users))
+
+	for _, u := range *users {
+		var language interface{}
+		if u.Language != nil {
+			language = string(*u.Language)
+		}
+
+		var lineManagerThreshold interface{}
+		if u.LineManagerThreshold != nil {
+			lineManagerThreshold = int(*u.LineManagerThreshold)
+		}
+
+		row := []interface{}{
+			*u.Id,
+			NullStringValue(null.StringFromPtr(u.CostCenterId)),
+			NullStringValue(null.StringFrom(u.Email)),
+			language,
+			NullStringValue(null.StringFrom(u.FirstName)),
+			NullStringValue(null.StringFrom(u.LastName)),
+			NullStringValue(null.StringFrom(u.LegalEntityId)),
+			NullStringValue(null.StringFromPtr(u.LineManagerId)),
+			lineManagerThreshold,
+			NullStringValue(null.StringFromPtr(u.PolicyId)),
+			NullBoolValue(null.BoolFrom(u.StatusActive)),
+			NullStringValue(null.StringFromPtr(u.SubmissionDelegateId)),
+		}
+		values = append(values, row)
+	}
+
+	return BulkInsert(ctx, db, "users", columns, values)
 }
