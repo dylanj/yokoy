@@ -10,9 +10,9 @@ import (
 )
 
 func fetchPolicies(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Policy, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdPoliciesParams{}
+	p := &api.ListPoliciesParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdPoliciesWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListPoliciesWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 
 	if err != nil {
 		return nil, err

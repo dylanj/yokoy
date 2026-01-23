@@ -228,6 +228,39 @@ func (s *Sync) SyncExpenses() error {
 	return nil
 }
 
+func (s *Sync) SyncTransactions() error {
+	start := time.Now()
+	s.log().Info("Syncing transactions")
+	ctx := context.TODO()
+
+	s.log().Debug("Truncating transactions")
+	truncateTransactions(ctx, s.db)
+
+	filters := forEachMonthSince("transactionDate", s.syncStart)
+	s.log().Info("Processing transaction filters", "count", len(filters))
+
+	for i, filter := range filters {
+		s.log().Debug("Fetching transactions", "filter", filter, "progress", fmt.Sprintf("%d/%d", i+1, len(filters)))
+
+		transactions, err := fetchTransactions(ctx, s.apiClient, filter)
+		if err != nil {
+			s.log().Error("Failed to fetch transactions", "filter", filter, "error", err)
+			return fmt.Errorf("fetch transactions for filter %s: %w", filter, err)
+		}
+
+		s.log().Info("Fetched transactions", "count", len(*transactions), "filter", filter)
+
+		s.log().Debug("Inserting transactions into database", "filter", filter)
+		if err := insertTransactions(ctx, s.db, transactions); err != nil {
+			s.log().Error("Failed to insert transactions", "filter", filter, "error", err)
+			return fmt.Errorf("insert transactions for filter %s: %w", filter, err)
+		}
+	}
+
+	s.log().Info("Completed syncing transactions", "duration", time.Since(start))
+	return nil
+}
+
 func (s *Sync) SyncCompanyCards() error {
 	start := time.Now()
 	s.log().Info("Syncing company cards")
@@ -520,6 +553,7 @@ func (s *Sync) Go() error {
 		{"categories", s.SyncCategories},
 		{"cost centers", s.SyncCostCenters},
 		{"expenses", s.SyncExpenses},
+		{"transactions", s.SyncTransactions},
 		{"policies", s.SyncPolicies},
 		{"tax rates", s.SyncTaxRates},
 		{"tags", s.SyncTags},

@@ -10,9 +10,9 @@ import (
 )
 
 func fetchInvoiceCategories(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.InvoiceCategory, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdInvoiceCategoriesParams{}
+	p := &api.ListInvoiceCategoriesParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdInvoiceCategoriesWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListInvoiceCategoriesWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 
 	if err != nil {
 		return nil, err
@@ -41,10 +41,10 @@ func insertInvoiceCategories(ctx context.Context, db *sql.DB, legalEntityID stri
 	for _, ic := range *invoiceCategories {
 		row := []interface{}{
 			*ic.Id,
-			NullStringValue(null.StringFrom(ic.Name)),
+			NullStringValue(null.StringFromPtr(ic.Name)),
 			NullStringValue(null.StringFromPtr(ic.Description)),
-			NullStringValue(null.StringFrom(ic.AccountReference)),
-			NullBoolValue(null.BoolFrom(ic.StatusActive)),
+			NullStringValue(null.StringFromPtr(ic.AccountReference)),
+			NullBoolValue(null.BoolFromPtr(ic.StatusActive)),
 			legalEntityID,
 		}
 		values = append(values, row)

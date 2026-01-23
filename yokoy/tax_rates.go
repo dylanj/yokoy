@@ -3,6 +3,7 @@ package yokoy
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 
 	"github.com/dylanj/yokoy/api"
@@ -10,9 +11,9 @@ import (
 )
 
 func fetchTaxRates(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.TaxRate, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdTaxRatesParams{}
+	p := &api.ListTaxRatesParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdTaxRatesWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListTaxRatesWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +22,18 @@ func fetchTaxRates(ctx context.Context, legalEntityId string, c api.ClientWithRe
 		return nil, errors.New("got non 200 response code")
 	}
 
-	return h.JSON200.TaxRates, nil
+	// The API returns a union type. We need to unmarshal from the response body directly
+	if h.JSON200 == nil || h.JSON200.TaxRates == nil {
+		return &[]api.TaxRate{}, nil
+	}
+	// Unmarshal the response body to get tax rates
+	var responseData struct {
+		TaxRates []api.TaxRate `json:"taxRates"`
+	}
+	if err := json.Unmarshal(h.Body, &responseData); err != nil {
+		return nil, err
+	}
+	return &responseData.TaxRates, nil
 }
 
 func truncateTaxRates(ctx context.Context, db *sql.DB) {

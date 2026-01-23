@@ -10,8 +10,8 @@ import (
 )
 
 func fetchTrips(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.Trip, error) {
-	p := &api.GetTripsParams{}
-	h, err := c.GetTripsWithResponse(ctx, p)
+	p := &api.ListTripsParams{}
+	h, err := c.ListTripsWithResponse(ctx, p)
 
 	if err != nil {
 		return nil, err

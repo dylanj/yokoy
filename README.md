@@ -18,6 +18,7 @@ This application syncs data from your [yokoy](https://yokoy.io) organization to 
     - [x] TaxItem
     - [x] ApproverId
     - [x] EventLog
+- [x] Transaction
 - [-] Invoice - Scoped to LegalEntity
     - [-] InvoiceLineItem
 - [x] InvoiceCategory - Scoped to LegalEntity
@@ -68,8 +69,11 @@ yq eval -P swagger.json > swagger.yaml
 
 # hack: we need to remove the 200response code from export-tasks/{exportTaskId}/artefacts so that we can generate a valid api
 
+# install oapi-codegen (note: module path changed from deepmap to oapi-codegen)
+go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+
 # generate code with oapi-codegen
-oapi-codegen -package api swagger.yaml &> api/yokoy.gen.go
+oapi-codegen -package api swagger.yaml > api/yokoy.gen.go
 
 # hack: we need to comment out the usage of InvoiceStatus as the API returns ints and the api docs say string
 ```

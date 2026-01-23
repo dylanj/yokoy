@@ -10,9 +10,9 @@ import (
 )
 
 func fetchCompanyCards(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.CompanyCard, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdCompanyCardsParams{}
+	p := &api.ListCompanyCardsParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdCompanyCardsWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListCompanyCardsWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 
 	if err != nil {
 		return nil, err

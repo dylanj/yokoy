@@ -28,6 +28,7 @@ func TestParent(t *testing.T) {
 	t.Run("Suppliers", testSuppliers)
 	t.Run("Tags", testTags)
 	t.Run("TaxRates", testTaxRates)
+	t.Run("Transactions", testTransactions)
 	t.Run("Trips", testTrips)
 	t.Run("Users", testUsers)
 }
@@ -49,6 +50,7 @@ func TestDelete(t *testing.T) {
 	t.Run("Suppliers", testSuppliersDelete)
 	t.Run("Tags", testTagsDelete)
 	t.Run("TaxRates", testTaxRatesDelete)
+	t.Run("Transactions", testTransactionsDelete)
 	t.Run("Trips", testTripsDelete)
 	t.Run("Users", testUsersDelete)
 }
@@ -70,6 +72,7 @@ func TestQueryDeleteAll(t *testing.T) {
 	t.Run("Suppliers", testSuppliersQueryDeleteAll)
 	t.Run("Tags", testTagsQueryDeleteAll)
 	t.Run("TaxRates", testTaxRatesQueryDeleteAll)
+	t.Run("Transactions", testTransactionsQueryDeleteAll)
 	t.Run("Trips", testTripsQueryDeleteAll)
 	t.Run("Users", testUsersQueryDeleteAll)
 }
@@ -91,6 +94,7 @@ func TestSliceDeleteAll(t *testing.T) {
 	t.Run("Suppliers", testSuppliersSliceDeleteAll)
 	t.Run("Tags", testTagsSliceDeleteAll)
 	t.Run("TaxRates", testTaxRatesSliceDeleteAll)
+	t.Run("Transactions", testTransactionsSliceDeleteAll)
 	t.Run("Trips", testTripsSliceDeleteAll)
 	t.Run("Users", testUsersSliceDeleteAll)
 }
@@ -112,6 +116,7 @@ func TestExists(t *testing.T) {
 	t.Run("Suppliers", testSuppliersExists)
 	t.Run("Tags", testTagsExists)
 	t.Run("TaxRates", testTaxRatesExists)
+	t.Run("Transactions", testTransactionsExists)
 	t.Run("Trips", testTripsExists)
 	t.Run("Users", testUsersExists)
 }
@@ -133,6 +138,7 @@ func TestFind(t *testing.T) {
 	t.Run("Suppliers", testSuppliersFind)
 	t.Run("Tags", testTagsFind)
 	t.Run("TaxRates", testTaxRatesFind)
+	t.Run("Transactions", testTransactionsFind)
 	t.Run("Trips", testTripsFind)
 	t.Run("Users", testUsersFind)
 }
@@ -154,6 +160,7 @@ func TestBind(t *testing.T) {
 	t.Run("Suppliers", testSuppliersBind)
 	t.Run("Tags", testTagsBind)
 	t.Run("TaxRates", testTaxRatesBind)
+	t.Run("Transactions", testTransactionsBind)
 	t.Run("Trips", testTripsBind)
 	t.Run("Users", testUsersBind)
 }
@@ -175,6 +182,7 @@ func TestOne(t *testing.T) {
 	t.Run("Suppliers", testSuppliersOne)
 	t.Run("Tags", testTagsOne)
 	t.Run("TaxRates", testTaxRatesOne)
+	t.Run("Transactions", testTransactionsOne)
 	t.Run("Trips", testTripsOne)
 	t.Run("Users", testUsersOne)
 }
@@ -196,6 +204,7 @@ func TestAll(t *testing.T) {
 	t.Run("Suppliers", testSuppliersAll)
 	t.Run("Tags", testTagsAll)
 	t.Run("TaxRates", testTaxRatesAll)
+	t.Run("Transactions", testTransactionsAll)
 	t.Run("Trips", testTripsAll)
 	t.Run("Users", testUsersAll)
 }
@@ -217,6 +226,7 @@ func TestCount(t *testing.T) {
 	t.Run("Suppliers", testSuppliersCount)
 	t.Run("Tags", testTagsCount)
 	t.Run("TaxRates", testTaxRatesCount)
+	t.Run("Transactions", testTransactionsCount)
 	t.Run("Trips", testTripsCount)
 	t.Run("Users", testUsersCount)
 }
@@ -238,6 +248,7 @@ func TestHooks(t *testing.T) {
 	t.Run("Suppliers", testSuppliersHooks)
 	t.Run("Tags", testTagsHooks)
 	t.Run("TaxRates", testTaxRatesHooks)
+	t.Run("Transactions", testTransactionsHooks)
 	t.Run("Trips", testTripsHooks)
 	t.Run("Users", testUsersHooks)
 }
@@ -275,6 +286,8 @@ func TestInsert(t *testing.T) {
 	t.Run("Tags", testTagsInsertWhitelist)
 	t.Run("TaxRates", testTaxRatesInsert)
 	t.Run("TaxRates", testTaxRatesInsertWhitelist)
+	t.Run("Transactions", testTransactionsInsert)
+	t.Run("Transactions", testTransactionsInsertWhitelist)
 	t.Run("Trips", testTripsInsert)
 	t.Run("Trips", testTripsInsertWhitelist)
 	t.Run("Users", testUsersInsert)
@@ -298,6 +311,7 @@ func TestReload(t *testing.T) {
 	t.Run("Suppliers", testSuppliersReload)
 	t.Run("Tags", testTagsReload)
 	t.Run("TaxRates", testTaxRatesReload)
+	t.Run("Transactions", testTransactionsReload)
 	t.Run("Trips", testTripsReload)
 	t.Run("Users", testUsersReload)
 }
@@ -319,6 +333,7 @@ func TestReloadAll(t *testing.T) {
 	t.Run("Suppliers", testSuppliersReloadAll)
 	t.Run("Tags", testTagsReloadAll)
 	t.Run("TaxRates", testTaxRatesReloadAll)
+	t.Run("Transactions", testTransactionsReloadAll)
 	t.Run("Trips", testTripsReloadAll)
 	t.Run("Users", testUsersReloadAll)
 }
@@ -340,6 +355,7 @@ func TestSelect(t *testing.T) {
 	t.Run("Suppliers", testSuppliersSelect)
 	t.Run("Tags", testTagsSelect)
 	t.Run("TaxRates", testTaxRatesSelect)
+	t.Run("Transactions", testTransactionsSelect)
 	t.Run("Trips", testTripsSelect)
 	t.Run("Users", testUsersSelect)
 }
@@ -361,6 +377,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("Suppliers", testSuppliersUpdate)
 	t.Run("Tags", testTagsUpdate)
 	t.Run("TaxRates", testTaxRatesUpdate)
+	t.Run("Transactions", testTransactionsUpdate)
 	t.Run("Trips", testTripsUpdate)
 	t.Run("Users", testUsersUpdate)
 }
@@ -382,6 +399,7 @@ func TestSliceUpdateAll(t *testing.T) {
 	t.Run("Suppliers", testSuppliersSliceUpdateAll)
 	t.Run("Tags", testTagsSliceUpdateAll)
 	t.Run("TaxRates", testTaxRatesSliceUpdateAll)
+	t.Run("Transactions", testTransactionsSliceUpdateAll)
 	t.Run("Trips", testTripsSliceUpdateAll)
 	t.Run("Users", testUsersSliceUpdateAll)
 }

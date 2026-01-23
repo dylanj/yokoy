@@ -54,10 +54,10 @@ func fetchExpenses(ctx context.Context, c api.ClientWithResponsesInterface, filt
 	//filter := "created ge 2024-01-01 and created lt 2024-01-02"
 	//filter := "created ge \"Mon, 12 Feb 2023 10:08:45 GMT\""
 	//filter := "legalEntityId eq BzTHfPWrnm"
-	p := &api.GetExpensesParams{
+	p := &api.ListExpensesParams{
 		Filter: &filter,
 	}
-	h, err := c.GetExpensesWithResponse(ctx, p)
+	h, err := c.ListExpensesWithResponse(ctx, p)
 
 	if err != nil {
 		return nil, err
@@ -132,14 +132,14 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			additionalCharges,
 			NullStringValue(null.StringFromPtr(exp.CategoryId)),
 			NullStringValue(null.StringFromPtr(exp.Country)),
-			NullTimeValue(null.TimeFromPtr(parseTime(exp.Created))),
+			NullTimeValue(null.TimeFromPtr(exp.Created)),
 			NullStringValue(null.StringFromPtr(exp.Currency)),
 			NullStringValue(null.StringFromPtr(exp.Description)),
 			NullTimeValue(null.TimeFromPtr(parseDate(exp.ExpenseDate))),
 			NullTimeValue(null.TimeFromPtr(parseTime(exp.ExpenseEndDate))),
 			expenseType,
 			NullBoolValue(null.BoolFromPtr(exp.IsCreditNote)),
-			NullTimeValue(null.TimeFromPtr(parseTime(exp.LastModified))),
+			NullTimeValue(null.TimeFromPtr(exp.LastModified)),
 			NullStringValue(null.StringFromPtr(exp.LegalEntityId)),
 			paymentMethod,
 			NullTimeValue(null.TimeFromPtr(parseDate(exp.PostingDate))),
@@ -156,7 +156,7 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 		for _, cci := range *exp.CostCenterItems {
 			var percentWeight *decimal.Decimal
 			if cci.PctWeight != nil {
-				weight := NullDecimalFromFloat64(*cci.PctWeight)
+				weight := NullDecimalFromFloat32(*cci.PctWeight)
 				percentWeight = &weight
 			}
 			costCenterValues = append(costCenterValues, []interface{}{
@@ -195,7 +195,7 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 				actionType,
 				NullStringValue(null.StringFromPtr(l.Comment)),
 				NullStringValue(null.StringFromPtr(l.Name)),
-				NullTimeValue(null.TimeFromPtr(parseLongTime(l.Timestamp))),
+				NullTimeValue(null.TimeFromPtr(l.Timestamp)),
 				NullStringValue(null.StringFromPtr(l.UserId)),
 			})
 		}

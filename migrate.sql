@@ -238,3 +238,24 @@ CREATE TABLE suppliers (
 
     PRIMARY KEY (legal_entity_id, id)
 );
+
+CREATE TABLE transactions (
+    id                  text primary key,
+    billing_amount      numeric(9,2) not null,
+    billing_currency    text,
+    booking_date        timestamp without time zone,
+    card_id             text,
+    country             text,
+    created             timestamp without time zone,
+    expense_id          text,
+    expense_status      integer,
+    is_credit_note       boolean,
+    legal_entity_id     text,
+    matching_status     integer,
+    mcc_sic_code        text,
+    merchant            text,
+    source_amount       numeric(9,2),
+    source_currency     text,
+    statement_reference text,
+    transaction_date    date
+);

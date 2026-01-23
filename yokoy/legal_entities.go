@@ -10,8 +10,8 @@ import (
 )
 
 func fetchLegalEntities(ctx context.Context, c api.ClientWithResponsesInterface) (*[]api.LegalEntity, error) {
-	p := &api.GetLegalEntitiesParams{}
-	h, err := c.GetLegalEntitiesWithResponse(ctx, p)
+	p := &api.ListLegalEntitiesParams{}
+	h, err := c.ListLegalEntitiesWithResponse(ctx, p)
 
 	if err != nil {
 		return nil, err

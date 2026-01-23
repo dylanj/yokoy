@@ -10,9 +10,9 @@ import (
 )
 
 func fetchCategories(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Category, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdCategoriesParams{}
+	p := &api.ListExpenseCategoriesParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdCategoriesWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListExpenseCategoriesWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 
 	if err != nil {
 		return nil, err

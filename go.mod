@@ -3,6 +3,7 @@ module github.com/dylanj/yokoy
 go 1.24.0
 
 require (
+	github.com/aarondl/null/v8 v8.1.3
 	github.com/aarondl/null/v9 v9.0.1
 	github.com/aarondl/randomize v0.0.2
 	github.com/aarondl/sqlboiler/v4 v4.19.7
@@ -19,7 +20,6 @@ require (
 
 require (
 	github.com/aarondl/inflect v0.0.2 // indirect
-	github.com/aarondl/null/v8 v8.1.3 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/ericlagergren/decimal v0.0.0-20190420051523-6335edbaa640 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect

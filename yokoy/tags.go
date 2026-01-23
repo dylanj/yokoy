@@ -10,9 +10,9 @@ import (
 )
 
 func fetchTags(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Tag, error) {
-	p := &api.GetLegalEntitiesLegalEntityIdTagsParams{}
+	p := &api.ListTagsParams{}
 
-	h, err := c.GetLegalEntitiesLegalEntityIdTagsWithResponse(ctx, legalEntityId, p)
+	h, err := c.ListTagsWithResponse(ctx, api.LegalEntityIdInPath(legalEntityId), p)
 
 	if err != nil {
 		return nil, err
