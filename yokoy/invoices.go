@@ -8,8 +8,8 @@ import (
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/shopspring/decimal"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/types"
+	"github.com/aarondl/null/v9"
+	"github.com/aarondl/sqlboiler/v4/types"
 )
 
 func fetchInvoices(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.Invoice, error) {

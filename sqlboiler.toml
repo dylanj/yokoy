@@ -1,7 +1,7 @@
 blacklist=["goose_db_version", "postgres"]
 schema="public"
 [psql]
-  dbname="yokoy-sync"
+  dbname="yokoy"
   host="localhost"
   port=5432
   user="dylan"

@@ -76,14 +76,14 @@ oapi-codegen -package api swagger.yaml &> api/yokoy.gen.go
 
 ### Generate models from DB
 
-This project uses [SQLBoiler](https://github.com/volatiletech/sqlboiler) to
+This project uses [SQLBoiler](https://github.com/aarondl/sqlboiler) to
 generate code for communicating with the database. You can modify the
 migrate.sql, recreate the database and generate the models with sqlboiler.
 
 ```
 # install sqlboiler
-go install github.com/volatiletech/sqlboiler/v4@latest
-go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
+go install github.com/aarondl/sqlboiler/v4@latest
+go install github.com/aarondl/sqlboiler/v4/drivers/sqlboiler-psql@latest
 
 # modify migrate.sql
 # ...

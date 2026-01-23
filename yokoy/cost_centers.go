@@ -9,7 +9,7 @@ import (
 
 	"github.com/dylanj/yokoy/api"
 	"github.com/shopspring/decimal"
-	"github.com/volatiletech/null/v8"
+	"github.com/aarondl/null/v9"
 )
 
 func fetchCostCenters(ctx context.Context, legalEntityId string, c api.ClientWithResponsesInterface) (*[]api.CostCenter, error) {

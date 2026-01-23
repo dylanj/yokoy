@@ -1,9 +1,12 @@
 module github.com/dylanj/yokoy
 
-go 1.21
+go 1.24.0
 
 require (
-	github.com/davecgh/go-spew v1.1.1
+	github.com/aarondl/null/v9 v9.0.1
+	github.com/aarondl/randomize v0.0.2
+	github.com/aarondl/sqlboiler/v4 v4.19.7
+	github.com/aarondl/strmangle v0.0.9
 	github.com/friendsofgo/errors v0.9.2
 	github.com/getkin/kin-openapi v0.125.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
@@ -12,13 +15,11 @@ require (
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/viper v1.12.0
-	github.com/volatiletech/null/v8 v8.1.2
-	github.com/volatiletech/randomize v0.0.1
-	github.com/volatiletech/sqlboiler/v4 v4.16.2
-	github.com/volatiletech/strmangle v0.0.6
 )
 
 require (
+	github.com/aarondl/inflect v0.0.2 // indirect
+	github.com/aarondl/null/v8 v8.1.3 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/ericlagergren/decimal v0.0.0-20190420051523-6335edbaa640 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
@@ -46,10 +47,9 @@ require (
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/volatiletech/inflect v0.0.1 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
@@ -58,5 +58,5 @@ require (
 
 require (
 	github.com/joho/godotenv v1.5.1
-	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
 )
