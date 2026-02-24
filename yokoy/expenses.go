@@ -161,18 +161,27 @@ func insertExpenses(ctx context.Context, db *sql.DB, expenses *[]api.Expense) er
 			}
 			costCenterValues = append(costCenterValues, []interface{}{
 				*exp.Id,
-				*cci.Id,
+				NullStringValue(null.StringFromPtr(cci.Id)),
 				percentWeight,
 			})
 		}
 
 		// Collect tax items
 		for _, ti := range *exp.TaxItems {
+			var gross, tax *decimal.Decimal
+			if ti.Gross != nil {
+				g := NullDecimalFromFloat32(*ti.Gross)
+				gross = &g
+			}
+			if ti.Tax != nil {
+				t := NullDecimalFromFloat32(*ti.Tax)
+				tax = &t
+			}
 			taxItemValues = append(taxItemValues, []interface{}{
 				*exp.Id,
-				*ti.RateId,
-				NullDecimalFromFloat32(*ti.Gross),
-				NullDecimalFromFloat32(*ti.Tax),
+				NullStringValue(null.StringFromPtr(ti.RateId)),
+				gross,
+				tax,
 			})
 		}
 
